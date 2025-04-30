@@ -5,6 +5,7 @@
 type Query {
   Company_add: String!
   Company_getDetail: String!
+  Company_profile: String!
   Company_signIn: String!
   sayHello: String!
 }

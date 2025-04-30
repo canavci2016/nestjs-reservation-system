@@ -24,6 +24,10 @@ export class CompanyService {
     return this.repository.findOneBy({ id });
   }
 
+  findOneByToken(token: string): Promise<Company | null> {
+    return this.repository.findOneBy({ token });
+  }
+
   async save(
     company: Pick<Company, 'name' | 'token' | 'tax' | 'isActive'>,
   ): Promise<Company> {
