@@ -2,10 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Company {
+  """company unique id"""
+  id: String!
+
+  """company status"""
+  isActive: Boolean!
+
+  """company name"""
+  name: String!
+
+  """company tax"""
+  tax: String
+
+  """company token"""
+  token: String!
+}
+
 type Query {
   Company_add: String!
   Company_getDetail: String!
-  Company_profile: String!
+  Company_profile: Company!
   Company_signIn: String!
   sayHello: String!
 }
