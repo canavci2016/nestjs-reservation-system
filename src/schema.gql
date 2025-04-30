@@ -1,0 +1,10 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Query {
+  Company_add: String!
+  Company_getDetail: String!
+  Company_signIn: String!
+  sayHello: String!
+}
