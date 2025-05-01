@@ -20,7 +20,7 @@ type Company {
 }
 
 type Mutation {
-  User_login: String!
+  User_login(password: String!, userName: String!): String!
 }
 
 type Query {
