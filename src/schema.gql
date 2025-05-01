@@ -19,10 +19,13 @@ type Company {
   token: String!
 }
 
+type Mutation {
+  User_login: String!
+}
+
 type Query {
   Company_add: String!
   Company_getDetail: String!
   Company_profile: Company!
   Company_signIn: String!
-  sayHello: String!
 }
