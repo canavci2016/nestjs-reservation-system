@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,11 +30,6 @@ export class UserService {
     payload: FindUserByUserNameAndPassword,
   ): Promise<User | null> {
     const user = await this.repository.findOneBy(payload);
-
-    if (!user || user?.password !== payload.password) {
-      throw new UnauthorizedException();
-    }
-
     return user;
   }
 
