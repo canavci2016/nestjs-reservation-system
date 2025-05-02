@@ -1,18 +1,21 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CompanyService } from './company.service';
+import { CompanyAddInput } from './dto/category-add.input';
 
 @Resolver()
 export class CompanyResolver {
   constructor(private readonly service: CompanyService) {}
 
-  @Query(() => String)
-  async Company_add(): Promise<string> {
-    await this.service.save({
-      secretKey:
-        'UzsgvMKR5UItceRoU1uRcqRLzh80QHyVDM898oL48gweuycl0weTOxYXak9pS2VK9GbE34RyhVsMKqIZb36EoyAPr4WyYGl4UJI9Hw42mlHVhvUgOPQ70K1JWulePBoCJjMKv1bYPXTxfwJ3AkzRLvl3Kc68H185WZPcggFwyK84O0u1FddPZo1zCH0JY3mhwALBaStyZLidwopPJYYma6bpBEeM',
-      name: 'ak polat',
-      isActive: true,
+  @Mutation(() => String)
+  async Company_add(
+    @Args('payload') payload: CompanyAddInput,
+  ): Promise<string> {
+    const company = await this.service.save({
+      secretKey: payload.secretKey,
+      name: payload.name,
+      isActive: payload.isActive || true,
     });
-    return 'Hello World!';
+
+    return company.secretKey;
   }
 }
