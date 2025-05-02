@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { User } from './auth.decorator';
 import { AuthUser } from './models/auth-user.model';
+import { UserSignUpInput } from './dto/user-signup.input';
 
 @Resolver()
 export class AuthResolver {
@@ -25,6 +26,19 @@ export class AuthResolver {
     });
 
     return user?.access_token;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => String)
+  async User_signUp(
+    @Company() company: any,
+    @Args('payload') payload: UserSignUpInput,
+  ): Promise<string> {
+    const user = await this.authService.singUp({
+      ...payload,
+      companyId: company.id,
+    });
+    return user.access_token;
   }
 
   @UseGuards(AuthGuard)
