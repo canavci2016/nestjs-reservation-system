@@ -8,14 +8,6 @@ import { Company as CompanyModel } from './models/company.model';
 @Resolver()
 export class CompanyAuthResolver {
   constructor(private readonly companyService: CompanyService) {}
-
-  @Query(() => String)
-  async Company_signIn(): Promise<string> {
-    const user = await this.companyService.findOneBySecretKey('dawda');
-
-    return 'result';
-  }
-
   @UseGuards(CompanyAuthGuard)
   @Query(() => CompanyModel)
   Company_profile(@Company() company: CompanyModel): CompanyModel {
