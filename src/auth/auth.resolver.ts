@@ -1,9 +1,11 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { UserLoginArgs } from './dto/user-login.args';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
+import { User } from './auth.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -22,5 +24,14 @@ export class AuthResolver {
     });
 
     return user?.access_token;
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => String)
+  async User_profile(
+    @Company() company: any,
+    @User() authUser: any,
+  ): Promise<string> {
+    return JSON.stringify(authUser);
   }
 }
