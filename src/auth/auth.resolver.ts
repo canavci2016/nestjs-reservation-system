@@ -16,6 +16,7 @@ export class AuthResolver {
     @Args() loginArgs: UserLoginArgs,
   ): Promise<string> {
     const user = await this.userService.findByUserNameAndPassword(loginArgs);
-    return 'company';
+
+    return user?.name || 'unknown';
   }
 }

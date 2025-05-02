@@ -26,10 +26,11 @@ export class UserService {
     return this.repository.findOneBy({ id });
   }
 
-  findByUserNameAndPassword(
+  async findByUserNameAndPassword(
     payload: FindUserByUserNameAndPassword,
-  ): Promise<User[]> {
-    return this.repository.find({ where: payload });
+  ): Promise<User | null> {
+    const user = await this.repository.findOneBy(payload);
+    return user;
   }
 
   async save(payload: SaveUser): Promise<User> {
