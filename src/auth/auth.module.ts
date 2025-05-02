@@ -7,5 +7,6 @@ import { CompanyModule } from 'src/company/company.module';
 @Module({
   imports: [UserModule, CompanyModule],
   providers: [AuthService, AuthResolver],
+  exports: [AuthService],
 })
 export class AuthModule {}

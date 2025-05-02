@@ -3,7 +3,6 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
-import { FindUserByUserNameAndPassword } from './interfaces/find-user-by-username-password.interface';
 
 @Injectable()
 export class UserService {
@@ -22,15 +21,8 @@ export class UserService {
     return this.repository.find();
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.repository.findOneBy({ id });
-  }
-
-  async findByUserNameAndPassword(
-    payload: FindUserByUserNameAndPassword,
-  ): Promise<User | null> {
-    const user = await this.repository.findOneBy(payload);
-    return user;
+  findOne(payload: Partial<User>): Promise<User | null> {
+    return this.repository.findOneBy(payload);
   }
 
   async save(payload: SaveUser): Promise<User> {
