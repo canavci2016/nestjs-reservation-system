@@ -6,11 +6,6 @@ export class CompanyResolver {
   constructor(private readonly service: CompanyService) {}
 
   @Query(() => String)
-  Company_getDetail(): string {
-    return 'Hello World!';
-  }
-
-  @Query(() => String)
   async Company_add(): Promise<string> {
     await this.service.save({
       secretKey:
