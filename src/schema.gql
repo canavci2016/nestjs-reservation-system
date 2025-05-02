@@ -38,6 +38,7 @@ type Company {
 
 type Mutation {
   User_login(password: String!, userName: String!): String!
+  User_signUp(payload: UserSignUpInput!): String!
 }
 
 type Query {
@@ -46,4 +47,13 @@ type Query {
   Company_profile: Company!
   Company_signIn: String!
   User_profile: AuthUser!
+}
+
+input UserSignUpInput {
+  email: String
+  lastName: String!
+  name: String!
+  password: String!
+  phone: String
+  userName: String!
 }

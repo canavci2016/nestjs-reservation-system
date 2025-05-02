@@ -1,4 +1,4 @@
-export interface SaveUser {
+export interface Signup {
   name: string;
   lastName: string;
   userName: string;
