@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthUser {
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+}
+
 type Company {
   """company unique id"""
   id: String!
@@ -28,5 +45,5 @@ type Query {
   Company_getDetail: String!
   Company_profile: Company!
   Company_signIn: String!
-  User_profile: String!
+  User_profile: AuthUser!
 }

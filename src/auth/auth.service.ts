@@ -1,5 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from 'src/user/user.entity';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -24,5 +27,15 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async findUserById(id: string) {
+    const user = await this.userService.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 }
