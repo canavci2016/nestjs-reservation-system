@@ -50,7 +50,6 @@ type Mutation {
 
 type Query {
   Company_profile: Company!
-  Company_signIn: String!
   User_profile: AuthUser!
 }
 
