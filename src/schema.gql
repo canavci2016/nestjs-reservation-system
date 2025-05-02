@@ -43,7 +43,6 @@ type Mutation {
 
 type Query {
   Company_add: String!
-  Company_getDetail: String!
   Company_profile: Company!
   Company_signIn: String!
   User_profile: AuthUser!
