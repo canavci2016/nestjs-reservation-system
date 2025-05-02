@@ -28,4 +28,5 @@ type Query {
   Company_getDetail: String!
   Company_profile: Company!
   Company_signIn: String!
+  User_profile: String!
 }
