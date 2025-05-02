@@ -21,6 +21,6 @@ export class AuthResolver {
       companyId: company!.id as string,
     });
 
-    return user?.name || 'unknown';
+    return user?.access_token;
   }
 }
