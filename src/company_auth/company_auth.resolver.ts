@@ -11,7 +11,7 @@ export class CompanyAuthResolver {
 
   @Query(() => String)
   async Company_signIn(): Promise<string> {
-    const user = await this.companyService.findOneByToken('dawda');
+    const user = await this.companyService.findOneBySecretKey('dawda');
 
     return 'result';
   }

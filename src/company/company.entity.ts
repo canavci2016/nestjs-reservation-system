@@ -13,7 +13,7 @@ export class Company {
   id: number;
 
   @Column()
-  token: string;
+  secretKey: string;
 
   @Column()
   name: string;

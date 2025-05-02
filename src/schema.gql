@@ -12,11 +12,11 @@ type Company {
   """company name"""
   name: String!
 
+  """company secret key"""
+  secretKey: String!
+
   """company tax"""
   tax: String
-
-  """company token"""
-  token: String!
 }
 
 type Mutation {
