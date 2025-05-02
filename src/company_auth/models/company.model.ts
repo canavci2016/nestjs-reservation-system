@@ -5,8 +5,8 @@ export class Company {
   @Field({ description: 'company unique id' })
   id: string;
 
-  @Field({ description: 'company token' })
-  token: string;
+  @Field({ description: 'company secret key' })
+  secretKey: string;
 
   @Field({ description: 'company name' })
   name: string;

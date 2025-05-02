@@ -21,7 +21,7 @@ export class CompanyAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.service.findOneByToken(token);
+      const payload = await this.service.findOneBySecretKey(token);
 
       if (!payload) {
         throw new UnauthorizedException();

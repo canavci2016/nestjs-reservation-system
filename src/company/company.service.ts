@@ -24,12 +24,12 @@ export class CompanyService {
     return this.repository.findOneBy({ id });
   }
 
-  findOneByToken(token: string): Promise<Company | null> {
-    return this.repository.findOneBy({ token });
+  findOneBySecretKey(secretKey: string): Promise<Company | null> {
+    return this.repository.findOneBy({ secretKey });
   }
 
   async save(
-    company: Pick<Company, 'name' | 'token' | 'tax' | 'isActive'>,
+    company: Pick<Company, 'name' | 'secretKey' | 'tax' | 'isActive'>,
   ): Promise<Company> {
     return this.repository.save(company);
   }
