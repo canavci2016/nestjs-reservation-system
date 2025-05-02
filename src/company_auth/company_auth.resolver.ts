@@ -18,10 +18,7 @@ export class CompanyAuthResolver {
 
   @UseGuards(CompanyAuthGuard)
   @Query(() => CompanyModel)
-  async Company_profile(
-    @Company() company: CompanyModel,
-  ): Promise<CompanyModel> {
-
+  Company_profile(@Company() company: CompanyModel): CompanyModel {
     return company;
   }
 }
