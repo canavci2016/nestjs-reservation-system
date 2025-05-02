@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddBlogInput {
+  description: String!
+  photoUrl: String!
+  title: String!
+}
+
 type AuthUser {
   """user email"""
   email: String
@@ -17,6 +23,17 @@ type AuthUser {
 
   """user phone"""
   phone: String
+}
+
+type Blog {
+  """blog description"""
+  description: String!
+
+  """blog photoUrl"""
+  photoUrl: String!
+
+  """blog title"""
+  title: String!
 }
 
 type Company {
@@ -43,12 +60,14 @@ input CompanyAddInput {
 }
 
 type Mutation {
+  Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
 }
 
 type Query {
+  Blog_list: [Blog!]!
   Company_profile: Company!
   User_profile: AuthUser!
 }
