@@ -6,6 +6,7 @@ import { UserLoginArgs } from './dto/user-login.args';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { User } from './auth.decorator';
+import { AuthUser } from './models/auth-user.model';
 
 @Resolver()
 export class AuthResolver {
@@ -27,11 +28,16 @@ export class AuthResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Query(() => String)
-  async User_profile(
-    @Company() company: any,
-    @User() authUser: any,
-  ): Promise<string> {
-    return JSON.stringify(authUser);
+  @Query(() => AuthUser)
+  async User_profile(@User() authUser: any): Promise<AuthUser> {
+    const user = await this.authService.findUserById(authUser.sub as string);
+    const authUserIns = new AuthUser();
+    authUserIns.id = user.id;
+    authUserIns.name = user.name;
+    authUserIns.lastName = user.lastName;
+    authUserIns.email = user.email;
+    authUserIns.phone = user.phone;
+
+    return authUserIns;
   }
 }
