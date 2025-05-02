@@ -11,7 +11,6 @@ import { CompanyAuthModule } from './company_auth/company_auth.module';
 import { UserModule } from './user/user.module';
 import { AuthResolver } from './auth/auth.resolver';
 import { AuthModule } from './auth/auth.module';
-import { BlogService } from './blog/blog.service';
 import { BlogModule } from './blog/blog.module';
 
 @Module({
@@ -49,6 +48,6 @@ import { BlogModule } from './blog/blog.module';
     BlogModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthResolver, BlogService],
+  providers: [AppService, AuthResolver],
 })
 export class AppModule {}
