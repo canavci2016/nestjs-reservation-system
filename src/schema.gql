@@ -36,13 +36,19 @@ type Company {
   tax: String
 }
 
+input CompanyAddInput {
+  isActive: Boolean
+  name: String!
+  secretKey: String!
+}
+
 type Mutation {
+  Company_add(payload: CompanyAddInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
 }
 
 type Query {
-  Company_add: String!
   Company_profile: Company!
   Company_signIn: String!
   User_profile: AuthUser!
