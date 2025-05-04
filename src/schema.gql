@@ -66,8 +66,13 @@ type Mutation {
   User_signUp(payload: UserSignUpInput!): String!
 }
 
+input PaginationInput {
+  length: Float!
+  number: Float!
+}
+
 type Query {
-  Blog_list: [Blog!]!
+  Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
   User_profile: AuthUser!
 }
