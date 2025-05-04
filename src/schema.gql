@@ -2,9 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddAnnouncementInput {
+  description: String!
+  photoUrl: String!
+  title: String!
+}
+
 input AddBlogInput {
   description: String!
   photoUrl: String!
+  title: String!
+}
+
+type Announcement {
+  """blog description"""
+  description: String!
+
+  """blog photoUrl"""
+  photoUrl: String!
+
+  """blog title"""
   title: String!
 }
 
@@ -60,6 +77,7 @@ input CompanyAddInput {
 }
 
 type Mutation {
+  Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   User_login(password: String!, userName: String!): String!
@@ -72,6 +90,7 @@ input PaginationInput {
 }
 
 type Query {
+  Announcement_list(pagination: PaginationInput): [Announcement!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
   User_profile: AuthUser!

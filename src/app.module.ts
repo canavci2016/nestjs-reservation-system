@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { AuthResolver } from './auth/auth.resolver';
 import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
+import { AnnouncementModule } from './announcement/announcement.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { BlogModule } from './blog/blog.module';
     UserModule,
     AuthModule,
     BlogModule,
+    AnnouncementModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],
