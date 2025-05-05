@@ -109,7 +109,7 @@ type Mutation {
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
-  Device_set: Boolean!
+  Device_set(payload: SetDeviceInput!): Boolean!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
@@ -126,6 +126,10 @@ type Query {
   Company_profile: Company!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!
+}
+
+input SetDeviceInput {
+  token: String!
 }
 
 input UserSignUpInput {
