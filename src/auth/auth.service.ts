@@ -48,4 +48,9 @@ export class AuthService {
 
     return user;
   }
+  async decrytToken(token: string) {
+    const payload: Record<any, any> = await this.jwtService.verifyAsync(token);
+
+    return payload;
+  }
 }

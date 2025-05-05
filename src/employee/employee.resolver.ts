@@ -1,4 +1,4 @@
-import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
@@ -6,7 +6,6 @@ import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
 import { Employee } from './models/employee.model';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
-import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
 
 @Resolver()
 export class EmployeeResolver {
@@ -26,7 +25,6 @@ export class EmployeeResolver {
   }
 
   @UseGuards(CompanyAuthGuard)
-  @UseInterceptors(ExtractAuthUserInterceptor)
   @Query(() => [Employee])
   async Employee_list(
     @Company() company: { id: string },
