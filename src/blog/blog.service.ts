@@ -8,11 +8,6 @@ import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 interface FindAllOptions {
   companyId?: string;
   pagination?: Pagination;
-}
-
-interface FindAllOptions {
-  companyId?: string;
-  pagination?: Pagination;
   order?: Record<string, string>;
 }
 

@@ -76,6 +76,26 @@ input CompanyAddInput {
   secretKey: String!
 }
 
+type Employee {
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+
+  """user nick name"""
+  userName: String!
+}
+
 input EmployeeSignUpInput {
   email: String
   lastName: String!
@@ -103,6 +123,7 @@ type Query {
   Announcement_list(pagination: PaginationInput): [Announcement!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
+  Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!
 }
 

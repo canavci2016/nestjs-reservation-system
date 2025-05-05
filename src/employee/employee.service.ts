@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Employee } from './employee.entity';
 import { Repository } from 'typeorm';
 import { SaveEmployee } from './interfaces/save-employee.interface';
+import { FindAllOptions } from './interfaces/find-all-options.interface';
 
 @Injectable()
 export class EmployeeService {
@@ -17,8 +18,24 @@ export class EmployeeService {
     return 'Hello World!';
   }
 
-  findAll(): Promise<Employee[]> {
-    return this.repository.find();
+  findAll(options: FindAllOptions | null = null): Promise<Employee[]> {
+    const query = {};
+    const whereQuery = {};
+
+    if (options?.companyId) {
+      whereQuery['companyId'] = options.companyId;
+    }
+
+    query['where'] = whereQuery;
+
+    const take = options?.pagination?.length || 10;
+    const page = options?.pagination?.number || 1;
+    const skip = (page - 1) * take;
+    query['take'] = take;
+    query['skip'] = skip;
+    query['order'] = { createdAt: 'desc' };
+
+    return this.repository.find(query);
   }
 
   findOne(payload: Partial<Employee>): Promise<Employee | null> {
