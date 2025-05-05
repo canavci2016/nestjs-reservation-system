@@ -13,6 +13,7 @@ import { AuthResolver } from './auth/auth.resolver';
 import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
 import { AnnouncementModule } from './announcement/announcement.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AnnouncementModule } from './announcement/announcement.module';
     AuthModule,
     BlogModule,
     AnnouncementModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],

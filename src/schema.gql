@@ -76,10 +76,20 @@ input CompanyAddInput {
   secretKey: String!
 }
 
+input EmployeeSignUpInput {
+  email: String
+  lastName: String!
+  name: String!
+  password: String!
+  phone: String
+  userName: String!
+}
+
 type Mutation {
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
+  Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
 }
