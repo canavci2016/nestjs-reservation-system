@@ -3,13 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Blog } from './blog.entity';
 import { SaveBlog } from './interfaces/save-blog.interface';
-import { Pagination } from 'src/pagination/interfaces/pagination.interface';
-
-interface FindAllOptions {
-  companyId?: string;
-  pagination?: Pagination;
-  order?: Record<string, string>;
-}
+import { FindAllOptions } from './interfaces/find-all-options.interface';
 
 @Injectable()
 export class BlogService {
