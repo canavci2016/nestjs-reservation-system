@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { EmployeeModule } from './employee/employee.module';
+import { DeviceModule } from './device/device.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { EmployeeModule } from './employee/employee.module';
     BlogModule,
     AnnouncementModule,
     EmployeeModule,
+    DeviceModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],
