@@ -9,5 +9,6 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Employee]), CompanyModule, AuthModule],
   providers: [EmployeeService, EmployeeResolver],
+  exports: [EmployeeService],
 })
 export class EmployeeModule {}

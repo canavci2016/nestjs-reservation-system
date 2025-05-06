@@ -8,6 +8,17 @@ input AddAnnouncementInput {
   title: String!
 }
 
+input AddAvailabilityInput {
+  availableDate: String!
+  employeeId: String!
+
+  """availability end date"""
+  endTime: String!
+
+  """availability start date"""
+  startTime: String!
+}
+
 input AddBlogInput {
   description: String!
   photoUrl: String!
@@ -96,6 +107,20 @@ type Employee {
   userName: String!
 }
 
+type EmployeeAvailability {
+  """availability date"""
+  availableDate: String!
+
+  """availability end date"""
+  endTime: String!
+
+  """availability unique id"""
+  id: String!
+
+  """availability start date"""
+  startTime: String!
+}
+
 input EmployeeSignUpInput {
   email: String
   lastName: String!
@@ -110,6 +135,7 @@ type Mutation {
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!
+  Employee_Availability_add(payload: AddAvailabilityInput!): Boolean!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
@@ -124,6 +150,7 @@ type Query {
   Announcement_list(pagination: PaginationInput): [Announcement!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
+  Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!
 }
