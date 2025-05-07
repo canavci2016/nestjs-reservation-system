@@ -30,6 +30,9 @@ export class EmployeeAvailability {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ type: 'numeric', default: 1 })
+  capacity: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
