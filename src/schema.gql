@@ -64,6 +64,11 @@ type Blog {
   title: String!
 }
 
+input BookAppointmentInput {
+  employeeAvailabilityId: String!
+  userId: String!
+}
+
 type Company {
   """company unique id"""
   id: String!
@@ -132,6 +137,7 @@ input EmployeeSignUpInput {
 
 type Mutation {
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
+  Appointment_book(payload: BookAppointmentInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!

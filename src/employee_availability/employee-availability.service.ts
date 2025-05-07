@@ -44,4 +44,10 @@ export class EmployeeAvailabilityService {
     }
     return this.repository.save(payload);
   }
+
+  findOne(
+    payload: Partial<EmployeeAvailability>,
+  ): Promise<EmployeeAvailability | null> {
+    return this.repository.findOneBy(payload);
+  }
 }

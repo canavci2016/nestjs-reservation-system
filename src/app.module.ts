@@ -16,6 +16,7 @@ import { AnnouncementModule } from './announcement/announcement.module';
 import { EmployeeModule } from './employee/employee.module';
 import { DeviceModule } from './device/device.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
+import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { EmployeeAvailabilityModule } from './employee_availability/employee-ava
     EmployeeModule,
     DeviceModule,
     EmployeeAvailabilityModule,
+    UserEmployeeAppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],

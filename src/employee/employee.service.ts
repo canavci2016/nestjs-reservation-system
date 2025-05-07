@@ -26,6 +26,8 @@ export class EmployeeService {
       whereQuery['companyId'] = options.companyId;
     }
 
+    whereQuery['isActive'] = true;
+
     query['where'] = whereQuery;
 
     const take = options?.pagination?.length || 10;

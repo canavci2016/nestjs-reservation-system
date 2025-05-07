@@ -15,5 +15,6 @@ import { EmployeeModule } from 'src/employee/employee.module';
     EmployeeModule,
   ],
   providers: [EmployeeAvailabilityService, EmployeeAvailabilityResolver],
+  exports: [EmployeeAvailabilityService],
 })
 export class EmployeeAvailabilityModule {}
