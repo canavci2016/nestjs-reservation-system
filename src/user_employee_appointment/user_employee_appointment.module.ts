@@ -4,7 +4,6 @@ import { UserEmployeeAppointmentResolver } from './user_employee_appointment.res
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEmployeeAppointment } from './user-employee-appointment.entity';
 import { EmployeeAvailabilityModule } from 'src/employee_availability/employee-availability.module';
-import { CompanyModule } from 'src/company/company.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
 
@@ -12,7 +11,6 @@ import { UserModule } from 'src/user/user.module';
   imports: [
     TypeOrmModule.forFeature([UserEmployeeAppointment]),
     EmployeeAvailabilityModule,
-    CompanyModule,
     AuthModule,
     UserModule,
   ],
