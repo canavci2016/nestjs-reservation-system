@@ -153,6 +153,7 @@ input PaginationInput {
 
 type Query {
   Announcement_list(pagination: PaginationInput): [Announcement!]!
+  Appointment_history: [UserEmployeeAppointment!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
@@ -162,6 +163,30 @@ type Query {
 
 input SetDeviceInput {
   token: String!
+}
+
+type UserEmployeeAppointment {
+  employeeAvailability: UserEmployeeAppointmentAvailability!
+
+  """appointment id"""
+  id: String!
+
+  """appointment status"""
+  status: String!
+}
+
+type UserEmployeeAppointmentAvailability {
+  """appointment date"""
+  availableDate: String!
+
+  """appointment end time"""
+  endTime: String!
+
+  """availability id"""
+  id: String!
+
+  """appointment start time"""
+  startTime: String!
 }
 
 input UserSignUpInput {

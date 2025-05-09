@@ -66,6 +66,14 @@ export class UserEmployeeAppointmentService {
     return true;
   }
 
+  async history() {
+    const histories = await this.repository.find({
+      relations: { employeeAvailability: true },
+    });
+
+    return histories;
+  }
+
   async save(
     payload: Partial<UserEmployeeAppointment>,
   ): Promise<UserEmployeeAppointment> {
