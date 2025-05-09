@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeAvailability } from './employee-availability.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import * as moment from 'moment';
 import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
+import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 
 @Injectable()
 export class EmployeeAvailabilityService {
@@ -24,12 +25,26 @@ export class EmployeeAvailabilityService {
     }
 
     const date = moment(payload.date).format('YYYY-MM-DD');
-    return this.repository.find({
+    const availableSlots = await this.repository.find({
       where: {
         availableDate: date,
         employeeId: payload.employeeId,
+        appointments: [
+          {
+            userId: IsNull(),
+          },
+          {
+            status: UserEmployeeAppointmentStatus.PENDING,
+          },
+          {
+            status: UserEmployeeAppointmentStatus.REJECTED,
+          },
+        ],
       },
+      relations: { appointments: true },
     });
+
+    return availableSlots;
   }
 
   async save(

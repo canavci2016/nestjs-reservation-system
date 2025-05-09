@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { EmployeeAvailability } from './employee-availability.entity';
 
 export enum UserEmployeeAppointmentStatus {
   PENDING = 'PENDING',
@@ -33,6 +35,9 @@ export class UserEmployeeAppointment {
 
   @Column({ type: 'numeric', default: 1 })
   capacity: number;
+
+  @ManyToOne(() => EmployeeAvailability, (model) => model.appointments)
+  employeeAvailability: EmployeeAvailability;
 
   @CreateDateColumn({
     type: 'timestamp',

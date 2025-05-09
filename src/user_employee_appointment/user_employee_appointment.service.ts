@@ -5,10 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEmployeeAppointment } from './user-employee-appointment.entity';
 import { Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
 import { UserService } from 'src/user/user.service';
+import { UserEmployeeAppointment } from 'src/database/entities/user-employee-appointment.entity';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
