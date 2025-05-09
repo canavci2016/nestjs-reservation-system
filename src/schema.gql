@@ -36,6 +36,26 @@ type Announcement {
   title: String!
 }
 
+type AuthEmployee {
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+
+  """user nick name"""
+  userName: String!
+}
+
 type AuthUser {
   """user email"""
   email: String
@@ -140,7 +160,8 @@ type Mutation {
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!
-  Employee_Availability_add(payload: AddAvailabilityInput!): Boolean!
+  EmployeeApp_Employee_Availability_add(payload: AddAvailabilityInput!): Boolean!
+  EmployeeApp_Employee_login(password: String!, userName: String!): String!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
@@ -156,6 +177,7 @@ type Query {
   Appointment_history: [UserEmployeeAppointment!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
+  EmployeeApp_Employee_profile: AuthEmployee!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!

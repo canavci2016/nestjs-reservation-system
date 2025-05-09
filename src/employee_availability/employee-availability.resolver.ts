@@ -8,6 +8,8 @@ import { User } from 'src/auth/auth.decorator';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';
 import { AddAvailabilityInput } from './dto/add-availability.input';
+import { Employee } from 'src/employee_auth/employee.decorator';
+import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 
 @Resolver()
 export class EmployeeAvailabilityResolver {
@@ -27,10 +29,11 @@ export class EmployeeAvailabilityResolver {
     return result;
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
-  async Employee_Availability_add(
+  async EmployeeApp_Employee_Availability_add(
     @Company() company: { id: string },
+    @Employee() employee,
     @Args('payload') payload: AddAvailabilityInput,
   ): Promise<boolean> {
     const data = {

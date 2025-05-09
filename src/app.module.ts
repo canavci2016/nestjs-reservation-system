@@ -18,6 +18,7 @@ import { DeviceModule } from './device/device.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 import { DatabaseModule } from './database/database.module';
+import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { DatabaseModule } from './database/database.module';
     EmployeeAvailabilityModule,
     UserEmployeeAppointmentModule,
     DatabaseModule,
+    EmployeeAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],
