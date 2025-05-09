@@ -4,6 +4,4 @@ import { Field, InputType } from '@nestjs/graphql';
 export class BookAppointmentInput {
   @Field()
   employeeAvailabilityId: string;
-  @Field()
-  userId: string;
 }

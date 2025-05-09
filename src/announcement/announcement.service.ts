@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
-import { Announcement } from './announcement.entity';
+import { Announcement } from 'src/database/entities/announcement.entity';
 
 interface FindAllOptions {
   companyId?: string;
