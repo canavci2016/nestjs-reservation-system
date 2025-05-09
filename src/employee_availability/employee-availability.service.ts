@@ -34,9 +34,6 @@ export class EmployeeAvailabilityService {
             userId: IsNull(),
           },
           {
-            status: UserEmployeeAppointmentStatus.PENDING,
-          },
-          {
             status: UserEmployeeAppointmentStatus.REJECTED,
           },
         ],
