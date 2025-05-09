@@ -5,6 +5,7 @@ import { UserEmployeeAppointment } from './entities/user-employee-appointment.en
 import { Company } from './entities/company.entity';
 import { User } from './entities/user.entity';
 import { Announcement } from './entities/announcement.entity';
+import { Blog } from './entities/blog.entity';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { Announcement } from './entities/announcement.entity';
       Company,
       User,
       Announcement,
+      Blog,
     ]),
   ],
   exports: [TypeOrmModule],
