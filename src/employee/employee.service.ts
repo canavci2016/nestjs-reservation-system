@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Employee } from './employee.entity';
 import { Repository } from 'typeorm';
 import { SaveEmployee } from './interfaces/save-employee.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
+import { Employee } from 'src/database/entities/employee.entity';
 
 @Injectable()
 export class EmployeeService {

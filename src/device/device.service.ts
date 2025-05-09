@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Device } from './device.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Device } from 'src/database/entities/device.entity';
 
 export type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
