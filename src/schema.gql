@@ -8,9 +8,8 @@ input AddAnnouncementInput {
   title: String!
 }
 
-input AddAvailabilityInput {
+input AddAvailabilitySingleInput {
   availableDate: String!
-  employeeId: String!
 
   """availability end date"""
   endTime: String!
@@ -160,8 +159,9 @@ type Mutation {
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!
-  EmployeeApp_Employee_Availability_add(payload: AddAvailabilityInput!): Boolean!
+  EmployeeApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   EmployeeApp_Employee_login(password: String!, userName: String!): String!
+  EmployeeApp_Employee_updateProfile(payload: UpdateProfileInput!): AuthEmployee!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
@@ -177,6 +177,7 @@ type Query {
   Appointment_history: [UserEmployeeAppointment!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
+  EmployeeApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   EmployeeApp_Employee_profile: AuthEmployee!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
@@ -185,6 +186,15 @@ type Query {
 
 input SetDeviceInput {
   token: String!
+}
+
+input UpdateProfileInput {
+  email: String
+  lastName: String
+  name: String
+  password: String
+  phone: String
+  userName: String
 }
 
 type UserEmployeeAppointment {

@@ -44,12 +44,10 @@ export class EmployeeAvailabilityService {
     return availableSlots;
   }
 
-  async save(
-    payload: Partial<EmployeeAvailability>,
-  ): Promise<EmployeeAvailability> {
+  async save(payload: Partial<EmployeeAvailability>[]) {
     const employee = await this.employeeService.findOne({
-      companyId: payload.companyId,
-      id: payload.employeeId,
+      companyId: payload[0].companyId,
+      id: payload[0].employeeId,
     });
     if (!employee) {
       throw new NotFoundException('Employee doesnt exist');

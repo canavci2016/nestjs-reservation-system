@@ -14,10 +14,6 @@ export class EmployeeService {
     console.log('CompanyService initialized');
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   findAll(options: FindAllOptions | null = null): Promise<Employee[]> {
     const query = {};
     const whereQuery = {};
@@ -46,5 +42,14 @@ export class EmployeeService {
 
   async save(payload: SaveEmployee): Promise<Employee> {
     return this.repository.save(payload);
+  }
+
+  async updateById(id: string, payload: Partial<Employee>) {
+    return this.repository
+      .createQueryBuilder()
+      .update()
+      .set(payload)
+      .where('id = :id', { id })
+      .execute();
   }
 }
