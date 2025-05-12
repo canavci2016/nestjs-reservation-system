@@ -19,4 +19,7 @@ export class AuthEmployee {
 
   @Field({ description: 'user email', nullable: true })
   email?: string;
+
+  @Field({ description: 'user device token', nullable: true })
+  deviceToken?: string;
 }

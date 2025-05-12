@@ -60,6 +60,7 @@ export class EmployeeAuthResolver {
     authUserIns.userName = user.userName;
     authUserIns.email = user.email;
     authUserIns.phone = user.phone;
+    authUserIns.deviceToken = user.deviceToken;
     return authUserIns;
   }
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
 import { UserService } from 'src/user/user.service';
 import { UserEmployeeAppointment } from 'src/database/entities/user-employee-appointment.entity';
@@ -66,9 +66,39 @@ export class UserEmployeeAppointmentService {
     return true;
   }
 
-  async history() {
+  async history(
+    params: {
+      employeeId?: string;
+      startDate?: string;
+      endDate?: string;
+      status?: string;
+    } = {},
+  ) {
+    const whereQuery: Record<any, any> = {};
+
+    if (params.status) {
+      whereQuery['status'] = params.status;
+    }
+
+    if (params?.employeeId) {
+      whereQuery['employeeAvailability'] = {
+        employeeId: params.employeeId,
+      };
+    }
+
+    if (params.startDate && params.endDate) {
+      whereQuery['employeeAvailability'] = {
+        availableDate: Between(params.startDate, params.endDate),
+      };
+    } else if (params?.startDate) {
+      whereQuery['employeeAvailability'] = {
+        availableDate: params.startDate,
+      };
+    }
+
     const histories = await this.repository.find({
       relations: { employeeAvailability: true },
+      where: whereQuery,
     });
 
     return histories;

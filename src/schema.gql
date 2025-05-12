@@ -36,6 +36,9 @@ type Announcement {
 }
 
 type AuthEmployee {
+  """user device token"""
+  deviceToken: String
+
   """user email"""
   email: String
 
@@ -179,7 +182,7 @@ type Query {
   Company_profile: Company!
   EmployeeApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   EmployeeApp_Employee_profile: AuthEmployee!
-  EmployeeApp_appointment_list: Boolean!
+  EmployeeApp_appointment_list(endDate: String, startDate: String, status: String): [UserEmployeeAppointment!]!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!

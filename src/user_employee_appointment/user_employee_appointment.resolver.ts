@@ -7,6 +7,8 @@ import { User } from 'src/auth/auth.decorator';
 import { UserEmployeeAppointment } from './models/user-employee-appointment.model';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
+import { SearchAppointmentArgs } from './dto/search-appointment.args';
+import * as moment from 'moment';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -39,11 +41,20 @@ export class UserEmployeeAppointmentResolver {
   }
 
   @UseGuards(EmployeeAuthGuard)
-  @Query(() => Boolean)
+  @Query(() => [UserEmployeeAppointment])
   async EmployeeApp_appointment_list(
     @Employee() employeeDto: { sub: string },
-  ): Promise<boolean> {
-    const res = await Promise.resolve();
-    return true;
+    @Args() args: SearchAppointmentArgs,
+  ): Promise<UserEmployeeAppointment[]> {
+    const startDate = args.startDate || moment().format('YYYY-MM-DD');
+    const endDate = args.endDate || moment().format('YYYY-MM-DD');
+    const status = args.status || 'PENDING';
+    const list = await this.appointmentService.history({
+      employeeId: employeeDto.sub,
+      startDate,
+      endDate,
+      status,
+    });
+    return list;
   }
 }
