@@ -19,7 +19,6 @@ import { EmployeeAvailabilityModule } from './employee_availability/employee-ava
 import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
-import { EmployeeReservationModule } from './employee_reservation/employee_reservation.module';
 
 @Module({
   imports: [
@@ -61,7 +60,6 @@ import { EmployeeReservationModule } from './employee_reservation/employee_reser
     UserEmployeeAppointmentModule,
     DatabaseModule,
     EmployeeAuthModule,
-    EmployeeReservationModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthResolver],

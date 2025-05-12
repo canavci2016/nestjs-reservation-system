@@ -5,6 +5,8 @@ import { BookAppointmentInput } from './dto/book-appointment.input';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/auth/auth.decorator';
 import { UserEmployeeAppointment } from './models/user-employee-appointment.model';
+import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
+import { Employee } from 'src/employee_auth/employee.decorator';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -34,5 +36,14 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<UserEmployeeAppointment[]> {
     const list = await this.appointmentService.history();
     return list;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Query(() => Boolean)
+  async EmployeeApp_appointment_list(
+    @Employee() employeeDto: { sub: string },
+  ): Promise<boolean> {
+    const res = await Promise.resolve();
+    return true;
   }
 }
