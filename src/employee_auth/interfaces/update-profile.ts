@@ -5,4 +5,5 @@ export interface UpdateProfile {
   password: string;
   phone: string;
   email: string;
+  deviceToken: string;
 }

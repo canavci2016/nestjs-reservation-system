@@ -189,6 +189,7 @@ input SetDeviceInput {
 }
 
 input UpdateProfileInput {
+  deviceToken: String
   email: String
   lastName: String
   name: String
