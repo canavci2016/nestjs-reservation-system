@@ -165,8 +165,8 @@ type Mutation {
   EmployeeApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   EmployeeApp_Employee_login(password: String!, userName: String!): String!
   EmployeeApp_Employee_updateProfile(payload: UpdateProfileInput!): AuthEmployee!
-  EmployeeApp_appointment_accept(id: String!): Boolean!
-  EmployeeApp_appointment_reject(id: String!): Boolean!
+  EmployeeApp_appointment_accept(comment: String, id: String!): Boolean!
+  EmployeeApp_appointment_reject(comment: String, id: String!): Boolean!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!

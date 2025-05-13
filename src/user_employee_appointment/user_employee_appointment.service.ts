@@ -118,7 +118,7 @@ export class UserEmployeeAppointmentService {
     return this.repository.save(payload);
   }
 
-  async accept(id: string, employeeId: string) {
+  async accept(id: string, employeeId: string, comment: string = '') {
     const appointment = await this.history({
       id: id,
       employeeId: employeeId,
@@ -132,14 +132,14 @@ export class UserEmployeeAppointmentService {
     const result = await this.repository
       .createQueryBuilder()
       .update(UserEmployeeAppointment)
-      .set({ status: UserEmployeeAppointmentStatus.ACCEPTED })
+      .set({ status: UserEmployeeAppointmentStatus.ACCEPTED, comment })
       .where('id = :id', { id: id })
       .execute();
 
     return true;
   }
 
-  async reject(id: string, employeeId: string) {
+  async reject(id: string, employeeId: string, comment: string = '') {
     const appointment = await this.history({
       id: id,
       employeeId: employeeId,
@@ -153,7 +153,7 @@ export class UserEmployeeAppointmentService {
     const result = await this.repository
       .createQueryBuilder()
       .update(UserEmployeeAppointment)
-      .set({ status: UserEmployeeAppointmentStatus.REJECTED })
+      .set({ status: UserEmployeeAppointmentStatus.REJECTED, comment })
       .where('id = :id', { id: id })
       .execute();
 

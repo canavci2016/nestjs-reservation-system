@@ -65,8 +65,13 @@ export class UserEmployeeAppointmentResolver {
   async EmployeeApp_appointment_accept(
     @Employee() employeeDto: { sub: string },
     @Args('id') id: string,
+    @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
-    const list = await this.appointmentService.accept(id, employeeDto.sub);
+    const list = await this.appointmentService.accept(
+      id,
+      employeeDto.sub,
+      comment || '',
+    );
 
     return true;
   }
@@ -76,8 +81,13 @@ export class UserEmployeeAppointmentResolver {
   async EmployeeApp_appointment_reject(
     @Employee() employeeDto: { sub: string },
     @Args('id') id: string,
+    @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
-    const list = await this.appointmentService.reject(id, employeeDto.sub);
+    const list = await this.appointmentService.reject(
+      id,
+      employeeDto.sub,
+      comment || '',
+    );
 
     return true;
   }

@@ -44,6 +44,9 @@ export class UserEmployeeAppointment {
   @ManyToOne(() => EmployeeAvailability, (model) => model.appointments)
   employeeAvailability: EmployeeAvailability;
 
+  @Column({ nullable: true })
+  comment: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
