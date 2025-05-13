@@ -9,6 +9,6 @@ export class SearchAppointmentArgs {
   @Field({ nullable: true })
   endDate?: string;
 
-  @Field({ nullable: true })
+  @Field((type) => UserEmployeeAppointmentStatus, { nullable: true })
   status?: UserEmployeeAppointmentStatus;
 }

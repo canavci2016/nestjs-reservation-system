@@ -9,6 +9,7 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { SearchAppointmentArgs } from './dto/search-appointment.args';
 import * as moment from 'moment';
+import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -48,7 +49,8 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<UserEmployeeAppointment[]> {
     const startDate = args.startDate || moment().format('YYYY-MM-DD');
     const endDate = args.endDate || moment().format('YYYY-MM-DD');
-    const status = args.status || 'PENDING';
+    const status = args.status || UserEmployeeAppointmentStatus.PENDING;
+
     const list = await this.appointmentService.history({
       employeeId: employeeDto.sub,
       startDate,

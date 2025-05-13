@@ -8,7 +8,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
 import { UserService } from 'src/user/user.service';
-import { UserEmployeeAppointment } from 'src/database/entities/user-employee-appointment.entity';
+import {
+  UserEmployeeAppointment,
+  UserEmployeeAppointmentStatus,
+} from 'src/database/entities/user-employee-appointment.entity';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -71,7 +74,7 @@ export class UserEmployeeAppointmentService {
       employeeId?: string;
       startDate?: string;
       endDate?: string;
-      status?: string;
+      status?: UserEmployeeAppointmentStatus;
     } = {},
   ) {
     const whereQuery: Record<any, any> = {};

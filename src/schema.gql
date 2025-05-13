@@ -182,7 +182,7 @@ type Query {
   Company_profile: Company!
   EmployeeApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   EmployeeApp_Employee_profile: AuthEmployee!
-  EmployeeApp_appointment_list(endDate: String, startDate: String, status: String): [UserEmployeeAppointment!]!
+  EmployeeApp_appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!
@@ -224,6 +224,12 @@ type UserEmployeeAppointmentAvailability {
 
   """appointment start time"""
   startTime: String!
+}
+
+enum UserEmployeeAppointmentStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
 }
 
 input UserSignUpInput {

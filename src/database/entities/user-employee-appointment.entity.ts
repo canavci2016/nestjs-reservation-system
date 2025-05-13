@@ -8,12 +8,17 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { EmployeeAvailability } from './employee-availability.entity';
+import { registerEnumType } from '@nestjs/graphql';
 
 export enum UserEmployeeAppointmentStatus {
   PENDING = 'PENDING',
   ACCEPTED = 'ACCEPTED',
   REJECTED = 'REJECTED',
 }
+
+registerEnumType(UserEmployeeAppointmentStatus, {
+  name: 'UserEmployeeAppointmentStatus',
+});
 
 @Entity()
 export class UserEmployeeAppointment {
