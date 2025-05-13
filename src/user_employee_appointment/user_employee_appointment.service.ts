@@ -129,12 +129,10 @@ export class UserEmployeeAppointmentService {
       throw new NotFoundException('there is no pending appointment available');
     }
 
-    const result = await this.repository
-      .createQueryBuilder()
-      .update(UserEmployeeAppointment)
-      .set({ status: UserEmployeeAppointmentStatus.ACCEPTED, comment })
-      .where('id = :id', { id: id })
-      .execute();
+    const result = await this.updateById(id, {
+      status: UserEmployeeAppointmentStatus.ACCEPTED,
+      comment,
+    });
 
     return true;
   }
@@ -150,14 +148,22 @@ export class UserEmployeeAppointmentService {
       throw new NotFoundException('there is no pending appointment available');
     }
 
+    const result = await this.updateById(id, {
+      status: UserEmployeeAppointmentStatus.REJECTED,
+      comment,
+    });
+
+    return true;
+  }
+
+  async updateById(id: string, payload: Partial<UserEmployeeAppointment>) {
     const result = await this.repository
       .createQueryBuilder()
       .update(UserEmployeeAppointment)
-      .set({ status: UserEmployeeAppointmentStatus.REJECTED, comment })
+      .set(payload)
       .where('id = :id', { id: id })
       .execute();
-
-    return true;
+    return result;
   }
 
   findOne(
