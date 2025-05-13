@@ -59,4 +59,26 @@ export class UserEmployeeAppointmentResolver {
     });
     return list;
   }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Mutation(() => Boolean)
+  async EmployeeApp_appointment_accept(
+    @Employee() employeeDto: { sub: string },
+    @Args('id') id: string,
+  ): Promise<boolean> {
+    const list = await this.appointmentService.accept(id, employeeDto.sub);
+
+    return true;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Mutation(() => Boolean)
+  async EmployeeApp_appointment_reject(
+    @Employee() employeeDto: { sub: string },
+    @Args('id') id: string,
+  ): Promise<boolean> {
+    const list = await this.appointmentService.reject(id, employeeDto.sub);
+
+    return true;
+  }
 }

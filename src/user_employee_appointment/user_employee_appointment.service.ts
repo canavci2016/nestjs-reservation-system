@@ -71,6 +71,7 @@ export class UserEmployeeAppointmentService {
 
   async history(
     params: {
+      id?: string;
       employeeId?: string;
       startDate?: string;
       endDate?: string;
@@ -78,6 +79,10 @@ export class UserEmployeeAppointmentService {
     } = {},
   ) {
     const whereQuery: Record<any, any> = {};
+
+    if (params.id) {
+      whereQuery['id'] = params.id;
+    }
 
     if (params.status) {
       whereQuery['status'] = params.status;
@@ -111,6 +116,48 @@ export class UserEmployeeAppointmentService {
     payload: Partial<UserEmployeeAppointment>,
   ): Promise<UserEmployeeAppointment> {
     return this.repository.save(payload);
+  }
+
+  async accept(id: string, employeeId: string) {
+    const appointment = await this.history({
+      id: id,
+      employeeId: employeeId,
+      status: UserEmployeeAppointmentStatus.PENDING,
+    });
+
+    if (appointment.length === 0) {
+      throw new NotFoundException('there is no pending appointment available');
+    }
+
+    const result = await this.repository
+      .createQueryBuilder()
+      .update(UserEmployeeAppointment)
+      .set({ status: UserEmployeeAppointmentStatus.ACCEPTED })
+      .where('id = :id', { id: id })
+      .execute();
+
+    return true;
+  }
+
+  async reject(id: string, employeeId: string) {
+    const appointment = await this.history({
+      id: id,
+      employeeId: employeeId,
+      status: UserEmployeeAppointmentStatus.PENDING,
+    });
+
+    if (appointment.length === 0) {
+      throw new NotFoundException('there is no pending appointment available');
+    }
+
+    const result = await this.repository
+      .createQueryBuilder()
+      .update(UserEmployeeAppointment)
+      .set({ status: UserEmployeeAppointmentStatus.REJECTED })
+      .where('id = :id', { id: id })
+      .execute();
+
+    return true;
   }
 
   findOne(
