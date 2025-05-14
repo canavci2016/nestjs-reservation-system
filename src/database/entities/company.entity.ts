@@ -13,6 +13,12 @@ export class Company {
   id: number;
 
   @Column()
+  userName: string;
+
+  @Column()
+  password: string;
+
+  @Column()
   secretKey: string;
 
   @Column()

@@ -6,16 +6,8 @@ import { CompanyAddInput } from './dto/category-add.input';
 export class CompanyResolver {
   constructor(private readonly service: CompanyService) {}
 
-  @Mutation(() => String)
-  async Company_add(
-    @Args('payload') payload: CompanyAddInput,
-  ): Promise<string> {
-    const company = await this.service.save({
-      secretKey: payload.secretKey,
-      name: payload.name,
-      isActive: payload.isActive || true,
-    });
-
-    return company.secretKey;
+  @Mutation(() => Boolean)
+  Company_add(@Args('payload') payload: CompanyAddInput): boolean {
+    return true;
   }
 }

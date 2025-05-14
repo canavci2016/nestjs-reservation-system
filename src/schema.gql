@@ -113,6 +113,14 @@ input CompanyAddInput {
   secretKey: String!
 }
 
+input CompanyRegisterInput {
+  isActive: Boolean
+  name: String!
+  password: String!
+  secretKey: String!
+  userName: String!
+}
+
 type Employee {
   """user email"""
   email: String
@@ -157,10 +165,12 @@ input EmployeeSignUpInput {
 }
 
 type Mutation {
+  AdminApp_Company_login(password: String!, userName: String!): String!
+  AdminApp_Company_register(payload: CompanyRegisterInput!): String!
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
-  Company_add(payload: CompanyAddInput!): String!
+  Company_add(payload: CompanyAddInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
   EmployeeApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   EmployeeApp_Employee_login(password: String!, userName: String!): String!
