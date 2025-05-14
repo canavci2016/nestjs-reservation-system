@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Signup } from './interfaces/sign-up.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +19,13 @@ export class AuthService {
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
   ): Promise<{ access_token: string }> {
-    const user = await this.userService.findOne(field);
+    const user = await this.userService.findOne({ userName: field.userName });
+    if (!user) {
+      throw new NotFoundException();
+    }
+    const result = await bcrypt.compare(field.password, user?.password);
 
-    if (user?.password !== field.password) {
+    if (!result) {
       throw new UnauthorizedException();
     }
 
@@ -31,6 +36,8 @@ export class AuthService {
   }
 
   async singUp(field: Signup): Promise<{ access_token: string }> {
+    field.password = await this.generateToken(field.password);
+
     const user = await this.userService.save(field);
 
     const payload = { sub: user.id, username: user.userName };
@@ -52,5 +59,9 @@ export class AuthService {
     const payload: Record<any, any> = await this.jwtService.verifyAsync(token);
 
     return payload;
+  }
+
+  generateToken(password: string) {
+    return bcrypt.hash(password, 10);
   }
 }
