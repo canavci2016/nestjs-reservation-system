@@ -36,10 +36,7 @@ export class CompanyAuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const companyHeader: string = request.headers
-      ?.companyauthorization as string;
-
-    const [type, token] = companyHeader?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const companyHeader: string = request.headers?.companysecretkey as string;
+    return companyHeader;
   }
 }
