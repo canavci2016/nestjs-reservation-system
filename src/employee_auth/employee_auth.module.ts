@@ -15,5 +15,6 @@ import { EmployeeModule } from 'src/employee/employee.module';
     }),
   ],
   providers: [EmployeeAuthService, EmployeeAuthResolver],
+  exports: [EmployeeAuthService],
 })
 export class EmployeeAuthModule {}

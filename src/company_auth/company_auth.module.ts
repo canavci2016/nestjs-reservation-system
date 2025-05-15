@@ -13,5 +13,6 @@ import { jwtConstants } from './constants';
     }),
   ],
   providers: [CompanyAuthResolver, CompanyAuthService],
+  exports: [CompanyAuthService],
 })
 export class CompanyAuthModule {}

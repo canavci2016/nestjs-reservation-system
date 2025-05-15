@@ -35,6 +35,14 @@ type Announcement {
   title: String!
 }
 
+type AuthAdmin {
+  """user name"""
+  access_token: String!
+
+  """user last name"""
+  role: String!
+}
+
 type AuthEmployee {
   """user device token"""
   deviceToken: String
@@ -165,6 +173,7 @@ input EmployeeSignUpInput {
 }
 
 type Mutation {
+  AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
   AdminApp_Company_login(password: String!, userName: String!): String!
   AdminApp_Company_register(payload: CompanyRegisterInput!): String!
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
