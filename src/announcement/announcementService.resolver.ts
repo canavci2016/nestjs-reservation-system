@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
@@ -11,7 +11,7 @@ import { AddAnnouncementInput } from './dto/add-announcement.input';
 export class AnnouncementResolver {
   constructor(private readonly announcementService: AnnouncementService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => Boolean)
   async Announcement_add(
     @Company() company: { id: string },
@@ -25,7 +25,7 @@ export class AnnouncementResolver {
     return Boolean(model);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Query(() => [Announcement])
   async Announcement_list(
     @Company() company: { id: string },

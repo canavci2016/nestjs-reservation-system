@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { Company } from 'src/company_auth/company_auth.decorator';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { UserLoginArgs } from './dto/user-login.args';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
@@ -13,7 +13,7 @@ import { UserSignUpInput } from './dto/user-signup.input';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async User_login(
     @Company() company: any,
@@ -28,7 +28,7 @@ export class AuthResolver {
     return user?.access_token;
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async User_signUp(
     @Company() company: any,

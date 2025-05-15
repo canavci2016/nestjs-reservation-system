@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Company } from 'src/company_auth/company_auth.decorator';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
 import { Employee } from './models/employee.model';
@@ -11,7 +11,7 @@ import { PaginationInput } from 'src/pagination/dto/pagination.input';
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async Employee_add(
     @Company() company: { id: string },
@@ -24,7 +24,7 @@ export class EmployeeResolver {
     return employee.id;
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Query(() => [Employee])
   async Employee_list(
     @Company() company: { id: string },

@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CompanyAuthGuard } from './company_auth.guard';
+import { CompanyAppGuard } from './company_app.guard';
 import { Company } from './company_auth.decorator';
 import { Company as CompanyModel } from './models/company.model';
 import { CompanyLoginArgs } from './dto/company-login.args';
@@ -10,7 +10,7 @@ import { CompanyRegisterInput } from './dto/category-register.input';
 @Resolver()
 export class CompanyAuthResolver {
   constructor(private readonly authService: CompanyAuthService) {}
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Query(() => CompanyModel)
   Company_profile(@Company() company: CompanyModel): CompanyModel {
     return company;

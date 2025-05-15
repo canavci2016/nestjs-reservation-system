@@ -9,7 +9,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { CompanyService } from 'src/company/company.service';
 
 @Injectable()
-export class CompanyAuthGuard implements CanActivate {
+export class CompanyAppGuard implements CanActivate {
   constructor(private service: CompanyService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

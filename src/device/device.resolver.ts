@@ -3,7 +3,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from 'src/auth/auth.decorator';
 import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
 import { Company } from 'src/company_auth/company_auth.decorator';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { SetDeviceInput } from './dto/set-device.input';
 import { DeviceService } from './device.service';
 
@@ -11,7 +11,7 @@ import { DeviceService } from './device.service';
 export class DeviceResolver {
   constructor(private readonly deviceService: DeviceService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @UseInterceptors(ExtractAuthUserInterceptor)
   @Mutation(() => Boolean)
   async Device_set(

@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { BlogService } from './blog.service';
 import { UseGuards } from '@nestjs/common';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AddBlogInput } from './dto/add-blog.input';
 import { Blog } from './models/blog.model';
@@ -11,7 +11,7 @@ import { PaginationInput } from 'src/pagination/dto/pagination.input';
 export class BlogResolver {
   constructor(private readonly blogService: BlogService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => Boolean)
   async Blog_add(
     @Company() company: { id: string },
@@ -25,7 +25,7 @@ export class BlogResolver {
     return Boolean(model);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Query(() => [Blog])
   async Blog_list(
     @Company() company: { id: string },

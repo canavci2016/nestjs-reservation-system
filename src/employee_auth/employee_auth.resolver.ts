@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Company } from 'src/company_auth/company_auth.decorator';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { EmployeeLoginArgs } from './dto/employee-login.args';
 import { EmployeeAuthService } from './employee_auth.service';
 import { Employee } from './employee.decorator';
@@ -13,7 +13,7 @@ import { UpdateProfileInput } from './dto/update-profile.input';
 export class EmployeeAuthResolver {
   constructor(private readonly authService: EmployeeAuthService) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async EmployeeApp_Employee_login(
     @Company() company: any,

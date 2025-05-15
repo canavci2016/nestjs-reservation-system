@@ -5,7 +5,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { User } from 'src/auth/auth.decorator';
@@ -24,7 +24,7 @@ export class EmployeeAvailabilityResolver {
     private readonly employeeService: EmployeeService,
   ) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(CompanyAppGuard)
   @UseInterceptors(ExtractAuthUserInterceptor)
   @Query(() => [EmployeeAvailability])
   async Employee_Availability_list(
