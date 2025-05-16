@@ -28,7 +28,7 @@ export class CompanyAppGuard implements CanActivate {
       }
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['company'] = payload;
+      request['company_app'] = payload;
     } catch {
       throw new UnauthorizedException();
     }
