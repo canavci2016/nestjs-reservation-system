@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_auth.decorator';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { Announcement } from './models/announcement.model';
@@ -14,7 +14,7 @@ export class AnnouncementResolver {
   @UseGuards(CompanyAppGuard)
   @Mutation(() => Boolean)
   async Announcement_add(
-    @Company() company: { id: string },
+    @CompanyApp() company: { id: string },
     @Args('payload') payload: AddAnnouncementInput,
   ): Promise<boolean> {
     const model = await this.announcementService.save({
@@ -28,7 +28,7 @@ export class AnnouncementResolver {
   @UseGuards(CompanyAppGuard)
   @Query(() => [Announcement])
   async Announcement_list(
-    @Company() company: { id: string },
+    @CompanyApp() company: { id: string },
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<Announcement[]> {
     const paginationObj = {

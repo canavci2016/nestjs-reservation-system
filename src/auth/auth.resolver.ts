@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_auth.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { UserLoginArgs } from './dto/user-login.args';
 import { AuthService } from './auth.service';
@@ -16,7 +16,7 @@ export class AuthResolver {
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async User_login(
-    @Company() company: any,
+    @CompanyApp() company: any,
     @Args() loginArgs: UserLoginArgs,
   ): Promise<string> {
     const user = await this.authService.signInByEmailAndPassword({
@@ -31,7 +31,7 @@ export class AuthResolver {
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async User_signUp(
-    @Company() company: any,
+    @CompanyApp() company: any,
     @Args('payload') payload: UserSignUpInput,
   ): Promise<string> {
     const user = await this.authService.singUp({

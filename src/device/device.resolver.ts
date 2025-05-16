@@ -2,7 +2,7 @@ import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from 'src/auth/auth.decorator';
 import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_auth.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { SetDeviceInput } from './dto/set-device.input';
 import { DeviceService } from './device.service';
@@ -15,7 +15,7 @@ export class DeviceResolver {
   @UseInterceptors(ExtractAuthUserInterceptor)
   @Mutation(() => Boolean)
   async Device_set(
-    @Company() company: { id: string },
+    @CompanyApp() company: { id: string },
     @User() user: { sub: string },
     @Args('payload') payload: SetDeviceInput,
   ): Promise<boolean> {

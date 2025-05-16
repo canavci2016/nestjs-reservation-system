@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_auth.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { EmployeeLoginArgs } from './dto/employee-login.args';
 import { EmployeeAuthService } from './employee_auth.service';

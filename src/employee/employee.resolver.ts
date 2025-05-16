@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_auth.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
@@ -14,7 +14,7 @@ export class EmployeeResolver {
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async Employee_add(
-    @Company() company: { id: string },
+    @CompanyApp() company: { id: string },
     @Args('payload') payload: EmployeeSignUpInput,
   ): Promise<string> {
     const employee = await this.employeeService.save({
@@ -27,7 +27,7 @@ export class EmployeeResolver {
   @UseGuards(CompanyAppGuard)
   @Query(() => [Employee])
   async Employee_list(
-    @Company() company: { id: string },
+    @CompanyApp() company: { id: string },
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<Employee[]> {
     const paginationObj = {
