@@ -20,7 +20,6 @@ export class CompanyService {
     return this.repository.find();
   }
 
-
   findOne(payload: Partial<Company>): Promise<Company | null> {
     return this.repository.findOneBy(payload);
   }

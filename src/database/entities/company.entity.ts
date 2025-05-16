@@ -10,7 +10,7 @@ import {
 @Entity()
 export class Company {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   userName: string;

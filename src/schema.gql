@@ -166,12 +166,12 @@ input EmployeeSignUpInput {
 
 type Mutation {
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
+  AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
   AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
-  Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Company_add(payload: CompanyAddInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
@@ -186,11 +186,11 @@ input PaginationInput {
 }
 
 type Query {
+  AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
-  Announcement_list(pagination: PaginationInput): [Announcement!]!
   Appointment_history: [UserEmployeeAppointment!]!
   Company_profile: Company!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
