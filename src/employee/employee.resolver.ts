@@ -1,33 +1,34 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
 import { Employee } from './models/employee.model';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { Company } from 'src/company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 
 @Resolver()
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(CompanyAuthGuard)
   @Mutation(() => String)
-  async Employee_add(
-    @CompanyApp() company: { id: string },
+  async AdminApp_Company_Employee_add(
+    @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: EmployeeSignUpInput,
   ): Promise<string> {
     const employee = await this.employeeService.save({
       ...payload,
-      companyId: company.id,
+      companyId: company.sub,
     });
     return employee.id;
   }
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(CompanyAuthGuard)
   @Query(() => [Employee])
-  async Employee_list(
-    @CompanyApp() company: { id: string },
+  async AdminApp_Company_Employee_list(
+    @Company() company: AuthCompanyDecoratorInterface,
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<Employee[]> {
     const paginationObj = {
@@ -35,7 +36,7 @@ export class EmployeeResolver {
       length: pagination?.length || 10,
     };
     const models = await this.employeeService.findAll({
-      companyId: company.id,
+      companyId: company.sub,
       pagination: paginationObj,
     });
     return models;
