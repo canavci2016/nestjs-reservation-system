@@ -9,7 +9,6 @@ import { ConfigModule } from '@nestjs/config';
 import { CompanyModule } from './company/company.module';
 import { CompanyAuthModule } from './company_auth/company_auth.module';
 import { UserModule } from './user/user.module';
-import { AuthResolver } from './auth/auth.resolver';
 import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
 import { AnnouncementModule } from './announcement/announcement.module';
@@ -20,6 +19,15 @@ import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_
 import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { AdminAuthModule } from './admin_auth/admin_auth.module';
+
+const configFactory = {
+  provide: 'CONFIG',
+  useFactory: () => {
+    return {
+      test: 'dad',
+    };
+  },
+};
 
 @Module({
   imports: [
@@ -64,6 +72,6 @@ import { AdminAuthModule } from './admin_auth/admin_auth.module';
     AdminAuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthResolver],
+  providers: [AppService, configFactory],
 })
 export class AppModule {}
