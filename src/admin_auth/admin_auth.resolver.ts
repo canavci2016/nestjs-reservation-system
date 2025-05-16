@@ -2,7 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { AdminAuthService } from './admin_auth.service';
 import { UseGuards } from '@nestjs/common';
-import { CompanyApp } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { AdminAppAuthLoginArgs } from './dto/adminapp-auth-login.args';
 import { AuthAdmin } from './model/auth-admin.model';
 

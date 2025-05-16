@@ -1,13 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeAvailabilityService } from './employee-availability.service';
-import {
-  UnauthorizedException,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
-import { CompanyApp } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { User } from 'src/auth/auth.decorator';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';

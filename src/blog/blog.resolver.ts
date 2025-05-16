@@ -2,7 +2,7 @@ import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { BlogService } from './blog.service';
 import { UseGuards } from '@nestjs/common';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { AddBlogInput } from './dto/add-blog.input';
 import { Blog } from './models/blog.model';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';

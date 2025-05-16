@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_auth.decorator';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { Announcement } from './models/announcement.model';
