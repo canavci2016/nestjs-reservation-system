@@ -40,17 +40,10 @@ export class EmployeeAvailabilityResolver {
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Employee_Availability_add(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args() payload: AddAvailabilityArgs,
   ): Promise<boolean> {
-    const employee = await this.employeeService.findOne({
-      id: employeeDto.sub,
-    });
-
-    if (!employee) {
-      throw new UnauthorizedException('employee isnt found');
-    }
-
+    const employee = employeeDto.employee;
     const data = payload.payload.map((it) => ({
       companyId: employee.companyId,
       employeeId: employee.id,

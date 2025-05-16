@@ -8,5 +8,6 @@ export interface AuthEmployeeDecoratorInterface {
     email: string;
     userName: string;
     phone: string;
+    companyId: string;
   };
 }

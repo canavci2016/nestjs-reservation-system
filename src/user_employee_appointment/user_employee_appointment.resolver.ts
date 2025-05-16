@@ -10,6 +10,7 @@ import { Employee } from 'src/employee_auth/employee.decorator';
 import { SearchAppointmentArgs } from './dto/search-appointment.args';
 import * as moment from 'moment';
 import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
+import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -44,7 +45,7 @@ export class UserEmployeeAppointmentResolver {
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [UserEmployeeAppointment])
   async AdminApp_Employee_Appointment_list(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args() args: SearchAppointmentArgs,
   ): Promise<UserEmployeeAppointment[]> {
     const startDate = args.startDate || moment().format('YYYY-MM-DD');
@@ -63,7 +64,7 @@ export class UserEmployeeAppointmentResolver {
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Employee_Appointment_accept(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
@@ -79,7 +80,7 @@ export class UserEmployeeAppointmentResolver {
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Employee_Appointment_reject(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
