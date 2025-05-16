@@ -169,7 +169,7 @@ type Mutation {
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
   AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
-  AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): AuthEmployee!
+  AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!

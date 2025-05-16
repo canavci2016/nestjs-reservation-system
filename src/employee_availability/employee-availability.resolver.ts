@@ -16,6 +16,7 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { EmployeeService } from 'src/employee/employee.service';
 import { AddAvailabilityArgs } from './dto/add-availability.args';
 import { EmployeeAppListAvailabilityArgs } from './dto/employeeapp-list-availability.args';
+import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class EmployeeAvailabilityResolver {
@@ -63,7 +64,7 @@ export class EmployeeAvailabilityResolver {
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [EmployeeAvailability])
   async AdminApp_Employee_Availability_list(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args() args: EmployeeAppListAvailabilityArgs,
   ): Promise<EmployeeAvailability[]> {
     const result = await this.availabilityService.getAvailableTimeSlots({

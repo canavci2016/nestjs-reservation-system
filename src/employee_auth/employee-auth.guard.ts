@@ -8,10 +8,15 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { EmployeeService } from 'src/employee/employee.service';
+import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 
 @Injectable()
 export class EmployeeAuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private employeeService: EmployeeService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -21,14 +26,18 @@ export class EmployeeAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
-      });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      request['employee'] = payload;
+      const payload: AuthEmployeeDecoratorInterface =
+        await this.jwtService.verifyAsync(token, {
+          secret: jwtConstants.secret,
+        });
+
+      const employee = await this.employeeService.findOne({ id: payload.sub });
+
+      if (!employee) {
+        throw new UnauthorizedException();
+      }
+
+      request['employee'] = { ...payload, employee };
     } catch {
       throw new UnauthorizedException();
     }
@@ -36,7 +45,7 @@ export class EmployeeAuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const authHeader: string = request.headers?.employeeauthorization as string;
+    const authHeader: string = request.headers?.authorization as string;
 
     const [type, token] = authHeader?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

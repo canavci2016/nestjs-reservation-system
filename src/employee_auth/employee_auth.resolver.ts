@@ -5,6 +5,7 @@ import { Employee } from './employee.decorator';
 import { EmployeeAuthGuard } from './employee-auth.guard';
 import { AuthEmployee } from './models/auth-employee.model';
 import { UpdateProfileInput } from './dto/update-profile.input';
+import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class EmployeeAuthResolver {
@@ -12,37 +13,27 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)
-  async AdminApp_Employee_profile(
-    @Employee() employeeDto: { sub: string },
-  ): Promise<AuthEmployee> {
-    const user = await this.authService.findUserById(employeeDto.sub);
+  AdminApp_Employee_profile(
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
+  ): AuthEmployee {
     const authUserIns = new AuthEmployee();
-    authUserIns.id = user.id;
-    authUserIns.name = user.name;
-    authUserIns.lastName = user.lastName;
-    authUserIns.userName = user.userName;
-    authUserIns.email = user.email;
-    authUserIns.phone = user.phone;
+    authUserIns.id = employeeDto.employee.id;
+    authUserIns.name = employeeDto.employee.name;
+    authUserIns.lastName = employeeDto.employee.lastName;
+    authUserIns.userName = employeeDto.employee.userName;
+    authUserIns.email = employeeDto.employee.email;
+    authUserIns.phone = employeeDto.employee.phone;
 
     return authUserIns;
   }
 
   @UseGuards(EmployeeAuthGuard)
-  @Mutation(() => AuthEmployee)
+  @Mutation(() => Boolean)
   async AdminApp_Employee_updateProfile(
-    @Employee() employeeDto: { sub: string },
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args('payload') payload: UpdateProfileInput,
-  ): Promise<AuthEmployee> {
+  ): Promise<boolean> {
     const res = await this.authService.updateById(employeeDto.sub, payload);
-    const user = await this.authService.findUserById(employeeDto.sub);
-    const authUserIns = new AuthEmployee();
-    authUserIns.id = user.id;
-    authUserIns.name = user.name;
-    authUserIns.lastName = user.lastName;
-    authUserIns.userName = user.userName;
-    authUserIns.email = user.email;
-    authUserIns.phone = user.phone;
-    authUserIns.deviceToken = user.deviceToken;
-    return authUserIns;
+    return res;
   }
 }
