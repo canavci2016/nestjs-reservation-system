@@ -43,7 +43,7 @@ export class UserEmployeeAppointmentResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [UserEmployeeAppointment])
-  async EmployeeApp_appointment_list(
+  async AdminApp_Employee_Appointment_list(
     @Employee() employeeDto: { sub: string },
     @Args() args: SearchAppointmentArgs,
   ): Promise<UserEmployeeAppointment[]> {
@@ -62,7 +62,7 @@ export class UserEmployeeAppointmentResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
-  async EmployeeApp_appointment_accept(
+  async AdminApp_Employee_Appointment_accept(
     @Employee() employeeDto: { sub: string },
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
@@ -78,7 +78,7 @@ export class UserEmployeeAppointmentResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
-  async EmployeeApp_appointment_reject(
+  async AdminApp_Employee_Appointment_reject(
     @Employee() employeeDto: { sub: string },
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,

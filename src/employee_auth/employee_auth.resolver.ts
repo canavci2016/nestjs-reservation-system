@@ -1,8 +1,5 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CompanyApp } from 'src/company_auth/company_auth.decorator';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { EmployeeLoginArgs } from './dto/employee-login.args';
 import { EmployeeAuthService } from './employee_auth.service';
 import { Employee } from './employee.decorator';
 import { EmployeeAuthGuard } from './employee-auth.guard';
@@ -15,7 +12,7 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)
-  async EmployeeApp_Employee_profile(
+  async AdminApp_Employee_profile(
     @Employee() employeeDto: { sub: string },
   ): Promise<AuthEmployee> {
     const user = await this.authService.findUserById(employeeDto.sub);
@@ -32,7 +29,7 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => AuthEmployee)
-  async EmployeeApp_Employee_updateProfile(
+  async AdminApp_Employee_updateProfile(
     @Employee() employeeDto: { sub: string },
     @Args('payload') payload: UpdateProfileInput,
   ): Promise<AuthEmployee> {

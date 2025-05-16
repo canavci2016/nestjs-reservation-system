@@ -38,7 +38,7 @@ export class EmployeeAvailabilityResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
-  async EmployeeApp_Employee_Availability_add(
+  async AdminApp_Employee_Availability_add(
     @Employee() employeeDto: { sub: string },
     @Args() payload: AddAvailabilityArgs,
   ): Promise<boolean> {
@@ -62,7 +62,7 @@ export class EmployeeAvailabilityResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [EmployeeAvailability])
-  async EmployeeApp_Employee_Availability_list(
+  async AdminApp_Employee_Availability_list(
     @Employee() employeeDto: { sub: string },
     @Args() args: EmployeeAppListAvailabilityArgs,
   ): Promise<EmployeeAvailability[]> {

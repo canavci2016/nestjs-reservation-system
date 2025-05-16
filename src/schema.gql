@@ -166,15 +166,15 @@ input EmployeeSignUpInput {
 
 type Mutation {
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
+  AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
+  AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
+  AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
+  AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): AuthEmployee!
   Announcement_add(payload: AddAnnouncementInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Blog_add(payload: AddBlogInput!): Boolean!
   Company_add(payload: CompanyAddInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
-  EmployeeApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
-  EmployeeApp_Employee_updateProfile(payload: UpdateProfileInput!): AuthEmployee!
-  EmployeeApp_appointment_accept(comment: String, id: String!): Boolean!
-  EmployeeApp_appointment_reject(comment: String, id: String!): Boolean!
   Employee_add(payload: EmployeeSignUpInput!): String!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
@@ -186,13 +186,13 @@ input PaginationInput {
 }
 
 type Query {
+  AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
+  AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
+  AdminApp_Employee_profile: AuthEmployee!
   Announcement_list(pagination: PaginationInput): [Announcement!]!
   Appointment_history: [UserEmployeeAppointment!]!
   Blog_list(pagination: PaginationInput): [Blog!]!
   Company_profile: Company!
-  EmployeeApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
-  EmployeeApp_Employee_profile: AuthEmployee!
-  EmployeeApp_appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   Employee_list(pagination: PaginationInput): [Employee!]!
   User_profile: AuthUser!
