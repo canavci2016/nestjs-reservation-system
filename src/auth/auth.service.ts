@@ -36,8 +36,6 @@ export class AuthService {
   }
 
   async singUp(field: Signup): Promise<{ access_token: string }> {
-    field.password = await this.generateToken(field.password);
-
     const user = await this.userService.save(field);
 
     const payload = { sub: user.id, username: user.userName };
@@ -59,9 +57,5 @@ export class AuthService {
     const payload: Record<any, any> = await this.jwtService.verifyAsync(token);
 
     return payload;
-  }
-
-  generateToken(password: string) {
-    return bcrypt.hash(password, 10);
   }
 }

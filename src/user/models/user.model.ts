@@ -19,4 +19,7 @@ export class User {
 
   @Field({ description: 'user email', nullable: true })
   email?: string;
+
+  @Field({ description: 'user email', nullable: true })
+  createdAt?: Date;
 }

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
 import { User } from 'src/database/entities/user.entity';
 import { FindAllOptions } from './interfaces/find-all-option.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -39,6 +40,14 @@ export class UserService {
   }
 
   async save(payload: SaveUser): Promise<User> {
+    if (payload.password) {
+      payload.password = await this.generateToken(payload.password);
+    }
+
     return this.repository.save(payload);
+  }
+
+  generateToken(password: string) {
+    return bcrypt.hash(password, 10);
   }
 }
