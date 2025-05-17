@@ -24,6 +24,17 @@ input AddBlogInput {
   title: String!
 }
 
+input AddEmployeeAvailabilitySingleInput {
+  availableDate: String!
+  employeeId: String!
+
+  """availability end date"""
+  endTime: String!
+
+  """availability start date"""
+  startTime: String!
+}
+
 type Announcement {
   """blog description"""
   description: String!
@@ -172,7 +183,9 @@ input EmployeeSignUpInput {
 type Mutation {
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
   AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
+  AdminApp_Company_Appointment_add(payload: BookAppointmentInput!): Boolean!
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
+  AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
@@ -195,6 +208,7 @@ type Query {
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
   AdminApp_Company_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
+  AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_User_list(pagination: PaginationInput): [User!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!

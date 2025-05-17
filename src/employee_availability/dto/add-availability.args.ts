@@ -1,7 +1,7 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-class AddAvailabilitySingleInput {
+export class AddAvailabilitySingleInput {
   @Field()
   availableDate: string;
 

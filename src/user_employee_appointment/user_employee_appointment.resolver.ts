@@ -45,6 +45,19 @@ export class UserEmployeeAppointmentResolver {
     return list;
   }
 
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Appointment_add(
+    @User() user: { sub: string },
+    @Args('payload') payload: BookAppointmentInput,
+  ): Promise<boolean> {
+    const res = await this.appointmentService.book({
+      userId: user.sub,
+      ...payload,
+    });
+    return true;
+  }
+
   @UseGuards(CompanyAuthGuard)
   @Query(() => [UserEmployeeAppointment])
   async AdminApp_Company_Appointment_list(
