@@ -11,6 +11,9 @@ import { SearchAppointmentArgs } from './dto/search-appointment.args';
 import * as moment from 'moment';
 import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from 'src/company_auth/company_auth.decorator';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -39,6 +42,25 @@ export class UserEmployeeAppointmentResolver {
     @User() user: { sub: string },
   ): Promise<UserEmployeeAppointment[]> {
     const list = await this.appointmentService.history();
+    return list;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => [UserEmployeeAppointment])
+  async AdminApp_Company_Appointment_list(
+    @Company() companyDto: AuthCompanyDecoratorInterface,
+    @Args() args: SearchAppointmentArgs,
+  ): Promise<UserEmployeeAppointment[]> {
+    const startDate = args.startDate || moment().format('YYYY-MM-DD');
+    const endDate = args.endDate || moment().format('YYYY-MM-DD');
+    const status = args.status || UserEmployeeAppointmentStatus.PENDING;
+
+    const list = await this.appointmentService.history({
+      companyId: companyDto.sub,
+      startDate,
+      endDate,
+      status,
+    });
     return list;
   }
 

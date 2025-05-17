@@ -193,6 +193,7 @@ input PaginationInput {
 
 type Query {
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  AdminApp_Company_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_User_list(pagination: PaginationInput): [User!]!

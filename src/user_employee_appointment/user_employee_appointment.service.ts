@@ -73,6 +73,7 @@ export class UserEmployeeAppointmentService {
     params: {
       id?: string;
       employeeId?: string;
+      companyId?: string;
       startDate?: string;
       endDate?: string;
       status?: UserEmployeeAppointmentStatus;
@@ -91,6 +92,12 @@ export class UserEmployeeAppointmentService {
     if (params?.employeeId) {
       whereQuery['employeeAvailability'] = {
         employeeId: params.employeeId,
+      };
+    }
+
+    if (params?.companyId) {
+      whereQuery['employeeAvailability'] = {
+        companyId: params.companyId,
       };
     }
 
