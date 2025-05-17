@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { SaveEmployee } from './interfaces/save-employee.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmployeeService {
@@ -41,6 +42,10 @@ export class EmployeeService {
   }
 
   async save(payload: SaveEmployee): Promise<Employee> {
+    if (payload.password) {
+      payload.password = await bcrypt.hash(payload.password, 10);
+    }
+
     return this.repository.save(payload);
   }
 

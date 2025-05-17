@@ -13,16 +13,16 @@ export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @UseGuards(CompanyAuthGuard)
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   async AdminApp_Company_Employee_add(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: EmployeeSignUpInput,
-  ): Promise<string> {
+  ): Promise<boolean> {
     const employee = await this.employeeService.save({
       ...payload,
       companyId: company.sub,
     });
-    return employee.id;
+    return true;
   }
 
   @UseGuards(CompanyAuthGuard)
