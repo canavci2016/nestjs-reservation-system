@@ -6,4 +6,5 @@ export interface SaveUser {
   companyId: string;
   phone?: string;
   email?: string;
+  isActive?: boolean;
 }

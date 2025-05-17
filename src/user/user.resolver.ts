@@ -1,0 +1,45 @@
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from 'src/company_auth/company_auth.decorator';
+import { UserService } from './user.service';
+import { UserAddInput } from './dto/user-add.input';
+import { User } from './models/user.model';
+
+@Resolver()
+export class UserResolver {
+  constructor(private readonly userService: UserService) {}
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_User_add(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('payload') payload: UserAddInput,
+  ): Promise<boolean> {
+    const model = await this.userService.save({
+      ...payload,
+      companyId: company.sub,
+      isActive: payload.isActive || true,
+    });
+    return Boolean(model);
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => [User])
+  async AdminApp_Company_User_list(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<User[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = await this.userService.findAll({
+      companyId: company.sub,
+      pagination: paginationObj,
+    });
+    return models;
+  }
+}

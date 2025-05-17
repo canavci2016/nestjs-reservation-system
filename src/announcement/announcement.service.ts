@@ -8,11 +8,6 @@ import { Announcement } from 'src/database/entities/announcement.entity';
 interface FindAllOptions {
   companyId?: string;
   pagination?: Pagination;
-}
-
-interface FindAllOptions {
-  companyId?: string;
-  pagination?: Pagination;
   order?: Record<string, string>;
 }
 

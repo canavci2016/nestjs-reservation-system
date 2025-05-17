@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
 import { User } from 'src/database/entities/user.entity';
+import { FindAllOptions } from './interfaces/find-all-option.interface';
 
 @Injectable()
 export class UserService {
@@ -13,12 +14,24 @@ export class UserService {
     console.log('CompanyService initialized');
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
+  findAll(options: FindAllOptions | null = null) {
+    const query = {};
+    const whereQuery = {};
 
-  findAll(): Promise<User[]> {
-    return this.repository.find();
+    if (options?.companyId) {
+      whereQuery['companyId'] = options.companyId;
+    }
+
+    query['where'] = whereQuery;
+
+    const take = options?.pagination?.length || 10;
+    const page = options?.pagination?.number || 1;
+    const skip = (page - 1) * take;
+    query['take'] = take;
+    query['skip'] = skip;
+    query['order'] = { createdAt: 'desc' };
+
+    return this.repository.find(query);
   }
 
   findOne(payload: Partial<User>): Promise<User | null> {
