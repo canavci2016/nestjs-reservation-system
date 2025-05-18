@@ -47,6 +47,19 @@ export class UserService {
     return this.repository.save(payload);
   }
 
+  async updateById(id: string, payload: Partial<SaveUser>) {
+    if (payload.password) {
+      payload.password = await this.generateToken(payload.password);
+    }
+
+    return await this.repository
+      .createQueryBuilder()
+      .update(User)
+      .set(payload)
+      .where('id = :id', { id })
+      .execute();
+  }
+
   generateToken(password: string) {
     return bcrypt.hash(password, 10);
   }

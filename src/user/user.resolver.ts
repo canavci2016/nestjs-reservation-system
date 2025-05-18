@@ -7,6 +7,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
 import { User } from './models/user.model';
+import { UserUpdateInput } from './dto/user-update.input';
 
 @Resolver()
 export class UserResolver {
@@ -41,5 +42,20 @@ export class UserResolver {
       pagination: paginationObj,
     });
     return models;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_User_update(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('userId') userId: string,
+    @Args('payload') payload: UserUpdateInput,
+  ): Promise<boolean> {
+    const model = await this.userService.updateById(userId, {
+      ...payload,
+      companyId: company.sub,
+      isActive: payload.isActive || true,
+    });
+    return Boolean(model.affected);
   }
 }
