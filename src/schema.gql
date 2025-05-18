@@ -273,6 +273,8 @@ input UserAddInput {
 }
 
 type UserEmployeeAppointment {
+  """appointment status"""
+  createdAt: DateTime!
   employeeAvailability: UserEmployeeAppointmentAvailability!
 
   """appointment id"""

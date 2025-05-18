@@ -9,6 +9,9 @@ export class UserEmployeeAppointment {
   @Field({ description: 'appointment status' })
   status: string;
 
+  @Field({ description: 'appointment status' })
+  createdAt: Date;
+
   @Field((type) => UserEmployeeAppointmentAvailability)
   employeeAvailability: UserEmployeeAppointmentAvailability;
 }
