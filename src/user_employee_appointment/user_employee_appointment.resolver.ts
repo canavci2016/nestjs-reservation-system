@@ -14,6 +14,7 @@ import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/aut
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -45,14 +46,13 @@ export class UserEmployeeAppointmentResolver {
     return list;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_Appointment_add(
-    @User() user: { sub: string },
-    @Args('payload') payload: BookAppointmentInput,
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('payload') payload: CompanyBookAppointmentInput,
   ): Promise<boolean> {
     const res = await this.appointmentService.book({
-      userId: user.sub,
       ...payload,
     });
     return true;

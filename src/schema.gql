@@ -132,6 +132,11 @@ input CompanyAddInput {
   secretKey: String!
 }
 
+input CompanyBookAppointmentInput {
+  employeeAvailabilityId: String!
+  userId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -183,7 +188,7 @@ input EmployeeSignUpInput {
 type Mutation {
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
   AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
-  AdminApp_Company_Appointment_add(payload: BookAppointmentInput!): Boolean!
+  AdminApp_Company_Appointment_add(payload: CompanyBookAppointmentInput!): Boolean!
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
   AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
