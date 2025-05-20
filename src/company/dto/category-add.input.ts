@@ -8,6 +8,12 @@ export class CompanyAddInput {
   @Field()
   name: string;
 
+  @Field()
+  userName: string;
+
+  @Field()
+  password: string;
+
   @Field({ nullable: true })
   isActive?: boolean;
 }

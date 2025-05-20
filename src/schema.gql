@@ -129,7 +129,9 @@ type Company {
 input CompanyAddInput {
   isActive: Boolean
   name: String!
+  password: String!
   secretKey: String!
+  userName: String!
 }
 
 input CompanyBookAppointmentInput {
