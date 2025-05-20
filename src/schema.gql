@@ -139,6 +139,14 @@ input CompanyBookAppointmentInput {
   userId: String!
 }
 
+input CompanyUpdateInput {
+  isActive: Boolean
+  name: String
+  password: String
+  secretKey: String
+  userName: String
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -203,6 +211,7 @@ type Mutation {
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
   SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
+  SuperAdmin_Company_update(id: String!, payload: CompanyUpdateInput!): Boolean!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
 }
@@ -225,11 +234,33 @@ type Query {
   Appointment_history: [UserEmployeeAppointment!]!
   Company_profile: Company!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
+  SuperAdmin_Company_delete(id: String!): Boolean!
+  SuperAdmin_Company_list: [SuperAdminCompany!]!
   User_profile: AuthUser!
 }
 
 input SetDeviceInput {
   token: String!
+}
+
+type SuperAdminCompany {
+  """company unique id"""
+  id: String!
+
+  """company status"""
+  isActive: Boolean!
+
+  """company name"""
+  name: String!
+
+  """company secret key"""
+  secretKey: String!
+
+  """company tax"""
+  tax: String
+
+  """company name"""
+  userName: String!
 }
 
 input UpdateProfileInput {

@@ -13,10 +13,6 @@ export class CompanyService {
     console.log('CompanyService initialized');
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   findAll(): Promise<Company[]> {
     return this.repository.find();
   }
@@ -34,6 +30,34 @@ export class CompanyService {
       company.password = await this.generateToken(company.password);
     }
     return this.repository.save(company);
+  }
+
+  async updateById(id: string, payload: Partial<Company>) {
+    if (payload.password) {
+      payload.password = await this.generateToken(payload.password);
+    }
+
+    if (Object.keys(payload).length > 0) {
+      return await this.repository
+        .createQueryBuilder()
+        .update(Company)
+        .set(payload)
+        .where('id = :id', { id })
+        .execute();
+    }
+
+    return this.repository.save(payload);
+  }
+
+  async deleteById(id: string) {
+    const result = await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(Company)
+      .where('id = :id', { id })
+      .execute();
+
+    return result;
   }
 
   generateToken(password: string) {
