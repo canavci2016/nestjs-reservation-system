@@ -199,8 +199,8 @@ type Mutation {
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
-  Company_add(payload: CompanyAddInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
+  SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
   User_login(password: String!, userName: String!): String!
   User_signUp(payload: UserSignUpInput!): String!
 }

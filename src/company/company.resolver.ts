@@ -7,7 +7,10 @@ export class CompanyResolver {
   constructor(private readonly service: CompanyService) {}
 
   @Mutation(() => Boolean)
-  Company_add(@Args('payload') payload: CompanyAddInput): boolean {
+  async SuperAdmin_Company_add(
+    @Args('payload') payload: CompanyAddInput,
+  ): Promise<boolean> {
+    const company = await this.service.save(payload);
     return true;
   }
 }

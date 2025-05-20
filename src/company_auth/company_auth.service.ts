@@ -37,8 +37,6 @@ export class CompanyAuthService {
   }
 
   async singUp(field: Signup): Promise<{ access_token: string }> {
-    field.password = await this.generateToken(field.password);
-
     const user = await this.companyService.save(field);
 
     const payload = { sub: user.id, username: user.userName };
@@ -47,7 +45,4 @@ export class CompanyAuthService {
     };
   }
 
-  generateToken(password: string) {
-    return bcrypt.hash(password, 10);
-  }
 }

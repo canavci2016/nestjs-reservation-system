@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CompanyService {
@@ -28,9 +29,14 @@ export class CompanyService {
     return this.repository.findOneBy({ secretKey });
   }
 
-  async save(
-    company: Pick<Company, 'name' | 'secretKey' | 'tax' | 'isActive'>,
-  ): Promise<Company> {
+  async save(company: Partial<Company>): Promise<Company> {
+    if (company.password) {
+      company.password = await this.generateToken(company.password);
+    }
     return this.repository.save(company);
+  }
+
+  generateToken(password: string) {
+    return bcrypt.hash(password, 10);
   }
 }
