@@ -8,6 +8,7 @@ import { Announcement } from './entities/announcement.entity';
 import { Blog } from './entities/blog.entity';
 import { Device } from './entities/device.entity';
 import { Employee } from './entities/employee.entity';
+import { SuperAdmin } from './entities/super-admin.entity';
 
 @Global()
 @Module({
@@ -21,6 +22,7 @@ import { Employee } from './entities/employee.entity';
       Blog,
       Device,
       Employee,
+      SuperAdmin,
     ]),
   ],
   exports: [TypeOrmModule],

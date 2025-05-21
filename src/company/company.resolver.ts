@@ -31,7 +31,7 @@ export class CompanyResolver {
     return companies;
   }
 
-  @Query(() => Boolean)
+  @Mutation(() => Boolean)
   async SuperAdmin_Company_delete(@Args('id') id: string) {
     const company = await this.service.deleteById(id);
     return Boolean(company.affected);
