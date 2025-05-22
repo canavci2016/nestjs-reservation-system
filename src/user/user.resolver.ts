@@ -58,4 +58,18 @@ export class UserResolver {
     });
     return Boolean(model.affected);
   }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_User_delete(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+  ): Promise<boolean> {
+    const model = await this.userService.deleteById({
+      id,
+      companyId: company.sub,
+    });
+
+    return Boolean(model.affected);
+  }
 }

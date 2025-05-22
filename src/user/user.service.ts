@@ -63,4 +63,16 @@ export class UserService {
   generateToken(password: string) {
     return bcrypt.hash(password, 10);
   }
+
+  async deleteById(condition: Pick<User, 'id' | 'companyId'>) {
+    const result = await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(User)
+      .softDelete()
+      .where(condition)
+      .execute();
+
+    return result;
+  }
 }
