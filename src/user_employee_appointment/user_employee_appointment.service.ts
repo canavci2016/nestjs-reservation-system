@@ -112,7 +112,7 @@ export class UserEmployeeAppointmentService {
     }
 
     const histories = await this.repository.find({
-      relations: { employeeAvailability: true },
+      relations: { employeeAvailability: { employee: true } },
       where: whereQuery,
     });
 

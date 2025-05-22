@@ -13,4 +13,7 @@ export class UserEmployeeAppointmentAvailability {
 
   @Field({ description: 'appointment end time' })
   endTime: string;
+
+  @Field({ description: 'employee id' })
+  employeeId: string;
 }

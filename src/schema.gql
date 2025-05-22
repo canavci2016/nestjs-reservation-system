@@ -368,6 +368,9 @@ type UserEmployeeAppointmentAvailability {
   """appointment date"""
   availableDate: String!
 
+  """employee id"""
+  employeeId: String!
+
   """appointment end time"""
   endTime: String!
 

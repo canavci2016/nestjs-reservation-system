@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import { UserEmployeeAppointment } from './user-employee-appointment.entity';
+import { Employee } from './employee.entity';
 
 @Entity()
 export class EmployeeAvailability {
@@ -34,6 +36,9 @@ export class EmployeeAvailability {
 
   @Column({ type: 'numeric', default: 1 })
   capacity: number;
+
+  @ManyToOne(() => Employee, (model) => model.availabilities)
+  employee: Employee;
 
   @OneToMany(
     (type) => UserEmployeeAppointment,

@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { EmployeeAvailability } from './employee-availability.entity';
 
 @Entity()
 export class Employee {
@@ -38,6 +40,9 @@ export class Employee {
 
   @Column({ nullable: true })
   deviceToken?: string;
+
+  @OneToMany((type) => EmployeeAvailability, (model) => model.employee)
+  availabilities: EmployeeAvailability[];
 
   @CreateDateColumn({
     type: 'timestamp',
