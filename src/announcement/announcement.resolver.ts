@@ -7,6 +7,7 @@ import { AddAnnouncementInput } from './dto/add-announcement.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { Company } from 'src/company_auth/company_auth.decorator';
+import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 
 @Resolver()
 export class AnnouncementResolver {
@@ -27,6 +28,24 @@ export class AnnouncementResolver {
   }
 
   @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Announcement_update(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+    @Args('payload') payload: UpdateAnnouncementInput,
+  ): Promise<boolean> {
+    const model = await this.announcementService.updateById(
+      { id, companyId: company.sub },
+      {
+        ...payload,
+        companyId: company.sub,
+        isActive: true,
+      },
+    );
+    return Boolean(model.affected);
+  }
+
+  @UseGuards(CompanyAuthGuard)
   @Query(() => [Announcement])
   async AdminApp_Company_Announcement_list(
     @Company() company: AuthCompanyDecoratorInterface,
@@ -41,5 +60,18 @@ export class AnnouncementResolver {
       pagination: paginationObj,
     });
     return models;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Announcement_delete(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+  ): Promise<boolean> {
+    const model = await this.announcementService.deleteById({
+      id,
+      companyId: company.sub,
+    });
+    return Boolean(model.affected);
   }
 }

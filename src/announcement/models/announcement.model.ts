@@ -2,12 +2,15 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Announcement {
-  @Field({ description: 'blog title' })
+  @Field({ description: 'announcement id' })
+  id: string;
+
+  @Field({ description: 'announcement title' })
   title: string;
 
-  @Field({ description: 'blog description' })
+  @Field({ description: 'announcement description' })
   description: string;
 
-  @Field({ description: 'blog photoUrl' })
+  @Field({ description: 'announcement photoUrl' })
   photoUrl: string;
 }

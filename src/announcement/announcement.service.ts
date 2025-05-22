@@ -47,4 +47,27 @@ export class AnnouncementService {
   async save(payload: SaveBlog): Promise<Announcement> {
     return this.repository.save(payload);
   }
+
+  async deleteById(payload: Pick<Announcement, 'id' | 'companyId'>) {
+    const result = await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(Announcement)
+      .where(payload)
+      .execute();
+
+    return result;
+  }
+
+  async updateById(
+    condition: Pick<Announcement, 'id' | 'companyId'>,
+    payload: Partial<Announcement>,
+  ) {
+    return await this.repository
+      .createQueryBuilder()
+      .update(Announcement)
+      .set(payload)
+      .where(condition)
+      .execute();
+  }
 }

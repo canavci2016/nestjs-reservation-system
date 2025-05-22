@@ -36,13 +36,16 @@ input AddEmployeeAvailabilitySingleInput {
 }
 
 type Announcement {
-  """blog description"""
+  """announcement description"""
   description: String!
 
-  """blog photoUrl"""
+  """announcement id"""
+  id: String!
+
+  """announcement photoUrl"""
   photoUrl: String!
 
-  """blog title"""
+  """announcement title"""
   title: String!
 }
 
@@ -203,6 +206,8 @@ input EmployeeSignUpInput {
 type Mutation {
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
   AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
+  AdminApp_Company_Announcement_delete(id: String!): Boolean!
+  AdminApp_Company_Announcement_update(id: String!, payload: UpdateAnnouncementInput!): Boolean!
   AdminApp_Company_Appointment_add(payload: CompanyBookAppointmentInput!): Boolean!
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
   AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
@@ -273,6 +278,12 @@ type SuperAdminCompany {
 input SuperAdminUpdateProfileInput {
   password: String
   userName: String
+}
+
+input UpdateAnnouncementInput {
+  description: String
+  photoUrl: String
+  title: String
 }
 
 input UpdateProfileInput {
