@@ -212,6 +212,8 @@ type Mutation {
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
   AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
+  AdminApp_Company_Employee_delete(id: String!): Boolean!
+  AdminApp_Company_Employee_update(id: String!, payload: UpdateEmployeeInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Company_User_update(payload: UserUpdateInput!, userId: String!): Boolean!
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
@@ -284,6 +286,15 @@ input UpdateAnnouncementInput {
   description: String
   photoUrl: String
   title: String
+}
+
+input UpdateEmployeeInput {
+  email: String
+  lastName: String
+  name: String
+  password: String
+  phone: String
+  userName: String
 }
 
 input UpdateProfileInput {

@@ -57,4 +57,32 @@ export class EmployeeService {
       .where('id = :id', { id })
       .execute();
   }
+
+  async deleteById(condition: Pick<Employee, 'id' | 'companyId'>) {
+    const result = await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(Employee)
+      .softDelete()
+      .where(condition)
+      .execute();
+
+    return result;
+  }
+
+  async updateByIdAndCompany(
+    condition: Pick<Employee, 'id' | 'companyId'>,
+    payload: Partial<Employee>,
+  ) {
+    if (payload.password) {
+      payload.password = await bcrypt.hash(payload.password, 10);
+    }
+
+    return await this.repository
+      .createQueryBuilder()
+      .update(Employee)
+      .set(payload)
+      .where(condition)
+      .execute();
+  }
 }

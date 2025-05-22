@@ -7,6 +7,7 @@ import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { UpdateEmployeeInput } from './dto/update-employee.input';
 
 @Resolver()
 export class EmployeeResolver {
@@ -40,5 +41,32 @@ export class EmployeeResolver {
       pagination: paginationObj,
     });
     return models;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Employee_delete(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+  ): Promise<boolean> {
+    const model = await this.employeeService.deleteById({
+      id,
+      companyId: company.sub,
+    });
+    return Boolean(model.affected);
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Employee_update(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+    @Args('payload') payload: UpdateEmployeeInput,
+  ): Promise<boolean> {
+    const model = await this.employeeService.updateByIdAndCompany(
+      { id, companyId: company.sub },
+      payload,
+    );
+    return Boolean(model.affected);
   }
 }
