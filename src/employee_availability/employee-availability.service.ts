@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 import * as moment from 'moment';
 import { EmployeeService } from 'src/employee/employee.service';
 import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
@@ -45,13 +49,29 @@ export class EmployeeAvailabilityService {
   }
 
   async save(payload: Partial<EmployeeAvailability>[]) {
+    const companyId = payload[0].companyId;
+    const employeeId = payload[0].employeeId;
     const employee = await this.employeeService.findOne({
-      companyId: payload[0].companyId,
-      id: payload[0].employeeId,
+      companyId,
+      id: employeeId,
     });
     if (!employee) {
       throw new NotFoundException('Employee doesnt exist');
     }
+
+    const availabilities = await this.repository.find({
+      where: payload.map((emp) => ({
+        companyId: emp.companyId,
+        employeeId: emp.employeeId,
+        availableDate: emp.availableDate,
+        startTime: emp.startTime,
+      })),
+    });
+
+    if (availabilities.length > 0) {
+      throw new ConflictException('duplicate records');
+    }
+
     return this.repository.save(payload);
   }
 
