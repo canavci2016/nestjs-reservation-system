@@ -61,16 +61,12 @@ export class SuperAdminAuthService {
       payload.password = await this.generateToken(payload.password);
     }
 
-    if (Object.keys(payload).length > 0) {
-      return await this.repository
-        .createQueryBuilder()
-        .update(SuperAdmin)
-        .set(payload)
-        .where('id = :id', { id })
-        .execute();
-    }
-
-    return this.repository.save(payload);
+    return await this.repository
+      .createQueryBuilder()
+      .update(SuperAdmin)
+      .set(payload)
+      .where('id = :id', { id })
+      .execute();
   }
 
   async deleteById(id: string) {

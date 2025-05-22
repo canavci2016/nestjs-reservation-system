@@ -7,14 +7,14 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { CompanyService } from 'src/company/company.service';
 import { jwtConstants } from './constants';
+import { SuperAdminAuthService } from './superadmin_auth.service';
 
 @Injectable()
 export class SuperAdminAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private companyService: CompanyService,
+    private authService: SuperAdminAuthService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -32,7 +32,7 @@ export class SuperAdminAuthGuard implements CanActivate {
         },
       );
 
-      const admin = await this.companyService.findOne({ id: payload.sub });
+      const admin = await this.authService.findOne({ id: payload.sub });
 
       if (!admin) {
         throw new UnauthorizedException();

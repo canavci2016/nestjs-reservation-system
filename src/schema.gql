@@ -216,6 +216,7 @@ type Mutation {
   Appointment_book(payload: BookAppointmentInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
+  SuperAdmin_Auth_updateProfile(payload: SuperAdminUpdateProfileInput!): Boolean!
   SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
   SuperAdmin_Company_delete(id: String!): Boolean!
   SuperAdmin_Company_update(id: String!, payload: CompanyUpdateInput!): Boolean!
@@ -267,6 +268,11 @@ type SuperAdminCompany {
 
   """company name"""
   userName: String!
+}
+
+input SuperAdminUpdateProfileInput {
+  password: String
+  userName: String
 }
 
 input UpdateProfileInput {
