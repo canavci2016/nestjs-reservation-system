@@ -106,6 +106,9 @@ type Blog {
   """blog description"""
   description: String!
 
+  """blog id"""
+  id: String!
+
   """blog photoUrl"""
   photoUrl: String!
 
@@ -210,6 +213,8 @@ type Mutation {
   AdminApp_Company_Announcement_update(id: String!, payload: UpdateAnnouncementInput!): Boolean!
   AdminApp_Company_Appointment_add(payload: CompanyBookAppointmentInput!): Boolean!
   AdminApp_Company_Blog_add(payload: AddBlogInput!): Boolean!
+  AdminApp_Company_Blog_delete(id: String!): Boolean!
+  AdminApp_Company_Blog_update(id: String!, payload: UpdateBlogInput!): Boolean!
   AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
   AdminApp_Company_Employee_delete(id: String!): Boolean!
@@ -283,6 +288,12 @@ input SuperAdminUpdateProfileInput {
 }
 
 input UpdateAnnouncementInput {
+  description: String
+  photoUrl: String
+  title: String
+}
+
+input UpdateBlogInput {
   description: String
   photoUrl: String
   title: String
