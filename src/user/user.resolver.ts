@@ -31,6 +31,7 @@ export class UserResolver {
   @Query(() => [User])
   async AdminApp_Company_User_list(
     @Company() company: AuthCompanyDecoratorInterface,
+    @Args('q', { nullable: true }) q: string,
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<User[]> {
     const paginationObj = {
@@ -38,6 +39,7 @@ export class UserResolver {
       length: pagination?.length || 10,
     };
     const models = await this.userService.findAll({
+      q,
       companyId: company.sub,
       pagination: paginationObj,
     });

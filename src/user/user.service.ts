@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
 import { User } from 'src/database/entities/user.entity';
@@ -21,6 +21,10 @@ export class UserService {
 
     if (options?.companyId) {
       whereQuery['companyId'] = options.companyId;
+    }
+
+    if (options?.q) {
+      whereQuery['name'] = Like(`%${options.q}%`);
     }
 
     query['where'] = whereQuery;

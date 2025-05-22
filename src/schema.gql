@@ -248,7 +248,7 @@ type Query {
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
-  AdminApp_Company_User_list(pagination: PaginationInput): [User!]!
+  AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
