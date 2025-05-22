@@ -13,5 +13,6 @@ import { jwtConstants } from './constants';
     }),
   ],
   providers: [SuperAdminAuthService, SuperadminAuthResolver],
+  exports: [SuperAdminAuthService],
 })
 export class SuperadminAuthModule {}

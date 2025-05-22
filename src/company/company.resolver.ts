@@ -3,11 +3,14 @@ import { CompanyService } from './company.service';
 import { CompanyAddInput } from './dto/category-add.input';
 import { CompanyUpdateInput } from './dto/category-update.input';
 import { SuperAdminCompany } from './models/super-admin-company.model';
+import { SuperAdminAuthGuard } from 'src/superadmin_auth/superadmin_auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver()
 export class CompanyResolver {
   constructor(private readonly service: CompanyService) {}
 
+  @UseGuards(SuperAdminAuthGuard)
   @Mutation(() => Boolean)
   async SuperAdmin_Company_add(
     @Args('payload') payload: CompanyAddInput,
@@ -16,6 +19,7 @@ export class CompanyResolver {
     return true;
   }
 
+  @UseGuards(SuperAdminAuthGuard)
   @Mutation(() => Boolean)
   async SuperAdmin_Company_update(
     @Args('id') id: string,
@@ -25,12 +29,14 @@ export class CompanyResolver {
     return true;
   }
 
+  @UseGuards(SuperAdminAuthGuard)
   @Query(() => [SuperAdminCompany])
   async SuperAdmin_Company_list() {
     const companies = await this.service.findAll();
     return companies;
   }
 
+  @UseGuards(SuperAdminAuthGuard)
   @Mutation(() => Boolean)
   async SuperAdmin_Company_delete(@Args('id') id: string) {
     const company = await this.service.deleteById(id);
