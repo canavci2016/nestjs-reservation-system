@@ -20,6 +20,7 @@ input AddAvailabilitySingleInput {
 
 input AddBlogInput {
   description: String!
+  photo: Upload
   photoUrl: String!
   title: String!
 }
@@ -318,6 +319,9 @@ input UpdateProfileInput {
   phone: String
   userName: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   """user email"""

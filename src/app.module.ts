@@ -59,6 +59,7 @@ const configFactory = {
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      csrfPrevention: false,
     }),
     UserModule,
     AuthModule,
