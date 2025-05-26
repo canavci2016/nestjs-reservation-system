@@ -49,7 +49,7 @@ export class BlogService {
     let photoUrl = payload.photoUrl;
     if (typeof payload.photo != 'undefined' || payload.photo != null) {
       const imageFile: FileUpload = await payload.photo;
-      const fileName = `${Date.now()}_${imageFile.filename}`;
+      const fileName = `${payload.companyId}_${Date.now()}_${imageFile.filename}`;
 
       const filePath = await this.uploadFileStream(
         imageFile.createReadStream,
