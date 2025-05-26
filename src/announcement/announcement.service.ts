@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { Announcement } from 'src/database/entities/announcement.entity';
+import { FileUpload } from './interfaces/file-upload.interface';
+import { UploadService } from 'src/upload/upload.service';
 
 interface FindAllOptions {
   companyId?: string;
@@ -16,6 +18,7 @@ export class AnnouncementService {
   constructor(
     @InjectRepository(Announcement)
     private repository: Repository<Announcement>,
+    private readonly uploadService: UploadService,
   ) {
     console.log('BlogService initialized');
   }
@@ -45,6 +48,18 @@ export class AnnouncementService {
   }
 
   async save(payload: SaveBlog): Promise<Announcement> {
+    let photoUrl = payload.photoUrl;
+    if (typeof payload.photo != 'undefined' || payload.photo != null) {
+      const imageFile: FileUpload = await payload.photo;
+      const fileName = `${payload.companyId}/announcement/${Date.now()}_${imageFile.filename}`;
+
+      const filePath = await this.uploadService.uploadOnS3AsStream(
+        imageFile.createReadStream,
+        fileName,
+      );
+      photoUrl = filePath.Location || photoUrl;
+    }
+    payload.photoUrl = photoUrl;
     return this.repository.save(payload);
   }
 
