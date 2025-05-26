@@ -1,5 +1,4 @@
 export interface SignInByEmailAndPassword {
   userName: string;
   password: string;
-  companyId: string;
 }
