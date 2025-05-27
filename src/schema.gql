@@ -248,12 +248,12 @@ input PaginationInput {
 
 type Query {
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
-  AdminApp_Company_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
+  AdminApp_Company_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
-  AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
+  AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
   Appointment_history: [UserEmployeeAppointment!]!
@@ -378,6 +378,10 @@ type UserEmployeeAppointment {
 
   """appointment status"""
   status: String!
+  user: UserEmployeeAppointmentUser!
+
+  """appointment user id"""
+  userId: String!
 }
 
 type UserEmployeeAppointmentAvailability {
@@ -401,6 +405,29 @@ enum UserEmployeeAppointmentStatus {
   ACCEPTED
   PENDING
   REJECTED
+}
+
+type UserEmployeeAppointmentUser {
+  """user email"""
+  createdAt: DateTime
+
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+
+  """user unique name"""
+  userName: String!
 }
 
 input UserSignUpInput {

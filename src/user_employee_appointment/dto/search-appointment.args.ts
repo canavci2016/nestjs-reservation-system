@@ -11,4 +11,7 @@ export class SearchAppointmentArgs {
 
   @Field((type) => UserEmployeeAppointmentStatus, { nullable: true })
   status?: UserEmployeeAppointmentStatus;
+
+  @Field({ nullable: true })
+  userId?: string;
 }

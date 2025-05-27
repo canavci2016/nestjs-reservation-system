@@ -77,12 +77,17 @@ export class UserEmployeeAppointmentService {
       startDate?: string;
       endDate?: string;
       status?: UserEmployeeAppointmentStatus;
+      userId?: string;
     } = {},
   ) {
     const whereQuery: Record<any, any> = {};
 
     if (params.id) {
       whereQuery['id'] = params.id;
+    }
+
+    if (params?.userId) {
+      whereQuery['userId'] = params.userId;
     }
 
     if (params.status) {
@@ -112,7 +117,7 @@ export class UserEmployeeAppointmentService {
     }
 
     const histories = await this.repository.find({
-      relations: { employeeAvailability: { employee: true } },
+      relations: { employeeAvailability: { employee: true }, user: true },
       where: whereQuery,
     });
 

@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { EmployeeAvailability } from './employee-availability.entity';
 import { registerEnumType } from '@nestjs/graphql';
+import { User } from './user.entity';
 
 export enum UserEmployeeAppointmentStatus {
   PENDING = 'PENDING',
@@ -30,6 +32,10 @@ export class UserEmployeeAppointment {
 
   @Column()
   userId: string;
+
+  @ManyToOne((type) => User)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne
+  user: User;
 
   @Column({
     type: 'enum',

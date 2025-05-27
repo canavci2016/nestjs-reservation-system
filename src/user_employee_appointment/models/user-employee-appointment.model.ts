@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { UserEmployeeAppointmentAvailability } from './employee-availability.model';
+import { UserEmployeeAppointmentUser } from './user.model';
 
 @ObjectType()
 export class UserEmployeeAppointment {
@@ -12,6 +13,12 @@ export class UserEmployeeAppointment {
   @Field({ description: 'appointment status' })
   createdAt: Date;
 
+  @Field({ description: 'appointment user id' })
+  userId: string;
+
   @Field((type) => UserEmployeeAppointmentAvailability)
   employeeAvailability: UserEmployeeAppointmentAvailability;
+
+  @Field((type) => UserEmployeeAppointmentUser)
+  user: UserEmployeeAppointmentUser;
 }
