@@ -5,6 +5,8 @@ import { CompanyUpdateInput } from './dto/category-update.input';
 import { SuperAdminCompany } from './models/super-admin-company.model';
 import { SuperAdminAuthGuard } from 'src/superadmin_auth/superadmin_auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class CompanyResolver {
@@ -41,5 +43,11 @@ export class CompanyResolver {
   async SuperAdmin_Company_delete(@Args('id') id: string) {
     const company = await this.service.deleteById(id);
     return Boolean(company.affected);
+  }
+
+  @UseGuards(CompanyAppGuard)
+  @Query(() => SuperAdminCompany)
+  ClienyApp_Company_detail(@CompanyApp() company: SuperAdminCompany) {
+    return company;
   }
 }

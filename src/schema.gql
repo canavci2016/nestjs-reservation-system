@@ -262,6 +262,7 @@ type Query {
   ClientApp_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   ClientApp_Employee_list(pagination: PaginationInput): [Employee!]!
   ClientApp_User_profile: AuthUser!
+  ClienyApp_Company_detail: SuperAdminCompany!
   Company_profile: Company!
   SuperAdmin_Company_list: [SuperAdminCompany!]!
 }
