@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { BlogService } from './blog.service';
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { AddBlogInput } from './dto/add-blog.input';
 import { Blog } from './models/blog.model';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
@@ -8,6 +8,8 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateBlogInput } from './dto/update-blog.input';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class BlogResolver {
@@ -71,5 +73,40 @@ export class BlogResolver {
       },
     );
     return Boolean(model.affected);
+  }
+
+  @UseGuards(CompanyAppGuard)
+  @Query(() => [Blog])
+  async ClientApp_Blog_list(
+    @CompanyApp() company: { id: string },
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<Blog[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = await this.blogService.findAll({
+      companyId: company.id,
+      pagination: paginationObj,
+    });
+    return models;
+  }
+
+  @UseGuards(CompanyAppGuard)
+  @Query(() => Blog)
+  async ClientApp_Blog_detail(
+    @CompanyApp() company: { id: string },
+    @Args('id') id: string,
+  ): Promise<Blog> {
+    const model = await this.blogService.findOne({
+      companyId: company.id,
+      id: id,
+    });
+
+    if (!model) {
+      throw new NotFoundException('blog is absent');
+    }
+
+    return model;
   }
 }

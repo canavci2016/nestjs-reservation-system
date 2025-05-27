@@ -257,6 +257,8 @@ type Query {
   Appointment_history: [UserEmployeeAppointment!]!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  ClientApp_Blog_detail(id: String!): Blog!
+  ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
   ClientApp_User_profile: AuthUser!
   Company_profile: Company!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
