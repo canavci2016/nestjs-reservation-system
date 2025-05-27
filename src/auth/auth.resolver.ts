@@ -15,7 +15,7 @@ export class AuthResolver {
 
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
-  async User_login(
+  async ClientApp_User_login(
     @CompanyApp() company: any,
     @Args() loginArgs: UserLoginArgs,
   ): Promise<string> {
@@ -30,7 +30,7 @@ export class AuthResolver {
 
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
-  async User_signUp(
+  async ClientApp_User_signUp(
     @CompanyApp() company: any,
     @Args('payload') payload: UserSignUpInput,
   ): Promise<string> {
@@ -43,7 +43,7 @@ export class AuthResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => AuthUser)
-  async User_profile(@User() authUser: any): Promise<AuthUser> {
+  async ClientApp_User_profile(@User() authUser: any): Promise<AuthUser> {
     const user = await this.authService.findUserById(authUser.sub as string);
     const authUserIns = new AuthUser();
     authUserIns.id = user.id;

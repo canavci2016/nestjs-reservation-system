@@ -229,14 +229,14 @@ type Mutation {
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   Appointment_book(payload: BookAppointmentInput!): Boolean!
+  ClientApp_User_login(password: String!, userName: String!): String!
+  ClientApp_User_signUp(payload: UserSignUpInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
   SuperAdmin_Auth_updateProfile(payload: SuperAdminUpdateProfileInput!): Boolean!
   SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
   SuperAdmin_Company_delete(id: String!): Boolean!
   SuperAdmin_Company_update(id: String!, payload: CompanyUpdateInput!): Boolean!
-  User_login(password: String!, userName: String!): String!
-  User_signUp(payload: UserSignUpInput!): String!
 }
 
 input PaginationInput {
@@ -255,10 +255,12 @@ type Query {
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
   Appointment_history: [UserEmployeeAppointment!]!
+  ClientApp_Announcement_detail(id: String!): Announcement!
+  ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  ClientApp_User_profile: AuthUser!
   Company_profile: Company!
   Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   SuperAdmin_Company_list: [SuperAdminCompany!]!
-  User_profile: AuthUser!
 }
 
 input SetDeviceInput {
