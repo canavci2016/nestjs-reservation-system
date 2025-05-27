@@ -21,6 +21,7 @@ import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { AdminAuthModule } from './admin_auth/admin_auth.module';
 import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
 import { UploadModule } from './upload/upload.module';
+import { UserPackageModule } from './user_package/user_package.module';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -75,6 +76,7 @@ const configFactory = {
     AdminAuthModule,
     SuperadminAuthModule,
     UploadModule,
+    UserPackageModule,
   ],
   controllers: [AppController],
   providers: [AppService, configFactory],

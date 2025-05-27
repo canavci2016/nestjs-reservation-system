@@ -148,6 +148,14 @@ input CompanyAddInput {
   userName: String!
 }
 
+input CompanyAddUserPackageInput {
+  expiresInNumber: Float!
+  expiresInType: CompanyUserPackageExpiresType!
+  isActive: Boolean!
+  name: String!
+  quota: Float!
+}
+
 input CompanyBookAppointmentInput {
   employeeAvailabilityId: String!
   userId: String!
@@ -160,6 +168,12 @@ input CompanyUpdateInput {
   password: String
   secretKey: String
   userName: String
+}
+
+enum CompanyUserPackageExpiresType {
+  DAY
+  MONTH
+  YEAR
 }
 
 """
@@ -223,6 +237,7 @@ type Mutation {
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
   AdminApp_Company_Employee_delete(id: String!): Boolean!
   AdminApp_Company_Employee_update(id: String!, payload: UpdateEmployeeInput!): Boolean!
+  AdminApp_Company_UserPackage_add(payload: CompanyAddUserPackageInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Company_User_delete(id: String!): Boolean!
   AdminApp_Company_User_update(payload: UserUpdateInput!, userId: String!): Boolean!
