@@ -8,6 +8,8 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateEmployeeInput } from './dto/update-employee.input';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class EmployeeResolver {
@@ -68,5 +70,23 @@ export class EmployeeResolver {
       payload,
     );
     return Boolean(model.affected);
+  }
+
+  @UseGuards(CompanyAppGuard)
+  @Query(() => [Employee])
+  async ClientApp_Employee_list(
+    @CompanyApp() company: { id: string },
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<Employee[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = await this.employeeService.findAll({
+      companyId: company.id,
+      pagination: paginationObj,
+      isActive: true,
+    });
+    return models;
   }
 }

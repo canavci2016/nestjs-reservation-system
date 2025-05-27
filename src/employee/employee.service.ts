@@ -23,7 +23,9 @@ export class EmployeeService {
       whereQuery['companyId'] = options.companyId;
     }
 
-    whereQuery['isActive'] = true;
+    if (options?.isActive) {
+      whereQuery['isActive'] = options.isActive;
+    }
 
     query['where'] = whereQuery;
 
