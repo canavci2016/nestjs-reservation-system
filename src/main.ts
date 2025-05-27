@@ -6,7 +6,7 @@ const graphqlUploadExpress = require('graphql-upload/graphqlUploadExpress.js');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ origin: false });
+  app.enableCors({ origin: '*' });
   app.use(
     '/graphql',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
