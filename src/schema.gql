@@ -140,6 +140,7 @@ type Company {
 }
 
 input CompanyAddInput {
+  enableUserPackageSystem: Boolean
   isActive: Boolean
   name: String!
   password: String!
@@ -153,6 +154,7 @@ input CompanyBookAppointmentInput {
 }
 
 input CompanyUpdateInput {
+  enableUserPackageSystem: Boolean
   isActive: Boolean
   name: String
   password: String
@@ -272,6 +274,9 @@ input SetDeviceInput {
 }
 
 type SuperAdminCompany {
+  """determine if a  company enabled user packaging system"""
+  enableUserPackageSystem: Boolean
+
   """company unique id"""
   id: String!
 

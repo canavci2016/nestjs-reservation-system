@@ -19,4 +19,10 @@ export class SuperAdminCompany {
 
   @Field({ description: 'company status' })
   isActive?: boolean;
+
+  @Field({
+    description: 'determine if a  company enabled user packaging system',
+    nullable: true,
+  })
+  enableUserPackageSystem?: boolean;
 }

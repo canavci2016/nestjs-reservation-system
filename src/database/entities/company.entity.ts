@@ -30,6 +30,9 @@ export class Company {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ default: false })
+  enableUserPackageSystem: boolean;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

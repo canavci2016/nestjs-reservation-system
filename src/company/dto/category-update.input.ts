@@ -16,4 +16,7 @@ export class CompanyUpdateInput {
 
   @Field({ nullable: true })
   isActive?: boolean;
+
+  @Field({ nullable: true })
+  enableUserPackageSystem?: boolean;
 }
