@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeAvailabilityService } from './employee-availability.service';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { User } from 'src/auth/auth.decorator';
@@ -20,6 +19,7 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Resolver()
 export class EmployeeAvailabilityResolver {
@@ -27,18 +27,6 @@ export class EmployeeAvailabilityResolver {
     private readonly availabilityService: EmployeeAvailabilityService,
     private readonly employeeService: EmployeeService,
   ) {}
-
-  @UseGuards(CompanyAppGuard)
-  @UseInterceptors(ExtractAuthUserInterceptor)
-  @Query(() => [EmployeeAvailability])
-  async Employee_Availability_list(
-    @CompanyApp() company: { id: string },
-    @User() user: { sub: string },
-    @Args() args: ListAvailabilityArgs,
-  ): Promise<EmployeeAvailability[]> {
-    const result = await this.availabilityService.getAvailableTimeSlots(args);
-    return result;
-  }
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
@@ -94,6 +82,17 @@ export class EmployeeAvailabilityResolver {
     const result = await this.availabilityService.getAvailableTimeSlots({
       ...args,
     });
+    return result;
+  }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ExtractAuthUserInterceptor)
+  @Query(() => [EmployeeAvailability])
+  async ClientApp_Employee_Availability_list(
+    @User() user: { sub: string },
+    @Args() args: ListAvailabilityArgs,
+  ): Promise<EmployeeAvailability[]> {
+    const result = await this.availabilityService.getAvailableTimeSlots(args);
     return result;
   }
 }
