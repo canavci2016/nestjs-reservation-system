@@ -386,6 +386,7 @@ input UserAddInput {
 type UserEmployeeAppointment {
   """appointment status"""
   createdAt: DateTime!
+  employee: UserEmployeeAppointmentEmployee!
   employeeAvailability: UserEmployeeAppointmentAvailability!
 
   """appointment id"""
@@ -414,6 +415,29 @@ type UserEmployeeAppointmentAvailability {
 
   """appointment start time"""
   startTime: String!
+}
+
+type UserEmployeeAppointmentEmployee {
+  """user email"""
+  createdAt: DateTime
+
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+
+  """user unique name"""
+  userName: String!
 }
 
 enum UserEmployeeAppointmentStatus {

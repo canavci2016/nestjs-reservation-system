@@ -12,6 +12,7 @@ import {
   UserEmployeeAppointment,
   UserEmployeeAppointmentStatus,
 } from 'src/database/entities/user-employee-appointment.entity';
+import { Employee } from 'src/database/entities/employee.entity';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -116,10 +117,15 @@ export class UserEmployeeAppointmentService {
       };
     }
 
-    const histories = await this.repository.find({
+    const rawHistories = await this.repository.find({
       relations: { employeeAvailability: { employee: true }, user: true },
       where: whereQuery,
     });
+
+    const histories = rawHistories.map((item) => ({
+      ...item,
+      employee: item.employeeAvailability.employee,
+    }));
 
     return histories;
   }
