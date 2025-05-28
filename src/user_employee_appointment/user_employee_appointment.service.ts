@@ -12,7 +12,6 @@ import {
   UserEmployeeAppointment,
   UserEmployeeAppointmentStatus,
 } from 'src/database/entities/user-employee-appointment.entity';
-import { Employee } from 'src/database/entities/employee.entity';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -136,18 +135,30 @@ export class UserEmployeeAppointmentService {
     return this.repository.save(payload);
   }
 
-  async accept(id: string, employeeId: string, comment: string = '') {
-    const appointment = await this.history({
-      id: id,
-      employeeId: employeeId,
+  async accept(
+    condition: { id: string; employeeId?: string; companyId?: string },
+    comment: string = '',
+  ) {
+    const historyQuery = {
+      id: condition.id,
       status: UserEmployeeAppointmentStatus.PENDING,
-    });
+    };
+
+    if (condition.employeeId) {
+      historyQuery['employeeId'] = condition.employeeId;
+    }
+
+    if (condition.companyId) {
+      historyQuery['companyId'] = condition.companyId;
+    }
+
+    const appointment = await this.history(historyQuery);
 
     if (appointment.length === 0) {
       throw new NotFoundException('there is no pending appointment available');
     }
 
-    const result = await this.updateById(id, {
+    const result = await this.updateById(condition.id, {
       status: UserEmployeeAppointmentStatus.ACCEPTED,
       comment,
     });
@@ -155,18 +166,30 @@ export class UserEmployeeAppointmentService {
     return true;
   }
 
-  async reject(id: string, employeeId: string, comment: string = '') {
-    const appointment = await this.history({
-      id: id,
-      employeeId: employeeId,
+  async reject(
+    condition: { id: string; employeeId?: string; companyId?: string },
+    comment: string = '',
+  ) {
+    const historyQuery = {
+      id: condition.id,
       status: UserEmployeeAppointmentStatus.PENDING,
-    });
+    };
+
+    if (condition.employeeId) {
+      historyQuery['employeeId'] = condition.employeeId;
+    }
+
+    if (condition.companyId) {
+      historyQuery['companyId'] = condition.companyId;
+    }
+
+    const appointment = await this.history(historyQuery);
 
     if (appointment.length === 0) {
       throw new NotFoundException('there is no pending appointment available');
     }
 
-    const result = await this.updateById(id, {
+    const result = await this.updateById(condition.id, {
       status: UserEmployeeAppointmentStatus.REJECTED,
       comment,
     });

@@ -103,8 +103,7 @@ export class UserEmployeeAppointmentResolver {
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
     const list = await this.appointmentService.accept(
-      id,
-      employeeDto.sub,
+      { id, employeeId: employeeDto.sub },
       comment || '',
     );
 
@@ -119,8 +118,36 @@ export class UserEmployeeAppointmentResolver {
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
     const list = await this.appointmentService.reject(
-      id,
-      employeeDto.sub,
+      { id, employeeId: employeeDto.sub },
+      comment || '',
+    );
+
+    return true;
+  }
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Appointment_accept(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+    @Args('comment', { nullable: true }) comment: string,
+  ): Promise<boolean> {
+    const list = await this.appointmentService.accept(
+      { id, companyId: company.sub },
+      comment || '',
+    );
+
+    return true;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Appointment_reject(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id') id: string,
+    @Args('comment', { nullable: true }) comment: string,
+  ): Promise<boolean> {
+    const list = await this.appointmentService.reject(
+      { id, companyId: company.sub },
       comment || '',
     );
 
