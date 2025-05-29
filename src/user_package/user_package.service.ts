@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyUserPackage } from 'src/database/entities/company-user-package.entity';
+import {
+  CompanyUserPackage,
+  CompanyUserPackageExpiresType,
+} from 'src/database/entities/company-user-package.entity';
+import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
+import * as moment from 'moment';
 
 export interface FindAllOptions {
   companyId?: string;
@@ -15,6 +21,9 @@ export class UserPackageService {
   constructor(
     @InjectRepository(CompanyUserPackage)
     private repository: Repository<CompanyUserPackage>,
+    @InjectRepository(UserAndCompanyUserPackage)
+    private userAndCompanyUserPackageRepository: Repository<UserAndCompanyUserPackage>,
+    private readonly userService: UserService,
   ) {
     console.log('UserPackageService initialized');
   }
@@ -66,5 +75,56 @@ export class UserPackageService {
       .set(payload)
       .where(condition)
       .execute();
+  }
+
+  async attachACompanyUserPackageToUser(
+    payload: { userId: string } & Pick<CompanyUserPackage, 'id' | 'companyId'>,
+  ) {
+    const companyUserPackage = await this.findOne({
+      id: payload.id,
+      companyId: payload.companyId,
+    });
+
+    if (!companyUserPackage) {
+      throw new NotFoundException('package not found');
+    }
+
+    const user = await this.userService.findOne({
+      id: payload.userId,
+      companyId: payload.companyId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+
+    const res = await this.userAndCompanyUserPackageRepository.save({
+      userId: payload.userId,
+      companyUserPackageId: payload.id,
+      quota: companyUserPackage.quota,
+      numberOfUsage: 0,
+      startDate: moment().format('YYYY-MM-DD'),
+      endDate: this.addCertainTimeToADate(new Date(), companyUserPackage),
+    });
+
+    return res;
+  }
+
+  addCertainTimeToADate(date: Date, companyUserPackage: CompanyUserPackage) {
+    const dateObj = moment(date);
+    const amount = companyUserPackage.expiresInNumber;
+    if (
+      companyUserPackage.expiresInType === CompanyUserPackageExpiresType.YEAR
+    ) {
+      return dateObj.add(amount, 'years').format('YYYY-MM-DD');
+    } else if (
+      companyUserPackage.expiresInType === CompanyUserPackageExpiresType.MONTH
+    ) {
+      return dateObj.add(amount, 'months').format('YYYY-MM-DD');
+    } else if (
+      companyUserPackage.expiresInType === CompanyUserPackageExpiresType.DAY
+    ) {
+      return dateObj.add(amount, 'days').format('YYYY-MM-DD');
+    }
   }
 }

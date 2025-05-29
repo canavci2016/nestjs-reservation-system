@@ -156,6 +156,12 @@ input CompanyAddUserPackageInput {
   quota: Float!
 }
 
+input CompanyAttachUserPackageInput {
+  """package id"""
+  id: String!
+  userId: String!
+}
+
 input CompanyBookAppointmentInput {
   employeeAvailabilityId: String!
   userId: String!
@@ -268,6 +274,7 @@ type Mutation {
   AdminApp_Company_Employee_delete(id: String!): Boolean!
   AdminApp_Company_Employee_update(id: String!, payload: UpdateEmployeeInput!): Boolean!
   AdminApp_Company_UserPackage_add(payload: CompanyAddUserPackageInput!): Boolean!
+  AdminApp_Company_UserPackage_attach(payload: CompanyAttachUserPackageInput!): Boolean!
   AdminApp_Company_UserPackage_delete(id: String!): Boolean!
   AdminApp_Company_UserPackage_update(id: String!, payload: CompanyUpdateUserPackageInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!

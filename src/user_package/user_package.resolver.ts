@@ -8,6 +8,7 @@ import { CompanyUpdateUserPackageInput } from './dto/company-update-user-package
 import { CompanyAddUserPackageInput } from './dto/company-add-user-package.input';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyUserPackage } from './models/company-user-package.model';
+import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package.input';
 
 @Resolver()
 export class UserPackageResolver {
@@ -74,5 +75,19 @@ export class UserPackageResolver {
       companyId: company.sub,
     });
     return Boolean(model.affected);
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_UserPackage_attach(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('payload') payload: CompanyAttachUserPackageInput,
+  ): Promise<boolean> {
+    const model = await this.packageService.attachACompanyUserPackageToUser({
+      userId: payload.userId,
+      id: payload.id,
+      companyId: company.sub,
+    });
+    return Boolean(model);
   }
 }

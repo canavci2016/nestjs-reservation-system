@@ -10,6 +10,7 @@ import { Device } from './entities/device.entity';
 import { Employee } from './entities/employee.entity';
 import { SuperAdmin } from './entities/super-admin.entity';
 import { CompanyUserPackage } from './entities/company-user-package.entity';
+import { UserAndCompanyUserPackage } from './entities/user-and-company-user-package.entity';
 
 @Global()
 @Module({
@@ -25,6 +26,7 @@ import { CompanyUserPackage } from './entities/company-user-package.entity';
       Employee,
       SuperAdmin,
       CompanyUserPackage,
+      UserAndCompanyUserPackage,
     ]),
   ],
   exports: [TypeOrmModule],
