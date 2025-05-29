@@ -170,6 +170,34 @@ input CompanyUpdateInput {
   userName: String
 }
 
+input CompanyUpdateUserPackageInput {
+  expiresInNumber: Float
+  expiresInType: CompanyUserPackageExpiresType
+  isActive: Boolean
+  name: String
+  quota: Float
+}
+
+type CompanyUserPackage {
+  """user package expires number"""
+  expiresInNumber: Float!
+
+  """user package expires type"""
+  expiresInType: CompanyUserPackageExpiresType!
+
+  """user package unique id"""
+  id: String!
+
+  """user package status"""
+  isActive: Boolean!
+
+  """user package  name"""
+  name: String!
+
+  """user package usage limit"""
+  quota: Float!
+}
+
 enum CompanyUserPackageExpiresType {
   DAY
   MONTH
@@ -240,6 +268,8 @@ type Mutation {
   AdminApp_Company_Employee_delete(id: String!): Boolean!
   AdminApp_Company_Employee_update(id: String!, payload: UpdateEmployeeInput!): Boolean!
   AdminApp_Company_UserPackage_add(payload: CompanyAddUserPackageInput!): Boolean!
+  AdminApp_Company_UserPackage_delete(id: String!): Boolean!
+  AdminApp_Company_UserPackage_update(id: String!, payload: CompanyUpdateUserPackageInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Company_User_delete(id: String!): Boolean!
   AdminApp_Company_User_update(payload: UserUpdateInput!, userId: String!): Boolean!
@@ -269,6 +299,7 @@ type Query {
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
+  AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!

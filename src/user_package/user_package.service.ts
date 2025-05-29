@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyUserPackage } from 'src/database/entities/company-user-package.entity';
+import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { Repository } from 'typeorm';
 
 export interface FindAllOptions {
   companyId?: string;
   order?: Record<string, string>;
+  pagination?: Pagination;
 }
 
 @Injectable()
@@ -30,6 +32,11 @@ export class UserPackageService {
     }
 
     query['where'] = whereQuery;
+    const take = options?.pagination?.length || 10;
+    const page = options?.pagination?.number || 1;
+    const skip = (page - 1) * take;
+    query['take'] = take;
+    query['skip'] = skip;
     query['order'] = { createdAt: 'desc' };
     return this.repository.find(query);
   }
