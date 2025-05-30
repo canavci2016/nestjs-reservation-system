@@ -16,6 +16,10 @@ export interface FindAllOptions {
   pagination?: Pagination;
 }
 
+export interface FindAllOptionsForUserAndCompanyPackage extends FindAllOptions {
+  userId?: string;
+}
+
 @Injectable()
 export class UserPackageService {
   constructor(
@@ -48,6 +52,35 @@ export class UserPackageService {
     query['skip'] = skip;
     query['order'] = { createdAt: 'desc' };
     return this.repository.find(query);
+  }
+
+  findAllForUserAndPackage(
+    options: FindAllOptionsForUserAndCompanyPackage | null = null,
+  ) {
+    const query = {};
+    const whereQuery = {};
+
+    if (options?.companyId) {
+      whereQuery['companyUserPackage'] = { companyId: options.companyId };
+    }
+
+    if (options?.userId) {
+      whereQuery['userId'] = options.userId;
+    }
+
+    query['where'] = whereQuery;
+    const take = options?.pagination?.length || 10;
+    const page = options?.pagination?.number || 1;
+    const skip = (page - 1) * take;
+    query['take'] = take;
+    query['skip'] = skip;
+    query['order'] = { createdAt: 'desc' };
+
+    query['relations'] = {
+      companyUserPackage: true,
+    };
+
+    return this.userAndCompanyUserPackageRepository.find(query);
   }
 
   async save(payload: Partial<CompanyUserPackage>) {
@@ -108,6 +141,19 @@ export class UserPackageService {
     });
 
     return res;
+  }
+
+  async detachACompanyUserPackageFromUser(
+    payload: Pick<UserAndCompanyUserPackage, 'id'>,
+  ) {
+    const result = await this.userAndCompanyUserPackageRepository
+      .createQueryBuilder()
+      .delete()
+      .from(UserAndCompanyUserPackage)
+      .where(payload)
+      .execute();
+
+    return result;
   }
 
   addCertainTimeToADate(date: Date, companyUserPackage: CompanyUserPackage) {

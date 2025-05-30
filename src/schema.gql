@@ -167,6 +167,11 @@ input CompanyBookAppointmentInput {
   userId: String!
 }
 
+input CompanyDetachUserPackageInput {
+  """package id on the intermediate table"""
+  id: String!
+}
+
 input CompanyUpdateInput {
   enableUserPackageSystem: Boolean
   isActive: Boolean
@@ -276,6 +281,7 @@ type Mutation {
   AdminApp_Company_UserPackage_add(payload: CompanyAddUserPackageInput!): Boolean!
   AdminApp_Company_UserPackage_attach(payload: CompanyAttachUserPackageInput!): Boolean!
   AdminApp_Company_UserPackage_delete(id: String!): Boolean!
+  AdminApp_Company_UserPackage_detach(payload: CompanyDetachUserPackageInput!): Boolean!
   AdminApp_Company_UserPackage_update(id: String!, payload: CompanyUpdateUserPackageInput!): Boolean!
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Company_User_delete(id: String!): Boolean!
@@ -307,6 +313,7 @@ type Query {
   AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
+  AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
@@ -421,6 +428,31 @@ input UserAddInput {
   password: String!
   phone: String
   userName: String!
+}
+
+type UserAndCompanyUserPackage {
+  companyUserPackage: CompanyUserPackage!
+
+  """user package id"""
+  companyUserPackageId: String!
+
+  """user package end date"""
+  endDate: String!
+
+  """user package unique id"""
+  id: String!
+
+  """user package usage stats"""
+  numberOfUsage: Float!
+
+  """user package quota"""
+  quota: Float!
+
+  """user package start date"""
+  startDate: String!
+
+  """user package user id """
+  userId: String!
 }
 
 type UserEmployeeAppointment {

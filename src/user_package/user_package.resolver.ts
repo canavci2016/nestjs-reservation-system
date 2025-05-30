@@ -9,6 +9,8 @@ import { CompanyAddUserPackageInput } from './dto/company-add-user-package.input
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyUserPackage } from './models/company-user-package.model';
 import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package.input';
+import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
+import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
 
 @Resolver()
 export class UserPackageResolver {
@@ -65,6 +67,32 @@ export class UserPackageResolver {
   }
 
   @UseGuards(CompanyAuthGuard)
+  @Query(() => [UserAndCompanyUserPackage])
+  async AdminApp_Company_UserPackage_listForAUser(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('userId') userId: string,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<UserAndCompanyUserPackage[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = await this.packageService.findAllForUserAndPackage({
+      userId: userId,
+      companyId: company.sub,
+      pagination: paginationObj,
+    });
+
+    const result = models.map((m) => ({
+      ...m,
+      startDate: m.startDate.toString(),
+      endDate: m.endDate.toString(),
+    }));
+
+    return result;
+  }
+
+  @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_UserPackage_delete(
     @Company() company: AuthCompanyDecoratorInterface,
@@ -89,5 +117,17 @@ export class UserPackageResolver {
       companyId: company.sub,
     });
     return Boolean(model);
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_UserPackage_detach(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('payload') payload: CompanyDetachUserPackageInput,
+  ): Promise<boolean> {
+    const model = await this.packageService.detachACompanyUserPackageFromUser({
+      id: payload.id,
+    });
+    return Boolean(model.affected);
   }
 }
