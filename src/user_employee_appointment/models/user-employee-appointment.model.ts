@@ -11,6 +11,9 @@ export class UserEmployeeAppointment {
   @Field({ description: 'appointment status' })
   status: string;
 
+  @Field({ description: 'appointment comment', nullable: true })
+  comment: string;
+
   @Field({ description: 'appointment status' })
   createdAt: Date;
 

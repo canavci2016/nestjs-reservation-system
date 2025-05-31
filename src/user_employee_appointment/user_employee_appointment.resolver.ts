@@ -15,6 +15,8 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
+import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
+import { PaginationInput } from 'src/pagination/dto/pagination.input';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -26,7 +28,7 @@ export class UserEmployeeAppointmentResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  async Appointment_book(
+  async ClientApp_Appointment_book(
     @User() user: { sub: string },
     @Args('payload') payload: BookAppointmentInput,
   ): Promise<boolean> {
@@ -39,10 +41,18 @@ export class UserEmployeeAppointmentResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [UserEmployeeAppointment])
-  async Appointment_history(
-    @User() user: { sub: string },
+  async ClientApp_Appointment_history(
+    @User() user: AuthUserDecoratorInterface,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<UserEmployeeAppointment[]> {
-    const list = await this.appointmentService.history();
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const list = await this.appointmentService.history({
+      userId: user.sub,
+      pagination: paginationObj,
+    });
     return list;
   }
 

@@ -290,7 +290,7 @@ type Mutation {
   AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
-  Appointment_book(payload: BookAppointmentInput!): Boolean!
+  ClientApp_Appointment_book(payload: BookAppointmentInput!): Boolean!
   ClientApp_User_login(password: String!, userName: String!): String!
   ClientApp_User_signUp(payload: UserSignUpInput!): String!
   Device_set(payload: SetDeviceInput!): Boolean!
@@ -318,9 +318,9 @@ type Query {
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
-  Appointment_history: [UserEmployeeAppointment!]!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  ClientApp_Appointment_history(pagination: PaginationInput): [UserEmployeeAppointment!]!
   ClientApp_Blog_detail(id: String!): Blog!
   ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
   ClientApp_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
@@ -456,6 +456,9 @@ type UserAndCompanyUserPackage {
 }
 
 type UserEmployeeAppointment {
+  """appointment comment"""
+  comment: String
+
   """appointment status"""
   createdAt: DateTime!
   employee: UserEmployeeAppointmentEmployee!

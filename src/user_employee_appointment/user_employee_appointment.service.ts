@@ -12,6 +12,7 @@ import {
   UserEmployeeAppointment,
   UserEmployeeAppointmentStatus,
 } from 'src/database/entities/user-employee-appointment.entity';
+import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -78,6 +79,7 @@ export class UserEmployeeAppointmentService {
       endDate?: string;
       status?: UserEmployeeAppointmentStatus;
       userId?: string;
+      pagination?: Pagination;
     } = {},
   ) {
     const whereQuery: Record<any, any> = {};
@@ -116,10 +118,21 @@ export class UserEmployeeAppointmentService {
       };
     }
 
-    const rawHistories = await this.repository.find({
-      relations: { employeeAvailability: { employee: true }, user: true },
-      where: whereQuery,
-    });
+    const query: Record<any, any> = {};
+
+    const take = params?.pagination?.length || 10;
+    const page = params?.pagination?.number || 1;
+    const skip = (page - 1) * take;
+    query['take'] = take;
+    query['skip'] = skip;
+    query['order'] = { createdAt: 'desc' };
+    query['relations'] = {
+      employeeAvailability: { employee: true },
+      user: true,
+    };
+    query['where'] = whereQuery;
+
+    const rawHistories = await this.repository.find(query);
 
     const histories = rawHistories.map((item) => ({
       ...item,
