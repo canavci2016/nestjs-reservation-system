@@ -22,6 +22,7 @@ import { AdminAuthModule } from './admin_auth/admin_auth.module';
 import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
 import { UploadModule } from './upload/upload.module';
 import { UserPackageModule } from './user_package/user_package.module';
+import { TokenModule } from './token/token.module';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -77,6 +78,7 @@ const configFactory = {
     SuperadminAuthModule,
     UploadModule,
     UserPackageModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService, configFactory],

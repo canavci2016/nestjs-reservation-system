@@ -8,10 +8,17 @@ import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
 import { User } from './models/user.model';
 import { UserUpdateInput } from './dto/user-update.input';
+import { TokenService } from 'src/token/token.service';
+import * as moment from 'moment';
+import { TokenTypes } from 'src/token/token-types.enum';
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -19,12 +26,56 @@ export class UserResolver {
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: UserAddInput,
   ): Promise<boolean> {
-    const model = await this.userService.save({
+    const userModel = await this.userService.save({
       ...payload,
       companyId: company.sub,
       isActive: payload.isActive || true,
     });
-    return Boolean(model);
+    const token = await this.tokenService.save({
+      owner_type: 'user',
+      owner_id: userModel.id,
+      action: TokenTypes.SET_PASSWORD,
+      expiresAt: moment().add(2, 'days').toDate(),
+    });
+
+    const snsClient = new SNSClient({
+      region: process.env.AWS_REGION,
+    });
+
+    const setPasswordUrl = `${process.env.APP_URL}/user/set-password?token=${token.content}`;
+
+    const attributes = {
+      name: { DataType: 'String', StringValue: userModel.name },
+      lastName: { DataType: 'String', StringValue: userModel.lastName },
+      passwordChangeUrl: {
+        DataType: 'String',
+        StringValue: setPasswordUrl,
+      },
+    };
+    if (userModel.email) {
+      attributes['email'] = {
+        DataType: 'String',
+        StringValue: userModel.email,
+      };
+    }
+    if (userModel.phone) {
+      attributes['phone'] = {
+        DataType: 'String',
+        StringValue: userModel.phone,
+      };
+    }
+
+    if (userModel.email) {
+      const response = await snsClient.send(
+        new PublishCommand({
+          Message: 'hello',
+          TopicArn: process.env.AWS_SNS_CREATE_ACCOUNT_ARN,
+          MessageAttributes: attributes,
+        }),
+      );
+    }
+
+    return Boolean(userModel);
   }
 
   @UseGuards(CompanyAuthGuard)
