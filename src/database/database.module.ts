@@ -11,6 +11,7 @@ import { Employee } from './entities/employee.entity';
 import { SuperAdmin } from './entities/super-admin.entity';
 import { CompanyUserPackage } from './entities/company-user-package.entity';
 import { UserAndCompanyUserPackage } from './entities/user-and-company-user-package.entity';
+import { Token } from './entities/token.entity';
 
 @Global()
 @Module({
@@ -27,6 +28,7 @@ import { UserAndCompanyUserPackage } from './entities/user-and-company-user-pack
       SuperAdmin,
       CompanyUserPackage,
       UserAndCompanyUserPackage,
+      Token,
     ]),
   ],
   exports: [TypeOrmModule],
