@@ -113,11 +113,6 @@ export class UserResolver {
     @Args('userId') userId: string,
     @Args('payload') payload: UserUpdateInput,
   ): Promise<boolean> {
-    const isUserExists = await this.userService.findOne({
-      userName: payload.userName,
-      companyId: company.sub,
-    });
-
     const user = await this.userService.findOne({ id: userId });
 
     if (user?.userName != payload.userName) {
