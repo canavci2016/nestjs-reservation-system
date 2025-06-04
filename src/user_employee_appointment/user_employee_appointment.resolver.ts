@@ -56,6 +56,17 @@ export class UserEmployeeAppointmentResolver {
     return list;
   }
 
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async ClientApp_Appointment_reject(
+    @Args('id') id: string,
+    @Args('comment', { nullable: true }) comment: string,
+  ): Promise<boolean> {
+    const list = await this.appointmentService.reject({ id }, comment || '');
+
+    return true;
+  }
+
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_Appointment_add(
