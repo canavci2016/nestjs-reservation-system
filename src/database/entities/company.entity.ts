@@ -30,6 +30,9 @@ export class Company {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ nullable: true })
+  deviceToken?: string;
+
   @Column({ default: false })
   enableUserPackageSystem: boolean;
 
