@@ -9,6 +9,8 @@ import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { CompanySelfUpdateInput } from './dto/company-self-update.input';
+import { Company } from 'src/company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 
 @Resolver()
 export class CompanyResolver {
@@ -56,10 +58,10 @@ export class CompanyResolver {
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_profile_update(
-    @Args('id') id: string,
+    @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: CompanySelfUpdateInput,
   ): Promise<boolean> {
-    const company = await this.service.updateById(id, payload);
+    const res = await this.service.updateById(company.sub, payload);
     return true;
   }
 }
