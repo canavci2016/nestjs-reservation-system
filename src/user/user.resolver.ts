@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { ConflictException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -26,6 +26,15 @@ export class UserResolver {
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: UserAddInput,
   ): Promise<boolean> {
+    const isUserExists = await this.userService.findOne({
+      userName: payload.userName,
+      companyId: company.sub,
+    });
+
+    if (isUserExists) {
+      throw new ConflictException('user is already available');
+    }
+
     const userModel = await this.userService.save({
       ...payload,
       companyId: company.sub,
@@ -104,6 +113,24 @@ export class UserResolver {
     @Args('userId') userId: string,
     @Args('payload') payload: UserUpdateInput,
   ): Promise<boolean> {
+    const isUserExists = await this.userService.findOne({
+      userName: payload.userName,
+      companyId: company.sub,
+    });
+
+    const user = await this.userService.findOne({ id: userId });
+
+    if (user?.userName != payload.userName) {
+      const isUserExists = await this.userService.findOne({
+        userName: payload.userName,
+        companyId: company.sub,
+      });
+
+      if (isUserExists) {
+        throw new ConflictException('user is already available');
+      }
+    }
+
     const model = await this.userService.updateById(userId, {
       ...payload,
       companyId: company.sub,
