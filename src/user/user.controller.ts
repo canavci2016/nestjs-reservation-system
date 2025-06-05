@@ -62,6 +62,6 @@ export class UserController {
     const revokeToken = await this.tokenService.updateById(tokenModel.id, {
       revoked: true,
     });
-    return res.send('password is update');
+    return res.send('password is updated please close the tab');
   }
 }
