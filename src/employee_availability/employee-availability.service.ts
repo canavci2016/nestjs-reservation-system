@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { Between, IsNull, Repository } from 'typeorm';
 import * as moment from 'moment';
 import { EmployeeService } from 'src/employee/employee.service';
 import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
@@ -20,7 +20,11 @@ export class EmployeeAvailabilityService {
     console.log('EmployeeAvailabilityService initialized');
   }
 
-  async getAvailableTimeSlots(payload: { employeeId: string; date: string }) {
+  async getAvailableTimeSlots(payload: {
+    employeeId: string;
+    startDate?: string;
+    endDate?: string;
+  }) {
     const employee = await this.employeeService.findOne({
       id: payload.employeeId,
     });
@@ -28,20 +32,26 @@ export class EmployeeAvailabilityService {
       throw new NotFoundException('Employee doesnt exist');
     }
 
-    const date = moment(payload.date).format('YYYY-MM-DD');
+    const whereQuery = {
+      employeeId: payload.employeeId,
+      appointments: [
+        { userId: IsNull() },
+        { status: UserEmployeeAppointmentStatus.REJECTED },
+      ],
+    };
+
+    const startDate = payload.startDate
+      ? moment(payload.startDate).format('YYYY-MM-DD')
+      : moment().format('YYYY-MM-DD');
+
+    const endDate = payload.endDate
+      ? moment(payload.endDate).format('YYYY-MM-DD')
+      : moment().format('YYYY-MM-DD');
+
+    whereQuery['availableDate'] = Between(startDate, endDate);
+
     const availableSlots = await this.repository.find({
-      where: {
-        availableDate: date,
-        employeeId: payload.employeeId,
-        appointments: [
-          {
-            userId: IsNull(),
-          },
-          {
-            status: UserEmployeeAppointmentStatus.REJECTED,
-          },
-        ],
-      },
+      where: whereQuery,
       relations: { appointments: true },
     });
 

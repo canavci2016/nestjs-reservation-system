@@ -5,6 +5,9 @@ export class ListAvailabilityArgs {
   @Field()
   employeeId: string;
 
-  @Field()
-  date: string;
+  @Field({ nullable: true })
+  startDate?: string;
+
+  @Field({ nullable: true })
+  endDate?: string;
 }

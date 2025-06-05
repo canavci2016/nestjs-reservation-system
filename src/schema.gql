@@ -322,20 +322,20 @@ type Query {
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
   AdminApp_Company_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
-  AdminApp_Company_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
+  AdminApp_Company_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_Appointment_list(endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
-  AdminApp_Employee_Availability_list(date: String!): [EmployeeAvailability!]!
+  AdminApp_Employee_Availability_list(endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_profile: AuthEmployee!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
   ClientApp_Appointment_history(pagination: PaginationInput): [UserEmployeeAppointment!]!
   ClientApp_Blog_detail(id: String!): Blog!
   ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
-  ClientApp_Employee_Availability_list(date: String!, employeeId: String!): [EmployeeAvailability!]!
+  ClientApp_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   ClientApp_Employee_list(pagination: PaginationInput): [Employee!]!
   ClientApp_User_profile: AuthUser!
   ClienyApp_Company_detail: SuperAdminCompany!
