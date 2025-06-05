@@ -46,7 +46,7 @@ export class EmployeeAvailabilityService {
 
     const endDate = payload.endDate
       ? moment(payload.endDate).format('YYYY-MM-DD')
-      : moment().format('YYYY-MM-DD');
+      : moment(startDate).format('YYYY-MM-DD');
 
     whereQuery['availableDate'] = Between(startDate, endDate);
 
