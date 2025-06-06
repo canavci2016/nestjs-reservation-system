@@ -17,6 +17,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -44,7 +45,11 @@ export class UserEmployeeAppointmentResolver {
   async ClientApp_Appointment_history(
     @User() user: AuthUserDecoratorInterface,
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args() args: ClientAppSearchAppointmentArgs,
   ): Promise<UserEmployeeAppointment[]> {
+    const startDate = args.startDate || moment().format('YYYY-MM-DD');
+    const endDate = args.endDate || moment().format('YYYY-MM-DD');
+
     const paginationObj = {
       number: pagination?.number || 1,
       length: pagination?.length || 10,
@@ -52,6 +57,8 @@ export class UserEmployeeAppointmentResolver {
     const list = await this.appointmentService.history({
       userId: user.sub,
       pagination: paginationObj,
+      startDate,
+      endDate,
     });
     return list;
   }
