@@ -303,8 +303,11 @@ type Mutation {
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   ClientApp_Appointment_book(payload: BookAppointmentInput!): Boolean!
   ClientApp_Appointment_reject(comment: String, id: String!): Boolean!
+  ClientApp_Profile_detail: User!
+  ClientApp_Profile_update(payload: UserUpdateInput!, userId: String!): Boolean!
   ClientApp_User_login(password: String!, userName: String!): String!
   ClientApp_User_signUp(payload: UserSignUpInput!): String!
+  ClientApp_User_update(payload: UserUpdateProfileInput!): Boolean!
   Device_set(payload: SetDeviceInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
   SuperAdmin_Auth_updateProfile(payload: SuperAdminUpdateProfileInput!): Boolean!
@@ -573,4 +576,12 @@ input UserUpdateInput {
   password: String!
   phone: String
   userName: String!
+}
+
+input UserUpdateProfileInput {
+  email: String
+  lastName: String
+  name: String
+  password: String
+  phone: String
 }

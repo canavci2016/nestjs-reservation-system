@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { ConflictException, UseGuards } from '@nestjs/common';
+import { ConflictException, NotFoundException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -12,13 +12,15 @@ import { TokenService } from 'src/token/token.service';
 import * as moment from 'moment';
 import { TokenTypes } from 'src/token/token-types.enum';
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { User as UserDecorator } from 'src/auth/auth.decorator';
 
 @Resolver()
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -145,6 +147,48 @@ export class UserResolver {
       companyId: company.sub,
     });
 
+    return Boolean(model.affected);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => User)
+  async ClientApp_Profile_detail(
+    @UserDecorator() userDto: { sub: string },
+  ): Promise<User> {
+    const user = await this.userService.findOne({ id: userDto.sub });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
+    return user;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async ClientApp_Profile_update(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('userId') userId: string,
+    @Args('payload') payload: UserUpdateInput,
+  ): Promise<boolean> {
+    const user = await this.userService.findOne({ id: userId });
+
+    if (user?.userName != payload.userName) {
+      const isUserExists = await this.userService.findOne({
+        userName: payload.userName,
+        companyId: company.sub,
+      });
+
+      if (isUserExists) {
+        throw new ConflictException('user is already available');
+      }
+    }
+
+    const model = await this.userService.updateById(userId, {
+      ...payload,
+      companyId: company.sub,
+      isActive: payload.isActive || true,
+    });
     return Boolean(model.affected);
   }
 }

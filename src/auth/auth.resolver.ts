@@ -8,10 +8,11 @@ import { AuthGuard } from './auth.guard';
 import { User } from './auth.decorator';
 import { AuthUser } from './models/auth-user.model';
 import { UserSignUpInput } from './dto/user-signup.input';
+import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
@@ -31,12 +32,12 @@ export class AuthResolver {
   @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async ClientApp_User_signUp(
-    @CompanyApp() company: any,
+    @CompanyApp() company: { sub: string },
     @Args('payload') payload: UserSignUpInput,
   ): Promise<string> {
     const user = await this.authService.singUp({
       ...payload,
-      companyId: company.id,
+      companyId: company.sub,
     });
     return user.access_token;
   }
@@ -53,5 +54,15 @@ export class AuthResolver {
     authUserIns.phone = user.phone;
 
     return authUserIns;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async ClientApp_User_update(
+    @User() authUser: { sub: string },
+    @Args('payload') payload: UserUpdateProfileInput,
+  ): Promise<boolean> {
+    const res = await this.authService.updateById(authUser.sub, payload);
+    return Boolean(res.affected);
   }
 }

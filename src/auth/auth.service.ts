@@ -8,13 +8,14 @@ import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.in
 import { JwtService } from '@nestjs/jwt';
 import { Signup } from './interfaces/sign-up.interface';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/database/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
@@ -56,6 +57,16 @@ export class AuthService {
 
     return user;
   }
+
+  async updateById(
+    id: string,
+    payload: Pick<User, 'name' | 'lastName' | 'password' | 'email' | 'phone'>,
+  ) {
+    const res = await this.userService.updateById(id, payload);
+
+    return res;
+  }
+
   async decrytToken(token: string) {
     const payload: Record<any, any> = await this.jwtService.verifyAsync(token);
 
