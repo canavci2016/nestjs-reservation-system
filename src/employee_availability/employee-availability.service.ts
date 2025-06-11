@@ -90,4 +90,15 @@ export class EmployeeAvailabilityService {
   ): Promise<EmployeeAvailability | null> {
     return this.repository.findOneBy(payload);
   }
+
+  async deleteBy(payload: Partial<EmployeeAvailability>) {
+    const result = await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(EmployeeAvailability)
+      .where(payload)
+      .execute();
+
+    return result;
+  }
 }

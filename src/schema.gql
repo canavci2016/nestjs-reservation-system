@@ -285,6 +285,10 @@ type Mutation {
   AdminApp_Company_Blog_delete(id: String!): Boolean!
   AdminApp_Company_Blog_update(id: String!, payload: UpdateBlogInput!): Boolean!
   AdminApp_Company_Employee_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
+  AdminApp_Company_Employee_Availability_delete(
+    """availability id"""
+    id: String!
+  ): Boolean!
   AdminApp_Company_Employee_add(payload: EmployeeSignUpInput!): Boolean!
   AdminApp_Company_Employee_delete(id: String!): Boolean!
   AdminApp_Company_Employee_update(id: String!, payload: UpdateEmployeeInput!): Boolean!
@@ -300,6 +304,10 @@ type Mutation {
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
   AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
+  AdminApp_Employee_Availability_delete(
+    """availability id"""
+    id: String!
+  ): Boolean!
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   ClientApp_Appointment_book(payload: BookAppointmentInput!): Boolean!
   ClientApp_Appointment_reject(comment: String, id: String!): Boolean!

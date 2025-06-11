@@ -25,7 +25,7 @@ export class EmployeeAvailabilityResolver {
   constructor(
     private readonly availabilityService: EmployeeAvailabilityService,
     private readonly employeeService: EmployeeService,
-  ) {}
+  ) { }
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
@@ -72,6 +72,17 @@ export class EmployeeAvailabilityResolver {
     return true;
   }
 
+  @UseGuards(EmployeeAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Employee_Availability_delete(
+    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
+    @Args('id', { description: 'availability id' })
+    id: string,
+  ): Promise<boolean> {
+    const res = await this.availabilityService.deleteBy({ id: id });
+    return Boolean(res.affected);
+  }
+
   @UseGuards(CompanyAuthGuard)
   @Query(() => [EmployeeAvailability])
   async AdminApp_Company_Employee_Availability_list(
@@ -82,6 +93,16 @@ export class EmployeeAvailabilityResolver {
       ...args,
     });
     return result;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Employee_Availability_delete(
+    @Company() companyDto: AuthCompanyDecoratorInterface,
+    @Args('id', { description: 'availability id' }) id: string,
+  ): Promise<boolean> {
+    const res = await this.availabilityService.deleteBy({ id: id });
+    return Boolean(res.affected);
   }
 
   @UseGuards(AuthGuard)
