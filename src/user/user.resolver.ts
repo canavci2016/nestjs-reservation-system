@@ -1,5 +1,9 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { ConflictException, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  ConflictException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -11,16 +15,19 @@ import { UserUpdateInput } from './dto/user-update.input';
 import { TokenService } from 'src/token/token.service';
 import * as moment from 'moment';
 import { TokenTypes } from 'src/token/token-types.enum';
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User as UserDecorator } from 'src/auth/auth.decorator';
+import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 
 @Resolver()
 export class UserResolver {
+  sqsClient: SQSClient;
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
-  ) { }
+  ) {
+    this.sqsClient = new SQSClient({});
+  }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -49,13 +56,10 @@ export class UserResolver {
       expiresAt: moment().add(2, 'days').toDate(),
     });
 
-    const snsClient = new SNSClient({
-      region: process.env.AWS_REGION,
-    });
-
     const setPasswordUrl = `${process.env.APP_URL}/user/set-password?token=${token.content}`;
 
     const attributes = {
+      action: { DataType: 'String', StringValue: 'CLIENTAPP_CREATE_ACCOUNT' },
       name: { DataType: 'String', StringValue: userModel.name },
       lastName: { DataType: 'String', StringValue: userModel.lastName },
       passwordChangeUrl: {
@@ -77,13 +81,16 @@ export class UserResolver {
     }
 
     if (userModel.email) {
-      const response = await snsClient.send(
-        new PublishCommand({
-          Message: 'hello',
-          TopicArn: process.env.AWS_SNS_CREATE_ACCOUNT_ARN,
-          MessageAttributes: attributes,
-        }),
-      );
+      const command = new SendMessageCommand({
+        QueueUrl: process.env.AWS_SQS_QUEUE_URL,
+        DelaySeconds: 10,
+        MessageAttributes: attributes,
+        MessageBody:
+          'Information about current NY Times fiction bestseller for week of 12/11/2016.',
+      });
+
+      const response = await this.sqsClient.send(command);
+      console.log(response);
     }
 
     return Boolean(userModel);
