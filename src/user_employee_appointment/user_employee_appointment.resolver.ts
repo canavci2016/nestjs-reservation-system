@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserEmployeeAppointmentService } from './user_employee_appointment.service';
 import { BookAppointmentInput } from './dto/book-appointment.input';
@@ -18,12 +18,17 @@ import { CompanyBookAppointmentInput } from './dto/company-book-appointment.inpu
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
+import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
+  sqsClient: SQSClient;
+
   constructor(
     private readonly appointmentService: UserEmployeeAppointmentService,
   ) {
+    this.sqsClient = new SQSClient({});
+
     console.log('EmployeeAvailabilityService initialized');
   }
 
@@ -120,6 +125,7 @@ export class UserEmployeeAppointmentResolver {
       endDate,
       status,
     });
+
     return list;
   }
 
@@ -130,12 +136,60 @@ export class UserEmployeeAppointmentResolver {
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
-    const list = await this.appointmentService.accept(
+    const res = await this.appointmentService.accept(
       { id, employeeId: employeeDto.sub },
       comment || '',
     );
 
-    return true;
+    const appointment = await this.appointmentService.findOne({ id: id });
+
+    if (!appointment) {
+      throw new NotFoundException('there is no valid appointment');
+    }
+
+    const userModel = await appointment.user;
+
+    if (!userModel) {
+      throw new NotFoundException('there is no valid user');
+    }
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_ACCEPT',
+      },
+      employeeName: {
+        DataType: 'String',
+        StringValue: employeeDto.employee.name,
+      },
+      employeeLastName: {
+        DataType: 'String',
+        StringValue: employeeDto.employee.lastName,
+      },
+    };
+    if (userModel.email) {
+      attributes['userEmail'] = {
+        DataType: 'String',
+        StringValue: userModel.email,
+      };
+    }
+    if (userModel.phone) {
+      attributes['phone'] = {
+        DataType: 'String',
+        StringValue: userModel.phone,
+      };
+    }
+    const command = new SendMessageCommand({
+      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
+      DelaySeconds: 10,
+      MessageAttributes: attributes,
+      MessageBody:
+        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
+    });
+
+    const response = await this.sqsClient.send(command);
+
+    return Boolean(response.MessageId);
   }
 
   @UseGuards(EmployeeAuthGuard)

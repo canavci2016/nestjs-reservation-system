@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { SaveEmployee } from './interfaces/save-employee.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
@@ -39,7 +39,7 @@ export class EmployeeService {
     return this.repository.find(query);
   }
 
-  findOne(payload: Partial<Employee>): Promise<Employee | null> {
+  findOne(payload: FindOptionsWhere<Employee>): Promise<Employee | null> {
     return this.repository.findOneBy(payload);
   }
 

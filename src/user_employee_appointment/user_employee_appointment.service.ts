@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
 import { UserService } from 'src/user/user.service';
 import {
@@ -221,7 +221,7 @@ export class UserEmployeeAppointmentService {
   }
 
   findOne(
-    payload: Partial<UserEmployeeAppointment>,
+    payload: FindOptionsWhere<UserEmployeeAppointment>,
   ): Promise<UserEmployeeAppointment | null> {
     return this.repository.findOneBy(payload);
   }

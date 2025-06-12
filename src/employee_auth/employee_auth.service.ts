@@ -7,20 +7,29 @@ import { EmployeeService } from 'src/employee/employee.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateProfile } from './interfaces/update-profile';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmployeeAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
   ): Promise<{ access_token: string }> {
-    const employee = await this.employeeService.findOne(field);
+    const employee = await this.employeeService.findOne({
+      userName: field.userName,
+    });
 
-    if (employee?.password !== field.password) {
+    if (!employee) {
+      throw new NotFoundException('employee is not found');
+    }
+
+    const result = await bcrypt.compare(field.password, employee?.password);
+
+    if (!result) {
       throw new UnauthorizedException();
     }
 

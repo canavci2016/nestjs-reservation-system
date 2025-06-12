@@ -35,7 +35,7 @@ export class UserEmployeeAppointment {
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne
-  user: User;
+  user: Promise<User>;
 
   @Column({
     type: 'enum',
