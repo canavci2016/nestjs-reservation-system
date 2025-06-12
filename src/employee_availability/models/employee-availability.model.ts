@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { EmployeeAvailabilityAppointment } from './employee-availability-appointment.model';
 
 @ObjectType()
 export class EmployeeAvailability {
@@ -13,4 +14,9 @@ export class EmployeeAvailability {
 
   @Field({ description: 'availability end date' })
   endTime: string;
+
+  @Field((type) => [EmployeeAvailabilityAppointment], {
+    description: 'user package expires type',
+  })
+  appointments: Array<EmployeeAvailabilityAppointment>;
 }

@@ -251,6 +251,9 @@ type Employee {
 }
 
 type EmployeeAvailability {
+  """user package expires type"""
+  appointments: [EmployeeAvailabilityAppointment!]!
+
   """availability date"""
   availableDate: String!
 
@@ -262,6 +265,17 @@ type EmployeeAvailability {
 
   """availability start date"""
   startTime: String!
+}
+
+type EmployeeAvailabilityAppointment {
+  """availability created date"""
+  createdAt: DateTime!
+
+  """appointment unique id"""
+  id: String!
+
+  """appointment status"""
+  status: String!
 }
 
 input EmployeeSignUpInput {

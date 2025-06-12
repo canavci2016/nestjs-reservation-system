@@ -34,10 +34,6 @@ export class EmployeeAvailabilityService {
 
     const whereQuery = {
       employeeId: payload.employeeId,
-      appointments: [
-        { userId: IsNull() },
-        { status: UserEmployeeAppointmentStatus.REJECTED },
-      ],
     };
 
     const startDate = payload.startDate
