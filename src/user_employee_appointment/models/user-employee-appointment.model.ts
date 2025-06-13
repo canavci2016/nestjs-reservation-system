@@ -21,7 +21,7 @@ export class UserEmployeeAppointment {
   userId: string;
 
   @Field((type) => UserEmployeeAppointmentAvailability)
-  employeeAvailability: UserEmployeeAppointmentAvailability;
+  employeeAvailability: Promise<UserEmployeeAppointmentAvailability>;
 
   @Field((type) => UserEmployeeAppointmentUser)
   user: Promise<UserEmployeeAppointmentUser>;

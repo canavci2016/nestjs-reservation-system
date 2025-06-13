@@ -48,7 +48,7 @@ export class UserEmployeeAppointment {
   capacity: number;
 
   @ManyToOne(() => EmployeeAvailability, (model) => model.appointments)
-  employeeAvailability: EmployeeAvailability;
+  employeeAvailability: Promise<EmployeeAvailability>;
 
   @Column({ nullable: true })
   comment: string;

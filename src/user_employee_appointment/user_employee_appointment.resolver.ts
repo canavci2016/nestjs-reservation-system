@@ -153,32 +153,32 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid user');
     }
 
+    const availabilityModel = await appointment.employeeAvailability;
+
+    if (!availabilityModel) {
+      throw new NotFoundException('there is no valid availibity');
+    }
+
+
     const attributes = {
       action: {
         DataType: 'String',
         StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_ACCEPT',
       },
-      employeeName: {
+      employeeModel: {
         DataType: 'String',
-        StringValue: employeeDto.employee.name,
+        StringValue: JSON.stringify(employeeDto.employee),
       },
-      employeeLastName: {
+      userModel: {
         DataType: 'String',
-        StringValue: employeeDto.employee.lastName,
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
       },
     };
-    if (userModel.email) {
-      attributes['userEmail'] = {
-        DataType: 'String',
-        StringValue: userModel.email,
-      };
-    }
-    if (userModel.phone) {
-      attributes['phone'] = {
-        DataType: 'String',
-        StringValue: userModel.phone,
-      };
-    }
+
     const command = new SendMessageCommand({
       QueueUrl: process.env.AWS_SQS_QUEUE_URL,
       DelaySeconds: 10,

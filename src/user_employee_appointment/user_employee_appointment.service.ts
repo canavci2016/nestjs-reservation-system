@@ -134,10 +134,19 @@ export class UserEmployeeAppointmentService {
 
     const rawHistories = await this.repository.find(query);
 
-    const histories = rawHistories.map((item) => ({
-      ...item,
-      employee: item.employeeAvailability.employee,
-    }));
+    const histories = rawHistories.map((item) => {
+      const obj = {
+        ...item,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        employeeAvailability: item['__employeeAvailability__'],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        user: item['__user__'],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        employee: item['__employeeAvailability__'].employee,
+      };
+
+      return obj;
+    });
 
     return histories;
   }
