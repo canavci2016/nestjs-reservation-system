@@ -105,6 +105,7 @@ export class UserEmployeeAppointmentResolver {
       endDate,
       status: args.status,
       userId: args.userId,
+      employeeId: args.employeeId,
     });
     return list;
   }
@@ -120,7 +121,7 @@ export class UserEmployeeAppointmentResolver {
     const status = args.status || UserEmployeeAppointmentStatus.PENDING;
 
     const list = await this.appointmentService.history({
-      employeeId: employeeDto.sub,
+      employeeId: args.employeeId || employeeDto.sub,
       startDate,
       endDate,
       status,

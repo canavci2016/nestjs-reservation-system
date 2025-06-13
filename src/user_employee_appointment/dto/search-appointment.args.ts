@@ -14,4 +14,7 @@ export class SearchAppointmentArgs {
 
   @Field({ nullable: true })
   userId?: string;
+
+  @Field({ nullable: true })
+  employeeId?: string;
 }
