@@ -160,7 +160,6 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid availibity');
     }
 
-
     const attributes = {
       action: {
         DataType: 'String',
@@ -205,6 +204,55 @@ export class UserEmployeeAppointmentResolver {
       comment || '',
     );
 
+    const appointment = await this.appointmentService.findOne({ id: id });
+
+    if (!appointment) {
+      throw new NotFoundException('there is no valid appointment');
+    }
+
+    const userModel = await appointment.user;
+
+    if (!userModel) {
+      throw new NotFoundException('there is no valid user');
+    }
+
+    const availabilityModel = await appointment.employeeAvailability;
+
+    if (!availabilityModel) {
+      throw new NotFoundException('there is no valid availibity');
+    }
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_REJECT',
+      },
+      employeeModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(employeeDto.employee),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const command = new SendMessageCommand({
+      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
+      DelaySeconds: 10,
+      MessageAttributes: attributes,
+      MessageBody:
+        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
+    });
+
+    const response = await this.sqsClient.send(command);
+
+    return Boolean(response.MessageId);
+
     return true;
   }
   @UseGuards(CompanyAuthGuard)
@@ -218,6 +266,53 @@ export class UserEmployeeAppointmentResolver {
       { id, companyId: company.sub },
       comment || '',
     );
+
+    const appointment = await this.appointmentService.findOne({ id: id });
+
+    if (!appointment) {
+      throw new NotFoundException('there is no valid appointment');
+    }
+
+    const userModel = await appointment.user;
+
+    if (!userModel) {
+      throw new NotFoundException('there is no valid user');
+    }
+
+    const availabilityModel = await appointment.employeeAvailability;
+
+    if (!availabilityModel) {
+      throw new NotFoundException('there is no valid availibity');
+    }
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_ACCEPT',
+      },
+      companyModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(company.company),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const command = new SendMessageCommand({
+      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
+      DelaySeconds: 10,
+      MessageAttributes: attributes,
+      MessageBody:
+        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
+    });
+
+    const response = await this.sqsClient.send(command);
 
     return true;
   }
@@ -233,6 +328,53 @@ export class UserEmployeeAppointmentResolver {
       { id, companyId: company.sub },
       comment || '',
     );
+
+    const appointment = await this.appointmentService.findOne({ id: id });
+
+    if (!appointment) {
+      throw new NotFoundException('there is no valid appointment');
+    }
+
+    const userModel = await appointment.user;
+
+    if (!userModel) {
+      throw new NotFoundException('there is no valid user');
+    }
+
+    const availabilityModel = await appointment.employeeAvailability;
+
+    if (!availabilityModel) {
+      throw new NotFoundException('there is no valid availibity');
+    }
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_REJECT',
+      },
+      companyModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(company.company),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const command = new SendMessageCommand({
+      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
+      DelaySeconds: 10,
+      MessageAttributes: attributes,
+      MessageBody:
+        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
+    });
+
+    const response = await this.sqsClient.send(command);
 
     return true;
   }
