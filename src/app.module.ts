@@ -37,7 +37,7 @@ const configFactory = {
   imports: [
     CompanyModule,
     CompanyAuthModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -51,8 +51,8 @@ const configFactory = {
         ssl:
           process.env.DB_SSL === 'true'
             ? {
-                rejectUnauthorized: false,
-              }
+              rejectUnauthorized: false,
+            }
             : undefined,
       },
       autoLoadEntities: true,
@@ -83,4 +83,4 @@ const configFactory = {
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule {}
+export class AppModule { }
