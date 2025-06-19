@@ -23,7 +23,6 @@ export class EmployeeResolver {
   ): Promise<boolean> {
     const isExists = await this.employeeService.findOne({
       userName: payload.userName,
-      companyId: company.sub,
     });
 
     if (isExists) {
