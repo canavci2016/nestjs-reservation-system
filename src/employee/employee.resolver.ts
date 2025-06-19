@@ -10,10 +10,14 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 import { UpdateEmployeeInput } from './dto/update-employee.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { CompanyService } from 'src/company/company.service';
 
 @Resolver()
 export class EmployeeResolver {
-  constructor(private readonly employeeService: EmployeeService) { }
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly companyService: CompanyService,
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -21,12 +25,20 @@ export class EmployeeResolver {
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: EmployeeSignUpInput,
   ): Promise<boolean> {
-    const isExists = await this.employeeService.findOne({
+    const isEmployeePresent = await this.employeeService.findOne({
       userName: payload.userName,
     });
 
-    if (isExists) {
+    if (isEmployeePresent) {
       throw new ConflictException('duplicate employee');
+    }
+
+    const isCompanyPresent = await this.companyService.findOne({
+      userName: payload.userName,
+    });
+
+    if (isCompanyPresent) {
+      throw new ConflictException('duplicate company');
     }
 
     const employee = await this.employeeService.save({
