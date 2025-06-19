@@ -60,7 +60,10 @@ export class AuthService {
 
   async updateById(
     id: string,
-    payload: Pick<User, 'name' | 'lastName' | 'password' | 'email' | 'phone'>,
+    payload: Pick<
+      User,
+      'name' | 'lastName' | 'password' | 'email' | 'phone' | 'deviceToken'
+    >,
   ) {
     const res = await this.userService.updateById(id, payload);
 

@@ -13,7 +13,6 @@ import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { EmployeeModule } from './employee/employee.module';
-import { DeviceModule } from './device/device.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 import { DatabaseModule } from './database/database.module';
@@ -67,7 +66,6 @@ const configFactory = {
     BlogModule,
     AnnouncementModule,
     EmployeeModule,
-    DeviceModule,
     EmployeeAvailabilityModule,
     UserEmployeeAppointmentModule,
     DatabaseModule,

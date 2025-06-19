@@ -16,4 +16,7 @@ export class UserUpdateProfileInput {
 
   @Field({ nullable: true })
   email: string;
+
+  @Field({ nullable: true })
+  deviceToken: string;
 }

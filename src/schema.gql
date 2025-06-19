@@ -330,7 +330,6 @@ type Mutation {
   ClientApp_User_login(password: String!, userName: String!): String!
   ClientApp_User_signUp(payload: UserSignUpInput!): String!
   ClientApp_User_update(payload: UserUpdateProfileInput!): Boolean!
-  Device_set(payload: SetDeviceInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
   SuperAdmin_Auth_updateProfile(payload: SuperAdminUpdateProfileInput!): Boolean!
   SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
@@ -366,10 +365,6 @@ type Query {
   ClienyApp_Company_detail: SuperAdminCompany!
   Company_profile: Company!
   SuperAdmin_Company_list: [SuperAdminCompany!]!
-}
-
-input SetDeviceInput {
-  token: String!
 }
 
 type SuperAdminCompany {
@@ -601,6 +596,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateProfileInput {
+  deviceToken: String
   email: String
   lastName: String
   name: String

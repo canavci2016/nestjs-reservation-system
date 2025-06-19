@@ -6,7 +6,6 @@ import { Company } from './entities/company.entity';
 import { User } from './entities/user.entity';
 import { Announcement } from './entities/announcement.entity';
 import { Blog } from './entities/blog.entity';
-import { Device } from './entities/device.entity';
 import { Employee } from './entities/employee.entity';
 import { SuperAdmin } from './entities/super-admin.entity';
 import { CompanyUserPackage } from './entities/company-user-package.entity';
@@ -23,7 +22,6 @@ import { Token } from './entities/token.entity';
       User,
       Announcement,
       Blog,
-      Device,
       Employee,
       SuperAdmin,
       CompanyUserPackage,
