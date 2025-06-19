@@ -50,9 +50,7 @@ const configFactory = {
       extra: {
         ssl:
           process.env.DB_SSL === 'true'
-            ? {
-              rejectUnauthorized: false,
-            }
+            ? { rejectUnauthorized: false }
             : undefined,
       },
       autoLoadEntities: true,
