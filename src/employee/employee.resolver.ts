@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { ConflictException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
@@ -13,7 +13,7 @@ import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class EmployeeResolver {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(private readonly employeeService: EmployeeService) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -21,11 +21,20 @@ export class EmployeeResolver {
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: EmployeeSignUpInput,
   ): Promise<boolean> {
+    const isExists = await this.employeeService.findOne({
+      userName: payload.userName,
+      companyId: company.sub,
+    });
+
+    if (isExists) {
+      throw new ConflictException('duplicate employee');
+    }
+
     const employee = await this.employeeService.save({
       ...payload,
       companyId: company.sub,
     });
-    return true;
+    return Boolean(employee);
   }
 
   @UseGuards(CompanyAuthGuard)

@@ -43,7 +43,7 @@ export class EmployeeService {
     return this.repository.findOneBy(payload);
   }
 
-  async save(payload: SaveEmployee): Promise<Employee> {
+  async save(payload: SaveEmployee) {
     if (payload.password) {
       payload.password = await bcrypt.hash(payload.password, 10);
     }
