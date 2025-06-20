@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class CompanyService {
     console.log('CompanyService initialized');
   }
 
-  findAll(): Promise<Company[]> {
-    return this.repository.find();
+  findAll(query: FindManyOptions = {}): Promise<Company[]> {
+    return this.repository.find(query);
   }
 
   findOne(payload: Partial<Company>): Promise<Company | null> {

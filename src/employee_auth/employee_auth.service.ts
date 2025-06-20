@@ -54,4 +54,12 @@ export class EmployeeAuthService {
     const affected = result.affected || 0;
     return affected > 0 ? true : false;
   }
+
+  async findByUserNameOrEmail(userNameOrEmail: string) {
+    const company = await this.employeeService.find({
+      where: [{ email: userNameOrEmail }, { userName: userNameOrEmail }],
+    });
+
+    return company;
+  }
 }

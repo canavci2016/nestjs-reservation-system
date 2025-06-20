@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CompanyAuthService } from 'src/company_auth/company_auth.service';
 import { EmployeeAuthService } from 'src/employee_auth/employee_auth.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
@@ -9,7 +9,7 @@ export class AdminAuthService {
   constructor(
     private readonly companyService: CompanyAuthService,
     private readonly employeeService: EmployeeAuthService,
-  ) {}
+  ) { }
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
@@ -33,5 +33,33 @@ export class AdminAuthService {
       role: AdminAuthRole.EMPLOYEE,
       access_token: employee.access_token,
     };
+  }
+
+  async findByUsernameOrEmail(
+    userNameOrEmail: string,
+  ): Promise<{ role: AdminAuthRole, model: any }> {
+    const company =
+      await this.companyService.findByUserNameOrEmail(userNameOrEmail);
+
+    if (company.length > 0) {
+      return {
+        role: AdminAuthRole.COMPANY,
+        model: company[0],
+      };
+    }
+
+    const employee =
+      await this.employeeService.findByUserNameOrEmail(userNameOrEmail);
+
+    if (employee.length > 0) {
+      return {
+        role: AdminAuthRole.EMPLOYEE,
+        model: employee[0],
+      };
+    }
+
+    throw new NotFoundException(
+      'there is no account associated with given credentials',
+    );
   }
 }

@@ -14,7 +14,7 @@ export class CompanyAuthService {
   constructor(
     private readonly companyService: CompanyService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
   ): Promise<{ access_token: string }> {
@@ -45,4 +45,11 @@ export class CompanyAuthService {
     };
   }
 
+  async findByUserNameOrEmail(userNameOrEmail: string) {
+    const company = await this.companyService.findAll({
+      where: [{ userName: userNameOrEmail }],
+    });
+
+    return company;
+  }
 }

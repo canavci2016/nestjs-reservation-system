@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { And, FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { SaveEmployee } from './interfaces/save-employee.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
@@ -36,6 +36,10 @@ export class EmployeeService {
     query['skip'] = skip;
     query['order'] = { createdAt: 'desc' };
 
+    return this.repository.find(query);
+  }
+
+  find(query: FindManyOptions = {}) {
     return this.repository.find(query);
   }
 
