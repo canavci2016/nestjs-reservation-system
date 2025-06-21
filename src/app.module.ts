@@ -22,6 +22,8 @@ import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
 import { UploadModule } from './upload/upload.module';
 import { UserPackageModule } from './user_package/user_package.module';
 import { TokenModule } from './token/token.module';
+import { AwsService } from './aws/aws.service';
+import { AwsModule } from './aws/aws.module';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -75,8 +77,9 @@ const configFactory = {
     UploadModule,
     UserPackageModule,
     TokenModule,
+    AwsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, configFactory],
+  providers: [AppService, configFactory, AwsService],
 })
 export class AppModule { }

@@ -18,17 +18,14 @@ import { CompanyBookAppointmentInput } from './dto/company-book-appointment.inpu
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
-import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { AwsService } from 'src/aws/aws.service';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
-  sqsClient: SQSClient;
-
   constructor(
     private readonly appointmentService: UserEmployeeAppointmentService,
+    private readonly awsService: AwsService,
   ) {
-    this.sqsClient = new SQSClient({});
-
     console.log('EmployeeAvailabilityService initialized');
   }
 
@@ -179,15 +176,7 @@ export class UserEmployeeAppointmentResolver {
       },
     };
 
-    const command = new SendMessageCommand({
-      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
-      DelaySeconds: 10,
-      MessageAttributes: attributes,
-      MessageBody:
-        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-    });
-
-    const response = await this.sqsClient.send(command);
+    const response = await this.awsService.pushIntoQueue(attributes);
 
     return Boolean(response.MessageId);
   }
@@ -241,20 +230,11 @@ export class UserEmployeeAppointmentResolver {
       },
     };
 
-    const command = new SendMessageCommand({
-      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
-      DelaySeconds: 10,
-      MessageAttributes: attributes,
-      MessageBody:
-        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-    });
-
-    const response = await this.sqsClient.send(command);
+    const response = await this.awsService.pushIntoQueue(attributes);
 
     return Boolean(response.MessageId);
-
-    return true;
   }
+
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_Appointment_accept(
@@ -304,17 +284,9 @@ export class UserEmployeeAppointmentResolver {
       },
     };
 
-    const command = new SendMessageCommand({
-      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
-      DelaySeconds: 10,
-      MessageAttributes: attributes,
-      MessageBody:
-        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-    });
+    const response = await this.awsService.pushIntoQueue(attributes);
 
-    const response = await this.sqsClient.send(command);
-
-    return true;
+    return Boolean(response.MessageId);
   }
 
   @UseGuards(CompanyAuthGuard)
@@ -366,16 +338,8 @@ export class UserEmployeeAppointmentResolver {
       },
     };
 
-    const command = new SendMessageCommand({
-      QueueUrl: process.env.AWS_SQS_QUEUE_URL,
-      DelaySeconds: 10,
-      MessageAttributes: attributes,
-      MessageBody:
-        'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-    });
+    const response = await this.awsService.pushIntoQueue(attributes);
 
-    const response = await this.sqsClient.send(command);
-
-    return true;
+    return Boolean(response.MessageId);
   }
 }

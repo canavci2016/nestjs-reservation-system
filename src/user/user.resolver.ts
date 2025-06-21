@@ -17,17 +17,15 @@ import * as moment from 'moment';
 import { TokenTypes } from 'src/token/token-types.enum';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User as UserDecorator } from 'src/auth/auth.decorator';
-import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { AwsService } from 'src/aws/aws.service';
 
 @Resolver()
 export class UserResolver {
-  sqsClient: SQSClient;
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
-  ) {
-    this.sqsClient = new SQSClient({});
-  }
+    private readonly awsService: AwsService,
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -81,15 +79,7 @@ export class UserResolver {
     }
 
     if (userModel.email) {
-      const command = new SendMessageCommand({
-        QueueUrl: process.env.AWS_SQS_QUEUE_URL,
-        DelaySeconds: 10,
-        MessageAttributes: attributes,
-        MessageBody:
-          'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-      });
-
-      const response = await this.sqsClient.send(command);
+      const response = await this.awsService.pushIntoQueue(attributes);
       console.log(response);
     }
 

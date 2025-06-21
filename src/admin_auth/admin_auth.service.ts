@@ -37,7 +37,7 @@ export class AdminAuthService {
 
   async findByUsernameOrEmail(
     userNameOrEmail: string,
-  ): Promise<{ role: AdminAuthRole, model: any }> {
+  ): Promise<{ role: AdminAuthRole; model: { id: string } }> {
     const company =
       await this.companyService.findByUserNameOrEmail(userNameOrEmail);
 

@@ -5,12 +5,16 @@ import { AuthAdmin } from './model/auth-admin.model';
 import { TokenService } from 'src/token/token.service';
 import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
+import { SendMessageCommand } from '@aws-sdk/client-sqs';
+import { AwsService } from 'src/aws/aws.service';
+import { AdminAuthRole } from './admin-auth-role.enum';
 
 @Resolver()
 export class AdminAuthResolver {
   constructor(
     private readonly authService: AdminAuthService,
     private readonly tokenService: TokenService,
+    private readonly awsService: AwsService,
   ) { }
 
   @Mutation(() => AuthAdmin)
@@ -32,12 +36,30 @@ export class AdminAuthResolver {
     const res = await this.authService.findByUsernameOrEmail(userNameOrEmail);
 
     const token = await this.tokenService.save({
-      owner_type: res.role,
-      owner_id: res.model!.id,
+      owner_type: res.role.toLowerCase(),
+      owner_id: res.model.id,
       action: TokenTypes.FORGET_PASSWORD,
       expiresAt: moment().add(2, 'days').toDate(),
     });
 
+    const forgetPasswordUrl = `${process.env.APP_URL}/admin-auth/set-password?token=${token.content}`;
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_AUTH_FORGETPASSWORD',
+      },
+      adminModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(res.model),
+      },
+      forgetPasswordUrl: {
+        DataType: 'String',
+        StringValue: forgetPasswordUrl,
+      },
+    };
+    const response = await this.awsService.pushIntoQueue(attributes);
+    console.log(response);
     return true;
   }
 }
