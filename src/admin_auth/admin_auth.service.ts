@@ -62,4 +62,41 @@ export class AdminAuthService {
       'there is no account associated with given credentials',
     );
   }
+
+  async findById(id: string) {
+    const company = await this.companyService.findById(id);
+
+    if (company) {
+      return {
+        role: AdminAuthRole.COMPANY,
+        model: company,
+      };
+    }
+
+    const employee = await this.employeeService.findUserById(id);
+
+    if (employee) {
+      return {
+        role: AdminAuthRole.EMPLOYEE,
+        model: employee,
+      };
+    }
+
+    throw new NotFoundException(
+      'there is no account associated with given credentials',
+    );
+  }
+
+  async updateById(id: string, payload: { password: string }) {
+    const company = await this.companyService.updatePassword(
+      id,
+      payload.password,
+    );
+
+    const employee = await this.employeeService.updateById(id, {
+      password: payload.password,
+    });
+
+    return true;
+  }
 }

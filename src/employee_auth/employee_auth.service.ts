@@ -51,8 +51,7 @@ export class EmployeeAuthService {
 
   async updateById(id: string, payload: Partial<UpdateProfile>) {
     const result = await this.employeeService.updateById(id, payload);
-    const affected = result.affected || 0;
-    return affected > 0 ? true : false;
+    return Boolean(result.affected);
   }
 
   async findByUserNameOrEmail(userNameOrEmail: string) {

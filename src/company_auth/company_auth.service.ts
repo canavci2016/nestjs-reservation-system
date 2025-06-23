@@ -52,4 +52,16 @@ export class CompanyAuthService {
 
     return company;
   }
+
+  async findById(id: string) {
+    const company = await this.companyService.findOne({ id: id });
+
+    return company;
+  }
+
+  async updatePassword(id: string, password: string) {
+    const company = await this.companyService.updateById(id, { password });
+
+    return company;
+  }
 }
