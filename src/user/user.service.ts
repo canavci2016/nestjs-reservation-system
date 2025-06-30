@@ -39,7 +39,7 @@ export class UserService {
     return this.repository.find(query);
   }
 
-  findOne(payload: Partial<User>): Promise<User | null> {
+  findOne(payload: Partial<Omit<User, 'company'>>) {
     return this.repository.findOneBy(payload);
   }
 

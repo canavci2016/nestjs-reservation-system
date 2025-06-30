@@ -4,9 +4,15 @@ import { UserEmployeeAppointmentResolver } from './user_employee_appointment.res
 import { EmployeeAvailabilityModule } from 'src/employee_availability/employee-availability.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
+import { UserPackageModule } from 'src/user_package/user_package.module';
 
 @Module({
-  imports: [EmployeeAvailabilityModule, AuthModule, UserModule],
+  imports: [
+    EmployeeAvailabilityModule,
+    AuthModule,
+    UserModule,
+    UserPackageModule,
+  ],
   providers: [UserEmployeeAppointmentService, UserEmployeeAppointmentResolver],
 })
-export class UserEmployeeAppointmentModule {}
+export class UserEmployeeAppointmentModule { }

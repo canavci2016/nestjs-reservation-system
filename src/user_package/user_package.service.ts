@@ -7,7 +7,7 @@ import {
 import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { LessThan, LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
 import * as moment from 'moment';
 
 export interface FindAllOptions {
@@ -25,6 +25,8 @@ export class UserPackageService {
   constructor(
     @InjectRepository(CompanyUserPackage)
     private repository: Repository<CompanyUserPackage>,
+    @InjectRepository(UserAndCompanyUserPackage)
+    private userPackagerepository: Repository<UserAndCompanyUserPackage>,
     @InjectRepository(UserAndCompanyUserPackage)
     private userAndCompanyUserPackageRepository: Repository<UserAndCompanyUserPackage>,
     private readonly userService: UserService,
@@ -172,5 +174,39 @@ export class UserPackageService {
     ) {
       return dateObj.add(amount, 'days').format('YYYY-MM-DD');
     }
+  }
+
+  async getActivePackageForUser(userId: string) {
+    const activePackages = await this.userPackagerepository.find({
+      where: {
+        userId: userId,
+        startDate: LessThanOrEqual(new Date()),
+        endDate: MoreThan(new Date()),
+        quota: MoreThan(0),
+        numberOfUsage: Raw((alias) => `${alias} < "quota"`),
+      },
+      skip: 0,
+      take: 1,
+    });
+
+    return activePackages[0] || null;
+  }
+
+  async updateUserAndCompanyPackage(
+    id: string,
+    payload: Partial<UserAndCompanyUserPackage>,
+  ) {
+    return await this.repository
+      .createQueryBuilder()
+      .update(UserAndCompanyUserPackage)
+      .set(payload)
+      .where({ id })
+      .execute();
+  }
+
+  findOneForUserAndCompanyUserPackagePivot(
+    payload: Partial<UserAndCompanyUserPackage>,
+  ) {
+    return this.userPackagerepository.findOneBy(payload);
   }
 }

@@ -6,5 +6,6 @@ import { UserModule } from 'src/user/user.module';
 @Module({
   imports: [UserModule],
   providers: [UserPackageService, UserPackageResolver],
+  exports: [UserPackageService],
 })
 export class UserPackageModule {}

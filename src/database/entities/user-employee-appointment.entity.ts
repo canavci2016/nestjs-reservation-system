@@ -11,6 +11,7 @@ import {
 import { EmployeeAvailability } from './employee-availability.entity';
 import { registerEnumType } from '@nestjs/graphql';
 import { User } from './user.entity';
+import { UserAndCompanyUserPackage } from './user-and-company-user-package.entity';
 
 export enum UserEmployeeAppointmentStatus {
   PENDING = 'PENDING',
@@ -32,6 +33,16 @@ export class UserEmployeeAppointment {
 
   @Column()
   userId: string;
+
+  @Column({ nullable: true, type: 'character varying' })
+  userAndCompanyUserPackageId?: string | null;
+
+  @ManyToOne((type) => UserAndCompanyUserPackage)
+  @JoinColumn({
+    name: 'userAndCompanyUserPackageId',
+    referencedColumnName: 'id',
+  })
+  userAndCompanyUserPackage: Promise<UserAndCompanyUserPackage>;
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne

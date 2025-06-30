@@ -13,6 +13,7 @@ import {
   UserEmployeeAppointmentStatus,
 } from 'src/database/entities/user-employee-appointment.entity';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { UserPackageService } from 'src/user_package/user_package.service';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -21,6 +22,7 @@ export class UserEmployeeAppointmentService {
     private repository: Repository<UserEmployeeAppointment>,
     private readonly employeeAvailabilityService: EmployeeAvailabilityService,
     private readonly userService: UserService,
+    private readonly userPackageService: UserPackageService,
   ) {
     console.log('EmployeeAvailabilityService initialized');
   }
@@ -32,6 +34,32 @@ export class UserEmployeeAppointmentService {
       const user = await this.userService.findOne({ id: params.userId });
       if (!user) {
         throw new NotFoundException('user doesnt exists');
+      }
+
+      const company = await user.company;
+
+      if (!company) {
+        throw new NotFoundException('company doesnt exists');
+      }
+
+      let activePackageId: string | null = null;
+
+      if (company.enableUserPackageSystem) {
+        const activePackage =
+          await this.userPackageService.getActivePackageForUser(user.id);
+
+        if (!activePackage) {
+          throw new NotFoundException('active package not found for the user');
+        }
+
+        activePackageId = activePackage.id;
+
+        const updateRes = await this.userPackageService.updateUserAndCompanyPackage(
+          activePackage.id,
+          {
+            numberOfUsage: activePackage.numberOfUsage + 1,
+          },
+        );
       }
 
       const availability = await this.employeeAvailabilityService.findOne({
@@ -48,12 +76,13 @@ export class UserEmployeeAppointmentService {
       });
 
       if (booking) {
-        throw new ConflictException('user already has booked this time slot');
+        throw new ConflictException('user has already booked this time slot');
       }
 
       const res = await this.save({
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
+        userAndCompanyUserPackageId: activePackageId,
       });
     } catch (e: any) {
       if (e instanceof NotFoundException) {
@@ -205,10 +234,31 @@ export class UserEmployeeAppointmentService {
       historyQuery['companyId'] = condition.companyId;
     }
 
-    const appointment = await this.history(historyQuery);
+    const appointments = await this.history(historyQuery);
 
-    if (appointment.length === 0) {
+    if (appointments.length === 0) {
       throw new NotFoundException('there is no pending appointment available');
+    }
+
+    const appointment = appointments[0];
+
+    if (appointment.userAndCompanyUserPackageId) {
+      const userPackage =
+        await this.userPackageService.findOneForUserAndCompanyUserPackagePivot({
+          id: appointment.userAndCompanyUserPackageId,
+        });
+
+      if (!userPackage) {
+        throw new NotFoundException('user package not found');
+      }
+
+      const increaseUsage =
+        await this.userPackageService.updateUserAndCompanyPackage(
+          userPackage.id,
+          {
+            numberOfUsage: userPackage.numberOfUsage + 1,
+          },
+        );
     }
 
     const result = await this.updateById(condition.id, {
