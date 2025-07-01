@@ -84,7 +84,39 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<boolean> {
     const res = await this.appointmentService.book({
       ...payload,
+      status: UserEmployeeAppointmentStatus.ACCEPTED,
     });
+
+    const appointment = await this.appointmentService.findOne({ id: res.id });
+
+    if (!appointment) {
+      throw new NotFoundException('appointment is not present');
+    }
+
+    const userModel = await appointment.user;
+    const availabilityModel = await appointment.employeeAvailability;
+    const employee = await availabilityModel.employee;
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_ADD',
+      },
+      companyModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(company.company),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const response = await this.awsService.pushIntoQueue(attributes);
     return true;
   }
 

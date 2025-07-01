@@ -28,7 +28,8 @@ export class UserEmployeeAppointmentService {
   }
 
   async book(
-    params: Pick<UserEmployeeAppointment, 'employeeAvailabilityId' | 'userId'>,
+    params: Pick<UserEmployeeAppointment, 'employeeAvailabilityId' | 'userId'> &
+      Partial<Pick<UserEmployeeAppointment, 'status'>>,
   ) {
     try {
       const user = await this.userService.findOne({ id: params.userId });
@@ -83,7 +84,10 @@ export class UserEmployeeAppointmentService {
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
         userAndCompanyUserPackageId: activePackageId,
+        ...(params.status ? { status: params.status } : {}),
       });
+
+      return res;
     } catch (e: any) {
       if (e instanceof NotFoundException) {
         throw e;
@@ -95,8 +99,6 @@ export class UserEmployeeAppointmentService {
 
       throw new BadRequestException(e.message);
     }
-
-    return true;
   }
 
   async history(
