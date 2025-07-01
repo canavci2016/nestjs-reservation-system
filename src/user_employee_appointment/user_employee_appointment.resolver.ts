@@ -19,12 +19,14 @@ import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-de
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
 import { AwsService } from 'src/aws/aws.service';
+import { EmployeeService } from 'src/employee/employee.service';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
   constructor(
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
+    private readonly employeeService: EmployeeService,
   ) {
     console.log('EmployeeAvailabilityService initialized');
   }
@@ -39,6 +41,46 @@ export class UserEmployeeAppointmentResolver {
       userId: user.sub,
       ...payload,
     });
+
+    const appointment = await this.appointmentService.findOne({ id: res.id });
+
+    if (!appointment) {
+      throw new NotFoundException('appointment is not present');
+    }
+
+    const userModel = await appointment.user;
+    const availabilityModel = await appointment.employeeAvailability;
+    const employee = await this.employeeService.findOne({
+      id: availabilityModel.employeeId,
+    });
+
+    const company = await userModel.company;
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'CLIENTAPP_APPOINTMENT_BOOK',
+      },
+      employeeModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(employee),
+      },
+      companyModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(company),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const response = await this.awsService.pushIntoQueue(attributes);
+
     return true;
   }
 
@@ -95,7 +137,6 @@ export class UserEmployeeAppointmentResolver {
 
     const userModel = await appointment.user;
     const availabilityModel = await appointment.employeeAvailability;
-    const employee = await availabilityModel.employee;
 
     const attributes = {
       action: {
@@ -105,6 +146,49 @@ export class UserEmployeeAppointmentResolver {
       companyModel: {
         DataType: 'String',
         StringValue: JSON.stringify(company.company),
+      },
+      userModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(userModel),
+      },
+      availabilityModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(availabilityModel),
+      },
+    };
+
+    const response = await this.awsService.pushIntoQueue(attributes);
+    return true;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Employee_Appointment_add(
+    @Employee() employee: AuthEmployeeDecoratorInterface,
+    @Args('payload') payload: CompanyBookAppointmentInput,
+  ): Promise<boolean> {
+    const res = await this.appointmentService.book({
+      ...payload,
+      status: UserEmployeeAppointmentStatus.ACCEPTED,
+    });
+
+    const appointment = await this.appointmentService.findOne({ id: res.id });
+
+    if (!appointment) {
+      throw new NotFoundException('appointment is not present');
+    }
+
+    const userModel = await appointment.user;
+    const availabilityModel = await appointment.employeeAvailability;
+
+    const attributes = {
+      action: {
+        DataType: 'String',
+        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_ADD',
+      },
+      employeeModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(employee.employee),
       },
       userModel: {
         DataType: 'String',

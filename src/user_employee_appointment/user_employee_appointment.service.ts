@@ -14,6 +14,7 @@ import {
 } from 'src/database/entities/user-employee-appointment.entity';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { UserPackageService } from 'src/user_package/user_package.service';
+import { User } from 'src/database/entities/user.entity';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -37,31 +38,7 @@ export class UserEmployeeAppointmentService {
         throw new NotFoundException('user doesnt exists');
       }
 
-      const company = await user.company;
-
-      if (!company) {
-        throw new NotFoundException('company doesnt exists');
-      }
-
-      let activePackageId: string | null = null;
-
-      if (company.enableUserPackageSystem) {
-        const activePackage =
-          await this.userPackageService.getActivePackageForUser(user.id);
-
-        if (!activePackage) {
-          throw new NotFoundException('active package not found for the user');
-        }
-
-        activePackageId = activePackage.id;
-
-        const updateRes = await this.userPackageService.updateUserAndCompanyPackage(
-          activePackage.id,
-          {
-            numberOfUsage: activePackage.numberOfUsage + 1,
-          },
-        );
-      }
+      const activePackageId = await this.deductUsageFromThePackage(user);
 
       const availability = await this.employeeAvailabilityService.findOne({
         id: params.employeeAvailabilityId,
@@ -285,5 +262,34 @@ export class UserEmployeeAppointmentService {
     payload: FindOptionsWhere<UserEmployeeAppointment>,
   ): Promise<UserEmployeeAppointment | null> {
     return this.repository.findOneBy(payload);
+  }
+
+  async deductUsageFromThePackage(user: User) {
+    const company = await user.company;
+
+    if (!company) {
+      throw new NotFoundException('company doesnt exists');
+    }
+
+    if (company.enableUserPackageSystem) {
+      const activePackage =
+        await this.userPackageService.getActivePackageForUser(user.id);
+
+      if (!activePackage) {
+        throw new NotFoundException('active package not found for the user');
+      }
+
+      const updateRes =
+        await this.userPackageService.updateUserAndCompanyPackage(
+          activePackage.id,
+          {
+            numberOfUsage: activePackage.numberOfUsage + 1,
+          },
+        );
+
+      return activePackage.id;
+    }
+
+    return null;
   }
 }
