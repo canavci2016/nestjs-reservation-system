@@ -57,7 +57,7 @@ export class CompanyResolver {
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
-  async AdminApp_Company_profile_update(
+  async AdminApp_Company_updateProfile(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: CompanySelfUpdateInput,
   ): Promise<boolean> {

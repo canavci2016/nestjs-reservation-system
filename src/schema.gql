@@ -314,7 +314,7 @@ type Mutation {
   AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
   AdminApp_Company_User_delete(id: String!): Boolean!
   AdminApp_Company_User_update(payload: UserUpdateInput!, userId: String!): Boolean!
-  AdminApp_Company_profile_update(payload: CompanySelfUpdateInput!): Boolean!
+  AdminApp_Company_updateProfile(payload: CompanySelfUpdateInput!): Boolean!
   AdminApp_Employee_Appointment_accept(comment: String, id: String!): Boolean!
   AdminApp_Employee_Appointment_reject(comment: String, id: String!): Boolean!
   AdminApp_Employee_Availability_add(payload: [AddAvailabilitySingleInput!]!): Boolean!
