@@ -18,6 +18,9 @@ import { TokenTypes } from 'src/token/token-types.enum';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User as UserDecorator } from 'src/auth/auth.decorator';
 import { AwsService } from 'src/aws/aws.service';
+import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
+import { Employee } from 'src/employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class UserResolver {
@@ -25,7 +28,7 @@ export class UserResolver {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
-  ) {}
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -100,6 +103,25 @@ export class UserResolver {
     const models = await this.userService.findAll({
       q,
       companyId: company.sub,
+      pagination: paginationObj,
+    });
+    return models;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Query(() => [User])
+  async AdminApp_Employee_User_list(
+    @Employee() employee: AuthEmployeeDecoratorInterface,
+    @Args('q', { nullable: true }) q: string,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<User[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = await this.userService.findAll({
+      q,
+      companyId: employee.employee.companyId,
       pagination: paginationObj,
     });
     return models;

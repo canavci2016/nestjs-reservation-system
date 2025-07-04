@@ -356,6 +356,7 @@ type Query {
   AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_Employee_list(pagination: PaginationInput): [Employee!]!
+  AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_profile: AuthEmployee!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
