@@ -90,7 +90,9 @@ export class UserEmployeeAppointmentService {
       pagination?: Pagination;
     } = {},
   ) {
-    const whereQuery: Record<any, any> = {};
+    const whereQuery: Record<any, any> & {
+      employeeAvailability?: Record<any, any>;
+    } = {};
 
     if (params.id) {
       whereQuery['id'] = params.id;
@@ -106,22 +108,26 @@ export class UserEmployeeAppointmentService {
 
     if (params?.employeeId) {
       whereQuery['employeeAvailability'] = {
+        ...(whereQuery['employeeAvailability'] || {}),
         employeeId: params.employeeId,
       };
     }
 
     if (params?.companyId) {
       whereQuery['employeeAvailability'] = {
+        ...(whereQuery['employeeAvailability'] || {}),
         companyId: params.companyId,
       };
     }
 
     if (params.startDate && params.endDate) {
       whereQuery['employeeAvailability'] = {
+        ...(whereQuery['employeeAvailability'] || {}),
         availableDate: Between(params.startDate, params.endDate),
       };
     } else if (params?.startDate) {
       whereQuery['employeeAvailability'] = {
+        ...(whereQuery['employeeAvailability'] || {}),
         availableDate: params.startDate,
       };
     }
