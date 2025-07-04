@@ -5,7 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Company } from './company.entity';
 
 @Entity()
 export class Blog {
@@ -23,6 +26,10 @@ export class Blog {
 
   @Column()
   companyId: string;
+
+  @ManyToOne((type) => Company)
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne
+  company: Promise<Company>;
 
   @Column({ default: true })
   isActive: boolean;

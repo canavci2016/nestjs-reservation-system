@@ -21,7 +21,7 @@ export class BlogService {
     console.log('BlogService initialized');
   }
 
-  findOne(payload: Partial<Blog>): Promise<Blog | null> {
+  findOne(payload: Partial<Omit<Blog, 'company'>>) {
     return this.repository.findOneBy(payload);
   }
 
