@@ -11,6 +11,9 @@ import { UpdateEmployeeInput } from './dto/update-employee.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { CompanyService } from 'src/company/company.service';
+import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
+import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class EmployeeResolver {
@@ -62,6 +65,20 @@ export class EmployeeResolver {
       companyId: company.sub,
       pagination: paginationObj,
     });
+    return models;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Query(() => [Employee])
+  AdminApp_Employee_Employee_list(
+    @EmployeeDecorator() employee: AuthEmployeeDecoratorInterface,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Employee[] {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+    const models = [employee.employee];
     return models;
   }
 
