@@ -34,11 +34,12 @@ export class UserEmployeeAppointmentResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   async ClientApp_Appointment_book(
-    @User() user: { sub: string },
+    @User() user: AuthUserDecoratorInterface,
     @Args('payload') payload: BookAppointmentInput,
   ): Promise<boolean> {
     const res = await this.appointmentService.book({
       userId: user.sub,
+      companyId: user.user.companyId,
       ...payload,
     });
 
@@ -126,6 +127,7 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<boolean> {
     const res = await this.appointmentService.book({
       ...payload,
+      companyId: company.sub,
       status: UserEmployeeAppointmentStatus.ACCEPTED,
     });
 
@@ -170,6 +172,7 @@ export class UserEmployeeAppointmentResolver {
     const res = await this.appointmentService.book({
       ...payload,
       status: UserEmployeeAppointmentStatus.ACCEPTED,
+      companyId: employee.employee.companyId,
     });
 
     const appointment = await this.appointmentService.findOne({ id: res.id });

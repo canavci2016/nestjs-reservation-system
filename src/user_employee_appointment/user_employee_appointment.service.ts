@@ -30,15 +30,14 @@ export class UserEmployeeAppointmentService {
 
   async book(
     params: Pick<UserEmployeeAppointment, 'employeeAvailabilityId' | 'userId'> &
-      Partial<Pick<UserEmployeeAppointment, 'status'>>,
+      Partial<Pick<UserEmployeeAppointment, 'status'>> & { companyId: string },
   ) {
     try {
+      const companyId = params.companyId;
       const user = await this.userService.findOne({ id: params.userId });
       if (!user) {
         throw new NotFoundException('user doesnt exists');
       }
-
-      const activePackageId = await this.deductUsageFromThePackage(user);
 
       const availability = await this.employeeAvailabilityService.findOne({
         id: params.employeeAvailabilityId,
@@ -47,6 +46,14 @@ export class UserEmployeeAppointmentService {
       if (!availability) {
         throw new NotFoundException('there is no such time slot');
       }
+
+      const employee = await availability.employee;
+
+      if (user.companyId != companyId || employee.companyId != companyId) {
+        throw new NotFoundException('userid and availability is inconsistent');
+      }
+
+      const activePackageId = await this.deductUsageFromThePackage(user);
 
       const booking = await this.findOne({
         employeeAvailabilityId: params.employeeAvailabilityId,

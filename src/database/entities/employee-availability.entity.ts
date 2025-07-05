@@ -38,7 +38,7 @@ export class EmployeeAvailability {
   capacity: number;
 
   @ManyToOne(() => Employee, (model) => model.availabilities)
-  employee: Employee;
+  employee: Promise<Employee>;
 
   @OneToMany(
     (type) => UserEmployeeAppointment,

@@ -1,7 +1,7 @@
 export interface AuthUserDecoratorInterface {
   sub: string;
   username: string;
-  employee: {
+  user: {
     id: string;
     name: string;
     lastName: string;
