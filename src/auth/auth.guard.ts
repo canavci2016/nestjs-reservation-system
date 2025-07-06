@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -21,9 +20,11 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
+      const secret = process.env.APP_KEY;
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
+        secret: secret,
       });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
