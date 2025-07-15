@@ -13,7 +13,7 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)
-  AdminApp_Employee_profile(
+  AdminApp_Employee_getProfile(
     @Employee() employeeDto: AuthEmployeeDecoratorInterface,
   ): AuthEmployee {
     const authUserIns = new AuthEmployee();
