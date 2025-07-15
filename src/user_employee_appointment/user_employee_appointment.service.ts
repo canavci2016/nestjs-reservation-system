@@ -184,7 +184,6 @@ export class UserEmployeeAppointmentService {
   ) {
     const historyQuery = {
       id: condition.id,
-      status: UserEmployeeAppointmentStatus.PENDING,
     };
 
     if (condition.employeeId) {
@@ -215,7 +214,6 @@ export class UserEmployeeAppointmentService {
   ) {
     const historyQuery = {
       id: condition.id,
-      status: UserEmployeeAppointmentStatus.PENDING,
     };
 
     if (condition.employeeId) {
