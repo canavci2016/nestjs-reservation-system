@@ -402,6 +402,7 @@ input SuperAdminUpdateProfileInput {
 
 input UpdateAnnouncementInput {
   description: String
+  photo: Upload
   photoUrl: String
   title: String
 }
