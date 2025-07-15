@@ -74,8 +74,22 @@ export class BlogService {
 
   async updateById(
     condition: Pick<Blog, 'id' | 'companyId'>,
-    payload: Partial<Blog>,
+    payload: Partial<SaveBlog>,
   ) {
+    let photoUrl = payload.photoUrl;
+    if (typeof payload.photo != 'undefined' || payload.photo != null) {
+      const imageFile: FileUpload = await payload.photo;
+      const fileName = `${payload.companyId}/blog/${Date.now()}_${imageFile.filename}`;
+
+      const filePath = await this.uploadService.uploadOnS3AsStream(
+        imageFile.createReadStream,
+        fileName,
+      );
+      photoUrl = filePath.Location || photoUrl;
+      delete payload.photo;
+    }
+    payload.photoUrl = photoUrl;
+
     return await this.repository
       .createQueryBuilder()
       .update(Blog)

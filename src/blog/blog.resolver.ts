@@ -13,7 +13,7 @@ import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class BlogResolver {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(private readonly blogService: BlogService) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -70,6 +70,8 @@ export class BlogResolver {
       { id, companyId: company.sub },
       {
         ...payload,
+        isActive: true,
+        companyId: company.sub,
       },
     );
     return Boolean(model.affected);

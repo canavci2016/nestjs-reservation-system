@@ -408,6 +408,7 @@ input UpdateAnnouncementInput {
 
 input UpdateBlogInput {
   description: String
+  photo: Upload
   photoUrl: String
   title: String
 }
