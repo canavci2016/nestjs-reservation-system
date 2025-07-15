@@ -14,7 +14,7 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 
 @Resolver()
 export class CompanyResolver {
-  constructor(private readonly service: CompanyService) {}
+  constructor(private readonly service: CompanyService) { }
 
   @UseGuards(SuperAdminAuthGuard)
   @Mutation(() => Boolean)
@@ -63,5 +63,13 @@ export class CompanyResolver {
   ): Promise<boolean> {
     const res = await this.service.updateById(company.sub, payload);
     return true;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => SuperAdminCompany)
+  AdminApp_Company_getProfile(
+    @Company() company: AuthCompanyDecoratorInterface,
+  ) {
+    return company.company;
   }
 }
