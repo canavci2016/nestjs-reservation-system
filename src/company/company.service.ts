@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
@@ -25,7 +25,14 @@ export class CompanyService {
     return this.repository.findOneBy({ secretKey });
   }
 
-  async save(company: Partial<Company>): Promise<Company> {
+  async save(company: Partial<Company>) {
+    const companyObj = await this.findOne({ userName: company.userName });
+    if (companyObj) {
+      throw new ConflictException(
+        `company with username "${company.userName}" already exists`,
+      );
+    }
+
     if (company.password) {
       company.password = await this.generateToken(company.password);
     }
