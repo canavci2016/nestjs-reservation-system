@@ -30,7 +30,7 @@ export class EmployeeAuthService {
     const result = await bcrypt.compare(field.password, employee?.password);
 
     if (!result) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('employee password is wrong');
     }
 
     const payload = { sub: employee.id, username: employee.userName };

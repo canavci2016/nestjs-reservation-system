@@ -7,7 +7,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { jwtConstants } from './constants';
 import { SuperAdminAuthService } from './superadmin_auth.service';
 
 @Injectable()
@@ -28,7 +27,7 @@ export class SuperAdminAuthGuard implements CanActivate {
       const payload: { sub: string } = await this.jwtService.verifyAsync(
         token,
         {
-          secret: jwtConstants.secret,
+          secret: process.env.APP_SECRET,
         },
       );
 

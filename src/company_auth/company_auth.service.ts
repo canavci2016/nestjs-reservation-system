@@ -7,7 +7,6 @@ import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.in
 import { CompanyService } from 'src/company/company.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Signup } from './interfaces/sign-up.interface';
 
 @Injectable()
 export class CompanyAuthService {
@@ -29,15 +28,6 @@ export class CompanyAuthService {
     if (!result) {
       throw new UnauthorizedException();
     }
-
-    const payload = { sub: user.id, username: user.userName };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
-  }
-
-  async singUp(field: Signup): Promise<{ access_token: string }> {
-    const user = await this.companyService.save(field);
 
     const payload = { sub: user.id, username: user.userName };
     return {

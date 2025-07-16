@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { EmployeeService } from 'src/employee/employee.service';
@@ -28,7 +27,7 @@ export class EmployeeAuthGuard implements CanActivate {
     try {
       const payload: AuthEmployeeDecoratorInterface =
         await this.jwtService.verifyAsync(token, {
-          secret: jwtConstants.secret,
+          secret: process.env.APP_SECRET,
         });
 
       const employee = await this.employeeService.findOne({ id: payload.sub });
