@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthCompanyDecoratorInterface } from './interfaces/auth-company-decorator.interface';
@@ -16,7 +15,7 @@ export class CompanyAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private companyService: CompanyService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -28,7 +27,7 @@ export class CompanyAuthGuard implements CanActivate {
     try {
       const payload: AuthCompanyDecoratorInterface =
         await this.jwtService.verifyAsync(token, {
-          secret: jwtConstants.secret,
+          secret: process.env.APP_SECRET,
         });
 
       const company = await this.companyService.findOne({ id: payload.sub });

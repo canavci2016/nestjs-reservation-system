@@ -24,6 +24,7 @@ import { UserPackageModule } from './user_package/user_package.module';
 import { TokenModule } from './token/token.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
+import { JwtModule } from '@nestjs/jwt';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -36,9 +37,14 @@ const configFactory = {
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.APP_KEY,
+      signOptions: { expiresIn: '10d' },
+    }),
     CompanyModule,
     CompanyAuthModule,
-    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
