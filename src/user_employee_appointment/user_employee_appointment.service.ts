@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  PreconditionFailedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
@@ -29,8 +30,10 @@ export class UserEmployeeAppointmentService {
   }
 
   async book(
-    params: Pick<UserEmployeeAppointment, 'employeeAvailabilityId' | 'userId'> &
-      Partial<Pick<UserEmployeeAppointment, 'status'>> & { companyId: string },
+    params: Pick<
+      UserEmployeeAppointment,
+      'employeeAvailabilityId' | 'userId'
+    > & { companyId: string },
   ) {
     try {
       const companyId = params.companyId;
@@ -68,7 +71,6 @@ export class UserEmployeeAppointmentService {
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
         userAndCompanyUserPackageId: activePackageId,
-        ...(params.status ? { status: params.status } : {}),
       });
 
       return res;
@@ -194,10 +196,16 @@ export class UserEmployeeAppointmentService {
       historyQuery['companyId'] = condition.companyId;
     }
 
-    const appointment = await this.history(historyQuery);
+    const appointments = await this.history(historyQuery);
 
-    if (appointment.length === 0) {
+    if (appointments.length === 0) {
       throw new NotFoundException('there is no pending appointment available');
+    }
+
+    const appointment = appointments[0];
+
+    if (appointment.status == UserEmployeeAppointmentStatus.ACCEPTED) {
+      throw new PreconditionFailedException('appointment is already accepted');
     }
 
     const result = await this.updateById(condition.id, {

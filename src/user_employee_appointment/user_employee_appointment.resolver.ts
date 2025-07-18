@@ -128,8 +128,9 @@ export class UserEmployeeAppointmentResolver {
     const res = await this.appointmentService.book({
       ...payload,
       companyId: company.sub,
-      status: UserEmployeeAppointmentStatus.ACCEPTED,
     });
+
+    const accept = await this.appointmentService.accept({ id: res.id });
 
     const appointment = await this.appointmentService.findOne({ id: res.id });
 
@@ -171,9 +172,10 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<boolean> {
     const res = await this.appointmentService.book({
       ...payload,
-      status: UserEmployeeAppointmentStatus.ACCEPTED,
       companyId: employee.employee.companyId,
     });
+
+    const accept = await this.appointmentService.accept({ id: res.id });
 
     const appointment = await this.appointmentService.findOne({ id: res.id });
 

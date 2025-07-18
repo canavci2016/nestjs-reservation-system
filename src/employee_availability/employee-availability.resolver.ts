@@ -83,6 +83,7 @@ export class EmployeeAvailabilityResolver {
     return Boolean(res.affected);
   }
 
+  //FIXME: when you have a employee's availability you could retrieve it regardless of its ownership
   @UseGuards(CompanyAuthGuard)
   @Query(() => [EmployeeAvailability])
   async AdminApp_Company_Employee_Availability_list(
