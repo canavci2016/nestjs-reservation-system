@@ -56,7 +56,7 @@ export class UserEmployeeAppointmentService {
         throw new NotFoundException('userid and availability is inconsistent');
       }
 
-      const activePackageId = await this.deductUsageFromThePackage(user);
+      const activePackage = await this.getActivePackageForUser(user);
 
       const booking = await this.findOne({
         employeeAvailabilityId: params.employeeAvailabilityId,
@@ -70,7 +70,7 @@ export class UserEmployeeAppointmentService {
       const res = await this.save({
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
-        userAndCompanyUserPackageId: activePackageId,
+        userAndCompanyUserPackageId: activePackage?.id,
       });
 
       return res;
@@ -213,6 +213,25 @@ export class UserEmployeeAppointmentService {
       comment,
     });
 
+    if (appointment.userAndCompanyUserPackageId) {
+      const userPackage =
+        await this.userPackageService.findOneForUserAndCompanyUserPackagePivot({
+          id: appointment.userAndCompanyUserPackageId,
+        });
+
+      if (!userPackage) {
+        throw new NotFoundException('user package not found');
+      }
+
+      const increaseUsage =
+        await this.userPackageService.updateUserAndCompanyPackage(
+          userPackage.id,
+          {
+            numberOfUsage: userPackage.numberOfUsage + 1,
+          },
+        );
+    }
+
     return true;
   }
 
@@ -240,6 +259,10 @@ export class UserEmployeeAppointmentService {
 
     const appointment = appointments[0];
 
+    if (appointment.status == UserEmployeeAppointmentStatus.REJECTED) {
+      throw new PreconditionFailedException('appointment is already rejected');
+    }
+
     if (appointment.userAndCompanyUserPackageId) {
       const userPackage =
         await this.userPackageService.findOneForUserAndCompanyUserPackagePivot({
@@ -254,7 +277,7 @@ export class UserEmployeeAppointmentService {
         await this.userPackageService.updateUserAndCompanyPackage(
           userPackage.id,
           {
-            numberOfUsage: userPackage.numberOfUsage + 1,
+            numberOfUsage: userPackage.numberOfUsage - 1,
           },
         );
     }
@@ -283,7 +306,7 @@ export class UserEmployeeAppointmentService {
     return this.repository.findOneBy(payload);
   }
 
-  async deductUsageFromThePackage(user: User) {
+  async getActivePackageForUser(user: User) {
     const company = await user.company;
 
     if (!company) {
@@ -295,18 +318,10 @@ export class UserEmployeeAppointmentService {
         await this.userPackageService.getActivePackageForUser(user.id);
 
       if (!activePackage) {
-        throw new NotFoundException('active package not found for the user');
+        throw new NotFoundException('active package is not found for the user');
       }
 
-      const updateRes =
-        await this.userPackageService.updateUserAndCompanyPackage(
-          activePackage.id,
-          {
-            numberOfUsage: activePackage.numberOfUsage + 1,
-          },
-        );
-
-      return activePackage.id;
+      return activePackage;
     }
 
     return null;
