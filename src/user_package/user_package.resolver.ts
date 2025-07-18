@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserPackageService } from './user_package.service';
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -11,10 +11,14 @@ import { CompanyUserPackage } from './models/company-user-package.model';
 import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package.input';
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
 import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
+import { UserService } from 'src/user/user.service';
 
 @Resolver()
 export class UserPackageResolver {
-  constructor(private readonly packageService: UserPackageService) {}
+  constructor(
+    private readonly packageService: UserPackageService,
+    private readonly userService: UserService,
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -77,6 +81,16 @@ export class UserPackageResolver {
       number: pagination?.number || 1,
       length: pagination?.length || 10,
     };
+
+    const user = await this.userService.findOne({
+      companyId: company.sub,
+      id: userId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
     const models = await this.packageService.findAllForUserAndPackage({
       userId: userId,
       companyId: company.sub,
