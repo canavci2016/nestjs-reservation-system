@@ -176,7 +176,7 @@ export class UserPackageService {
     }
   }
 
-  async getActivePackageForUser(userId: string) {
+  async getActivePackagesForUser(userId: string) {
     const activePackages = await this.userPackagerepository.find({
       where: {
         userId: userId,
@@ -185,11 +185,9 @@ export class UserPackageService {
         quota: MoreThan(0),
         numberOfUsage: Raw((alias) => `${alias} < "quota"`),
       },
-      skip: 0,
-      take: 1,
     });
 
-    return activePackages[0] || null;
+    return activePackages;
   }
 
   async updateUserAndCompanyPackage(

@@ -12,6 +12,12 @@ import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
 import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
 import { UserService } from 'src/user/user.service';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
+import { User } from 'src/auth/auth.decorator';
+import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
+import { Employee } from 'src/employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 
 @Resolver()
 export class UserPackageResolver {
@@ -143,5 +149,77 @@ export class UserPackageResolver {
       id: payload.id,
     });
     return Boolean(model.affected);
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => [UserAndCompanyUserPackage])
+  async CLientApp_UserPackage_list(
+    @User() authUser: AuthUserDecoratorInterface,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<UserAndCompanyUserPackage[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+
+    const user = await this.userService.findOne({
+      id: authUser.sub,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
+    const company = await user.company;
+
+    const models = await this.packageService.findAllForUserAndPackage({
+      userId: user.id,
+      companyId: company.id,
+      pagination: paginationObj,
+    });
+
+    const result = models.map((m) => ({
+      ...m,
+      startDate: m.startDate.toString(),
+      endDate: m.endDate.toString(),
+    }));
+
+    return result;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Query(() => [UserAndCompanyUserPackage])
+  async AdminApp_Employee_UserPackage_listForAUser(
+    @Employee() employee: AuthEmployeeDecoratorInterface,
+    @Args('userId') userId: string,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+  ): Promise<UserAndCompanyUserPackage[]> {
+    const paginationObj = {
+      number: pagination?.number || 1,
+      length: pagination?.length || 10,
+    };
+
+    const user = await this.userService.findOne({
+      companyId: employee.employee.companyId,
+      id: userId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
+    const models = await this.packageService.findAllForUserAndPackage({
+      userId: userId,
+      companyId: employee.employee.companyId,
+      pagination: paginationObj,
+    });
+
+    const result = models.map((m) => ({
+      ...m,
+      startDate: m.startDate.toString(),
+      endDate: m.endDate.toString(),
+    }));
+
+    return result;
   }
 }

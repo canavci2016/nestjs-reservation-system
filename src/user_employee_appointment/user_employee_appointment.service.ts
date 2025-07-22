@@ -33,7 +33,7 @@ export class UserEmployeeAppointmentService {
     params: Pick<
       UserEmployeeAppointment,
       'employeeAvailabilityId' | 'userId'
-    > & { companyId: string },
+    > & { companyId: string; userCompanyPackageId?: string },
   ) {
     try {
       const companyId = params.companyId;
@@ -56,8 +56,6 @@ export class UserEmployeeAppointmentService {
         throw new NotFoundException('userid and availability is inconsistent');
       }
 
-      const activePackage = await this.getActivePackageForUser(user);
-
       const booking = await this.findOne({
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
@@ -66,6 +64,11 @@ export class UserEmployeeAppointmentService {
       if (booking) {
         throw new ConflictException('user has already booked this time slot');
       }
+
+      const activePackage = await this.getActivePackageForUser(
+        user,
+        params.userCompanyPackageId,
+      );
 
       const res = await this.save({
         employeeAvailabilityId: params.employeeAvailabilityId,
@@ -306,24 +309,35 @@ export class UserEmployeeAppointmentService {
     return this.repository.findOneBy(payload);
   }
 
-  async getActivePackageForUser(user: User) {
+  async getActivePackageForUser(user: User, defaultPackageId?: string) {
     const company = await user.company;
 
     if (!company) {
       throw new NotFoundException('company doesnt exists');
     }
 
-    if (company.enableUserPackageSystem) {
-      const activePackage =
-        await this.userPackageService.getActivePackageForUser(user.id);
+    if (!company.enableUserPackageSystem) {
+      return null;
+    }
 
+    const packages = await this.userPackageService.getActivePackagesForUser(
+      user.id,
+    );
+
+    if (packages.length == 0) {
+      throw new NotFoundException('active package is not found for the user');
+    }
+
+    if (defaultPackageId) {
+      const activePackage = packages.find((it) => it.id == defaultPackageId);
       if (!activePackage) {
-        throw new NotFoundException('active package is not found for the user');
+        throw new NotFoundException(
+          `package ${defaultPackageId} is not active`,
+        );
       }
-
       return activePackage;
     }
 
-    return null;
+    return packages[0];
   }
 }
