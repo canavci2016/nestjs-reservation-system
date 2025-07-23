@@ -18,6 +18,7 @@ import { User } from 'src/auth/auth.decorator';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class UserPackageResolver {
@@ -63,15 +64,12 @@ export class UserPackageResolver {
   @Query(() => [CompanyUserPackage])
   async AdminApp_Company_UserPackage_list(
     @Company() company: AuthCompanyDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<CompanyUserPackage[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.packageService.findAll({
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
@@ -81,13 +79,9 @@ export class UserPackageResolver {
   async AdminApp_Company_UserPackage_listForAUser(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('userId') userId: string,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<UserAndCompanyUserPackage[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
-
     const user = await this.userService.findOne({
       companyId: company.sub,
       id: userId,
@@ -100,7 +94,7 @@ export class UserPackageResolver {
     const models = await this.packageService.findAllForUserAndPackage({
       userId: userId,
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
 
     const result = models.map((m) => ({
@@ -155,13 +149,9 @@ export class UserPackageResolver {
   @Query(() => [UserAndCompanyUserPackage])
   async CLientApp_UserPackage_list(
     @User() authUser: AuthUserDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<UserAndCompanyUserPackage[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
-
     const user = await this.userService.findOne({
       id: authUser.sub,
     });
@@ -175,7 +165,7 @@ export class UserPackageResolver {
     const models = await this.packageService.findAllForUserAndPackage({
       userId: user.id,
       companyId: company.id,
-      pagination: paginationObj,
+      pagination: pagination,
     });
 
     const result = models.map((m) => ({
@@ -192,13 +182,9 @@ export class UserPackageResolver {
   async AdminApp_Employee_UserPackage_listForAUser(
     @Employee() employee: AuthEmployeeDecoratorInterface,
     @Args('userId') userId: string,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<UserAndCompanyUserPackage[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
-
     const user = await this.userService.findOne({
       companyId: employee.employee.companyId,
       id: userId,
@@ -211,7 +197,7 @@ export class UserPackageResolver {
     const models = await this.packageService.findAllForUserAndPackage({
       userId: userId,
       companyId: employee.employee.companyId,
-      pagination: paginationObj,
+      pagination: pagination,
     });
 
     const result = models.map((m) => ({

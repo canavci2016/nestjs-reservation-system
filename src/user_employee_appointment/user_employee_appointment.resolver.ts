@@ -20,6 +20,7 @@ import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
 import { AwsService } from 'src/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -89,19 +90,16 @@ export class UserEmployeeAppointmentResolver {
   @Query(() => [UserEmployeeAppointment])
   async ClientApp_Appointment_history(
     @User() user: AuthUserDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
     @Args() args: ClientAppSearchAppointmentArgs,
   ): Promise<UserEmployeeAppointment[]> {
     const startDate = args.startDate || moment().format('YYYY-MM-DD');
     const endDate = args.endDate || moment().format('YYYY-MM-DD');
 
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const list = await this.appointmentService.history({
       userId: user.sub,
-      pagination: paginationObj,
+      pagination: pagination,
       startDate,
       endDate,
     });

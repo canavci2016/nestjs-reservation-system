@@ -14,6 +14,7 @@ import { CompanyService } from 'src/company/company.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class EmployeeResolver {
@@ -55,15 +56,12 @@ export class EmployeeResolver {
   @Query(() => [Employee])
   async AdminApp_Company_Employee_list(
     @Company() company: AuthCompanyDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Employee[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.employeeService.findAll({
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
@@ -74,10 +72,6 @@ export class EmployeeResolver {
     @EmployeeDecorator() employee: AuthEmployeeDecoratorInterface,
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Employee[] {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = [employee.employee];
     return models;
   }
@@ -113,15 +107,12 @@ export class EmployeeResolver {
   @Query(() => [Employee])
   async ClientApp_Employee_list(
     @CompanyApp() company: { id: string },
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Employee[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.employeeService.findAll({
       companyId: company.id,
-      pagination: paginationObj,
+      pagination: pagination,
       isActive: true,
     });
     return models;

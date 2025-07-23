@@ -21,6 +21,7 @@ import { AwsService } from 'src/aws/aws.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class UserResolver {
@@ -94,16 +95,13 @@ export class UserResolver {
   async AdminApp_Company_User_list(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('q', { nullable: true }) q: string,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<User[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.userService.findAll({
       q,
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
@@ -113,16 +111,13 @@ export class UserResolver {
   async AdminApp_Employee_User_list(
     @Employee() employee: AuthEmployeeDecoratorInterface,
     @Args('q', { nullable: true }) q: string,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<User[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.userService.findAll({
       q,
       companyId: employee.employee.companyId,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }

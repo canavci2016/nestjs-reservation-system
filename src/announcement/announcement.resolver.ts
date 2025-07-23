@@ -10,10 +10,11 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class AnnouncementResolver {
-  constructor(private readonly announcementService: AnnouncementService) {}
+  constructor(private readonly announcementService: AnnouncementService) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -51,15 +52,12 @@ export class AnnouncementResolver {
   @Query(() => [Announcement])
   async AdminApp_Company_Announcement_list(
     @Company() company: AuthCompanyDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Announcement[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.announcementService.findAll({
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
@@ -82,15 +80,12 @@ export class AnnouncementResolver {
   async ClientApp_Announcement_list(
     @CompanyApp()
     company: { id: string },
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Announcement[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.announcementService.findAll({
       companyId: company.id,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }

@@ -10,6 +10,7 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 import { UpdateBlogInput } from './dto/update-blog.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { PaginationPipe } from 'src/pagination/pagination.pipe';
 
 @Resolver()
 export class BlogResolver {
@@ -33,15 +34,12 @@ export class BlogResolver {
   @Query(() => [Blog])
   async AdminApp_Company_Blog_list(
     @Company() company: AuthCompanyDecoratorInterface,
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Blog[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.blogService.findAll({
       companyId: company.sub,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
@@ -81,15 +79,12 @@ export class BlogResolver {
   @Query(() => [Blog])
   async ClientApp_Blog_list(
     @CompanyApp() company: { id: string },
-    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<Blog[]> {
-    const paginationObj = {
-      number: pagination?.number || 1,
-      length: pagination?.length || 10,
-    };
     const models = await this.blogService.findAll({
       companyId: company.id,
-      pagination: paginationObj,
+      pagination: pagination,
     });
     return models;
   }
