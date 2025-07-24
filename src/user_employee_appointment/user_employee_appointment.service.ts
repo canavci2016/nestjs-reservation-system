@@ -91,14 +91,13 @@ export class UserEmployeeAppointmentService {
   }
 
   async history(
-    params: {
-      id?: string;
+    params: Partial<
+      Pick<UserEmployeeAppointment, 'id' | 'userId' | 'status'>
+    > & {
       employeeId?: string;
       companyId?: string;
       startDate?: string;
       endDate?: string;
-      status?: UserEmployeeAppointmentStatus;
-      userId?: string;
       pagination?: Pagination;
     } = {},
   ) {
