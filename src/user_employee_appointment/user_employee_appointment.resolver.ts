@@ -234,13 +234,12 @@ export class UserEmployeeAppointmentResolver {
   ): Promise<UserEmployeeAppointment[]> {
     const startDate = args.startDate || moment().format('YYYY-MM-DD');
     const endDate = args.endDate || moment().format('YYYY-MM-DD');
-    const status = args.status || UserEmployeeAppointmentStatus.PENDING;
 
     const list = await this.appointmentService.history({
       employeeId: args.employeeId || employeeDto.sub,
       startDate,
       endDate,
-      status,
+      status: args.status,
     });
 
     return list;
