@@ -75,7 +75,6 @@ export class EmployeeAvailabilityService {
           slotItem.appointments.length > 0
         ) {
           slot.appointments.push(...slotItem.appointments);
-          console.log(slot, slotItem);
         }
       }
 
