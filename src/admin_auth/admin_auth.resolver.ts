@@ -5,9 +5,7 @@ import { AuthAdmin } from './model/auth-admin.model';
 import { TokenService } from 'src/token/token.service';
 import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
-import { SendMessageCommand } from '@aws-sdk/client-sqs';
 import { AwsService } from 'src/aws/aws.service';
-import { AdminAuthRole } from './admin-auth-role.enum';
 
 @Resolver()
 export class AdminAuthResolver {

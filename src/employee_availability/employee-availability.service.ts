@@ -4,11 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindOptionsWhere, IsNull, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import * as moment from 'moment';
 import { EmployeeService } from 'src/employee/employee.service';
 import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
-import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 
 @Injectable()
 export class EmployeeAvailabilityService {
@@ -49,9 +48,41 @@ export class EmployeeAvailabilityService {
     const availableSlots = await this.repository.find({
       where: whereQuery,
       relations: { appointments: true },
+      order: { availableDate: 'ASC', startTime: 'ASC' },
     });
 
-    return availableSlots;
+    const updatedTimeSlots = availableSlots.map((slot) => {
+      const target = moment(
+        `${slot.availableDate} ${slot.startTime}`,
+        'YYYY-MM-DD HH:mm',
+      );
+
+      for (const slotItem of availableSlots) {
+        const start = moment(
+          `${slotItem.availableDate} ${slotItem.startTime}`,
+          'YYYY-MM-DD HH:mm',
+        );
+        const end = moment(
+          `${slotItem.availableDate} ${slotItem.endTime}`,
+          'YYYY-MM-DD HH:mm',
+        );
+
+        const isBetween = target.isBetween(start, end);
+
+        if (
+          isBetween &&
+          slotItem.id != slot.id &&
+          slotItem.appointments.length > 0
+        ) {
+          slot.appointments.push(...slotItem.appointments);
+          console.log(slot, slotItem);
+        }
+      }
+
+      return slot;
+    });
+
+    return updatedTimeSlots;
   }
 
   async save(payload: Partial<EmployeeAvailability>[]) {

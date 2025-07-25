@@ -276,6 +276,9 @@ type EmployeeAvailabilityAppointment {
   """availability created date"""
   createdAt: DateTime!
 
+  """appointment employeeAvailabilityId"""
+  employeeAvailabilityId: String!
+
   """appointment unique id"""
   id: String!
 
