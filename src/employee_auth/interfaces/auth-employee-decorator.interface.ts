@@ -9,5 +9,6 @@ export interface AuthEmployeeDecoratorInterface {
     userName: string;
     phone: string;
     companyId: string;
+    lengthOfOperationInMinute?: number;
   };
 }

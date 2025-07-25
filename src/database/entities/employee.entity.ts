@@ -44,6 +44,9 @@ export class Employee {
   @OneToMany((type) => EmployeeAvailability, (model) => model.employee)
   availabilities: EmployeeAvailability[];
 
+  @Column({ default: 60, type: 'integer' })
+  lengthOfOperationInMinute: number;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

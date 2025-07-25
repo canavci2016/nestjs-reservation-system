@@ -19,4 +19,7 @@ export class UpdateEmployeeInput {
 
   @Field({ nullable: true })
   email?: string;
+
+  @Field({ nullable: true })
+  lengthOfOperationInMinute?: number;
 }

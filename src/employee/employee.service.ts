@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { And, FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
-import { SaveEmployee } from './interfaces/save-employee.interface';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
 import * as bcrypt from 'bcrypt';
@@ -47,7 +46,7 @@ export class EmployeeService {
     return this.repository.findOneBy(payload);
   }
 
-  async save(payload: SaveEmployee) {
+  async save(payload: Partial<Omit<Employee, 'availabilities'>>) {
     if (payload.password) {
       payload.password = await bcrypt.hash(payload.password, 10);
     }

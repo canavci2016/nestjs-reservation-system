@@ -9,20 +9,22 @@ import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decor
 
 @Resolver()
 export class EmployeeAuthResolver {
-  constructor(private readonly authService: EmployeeAuthService) {}
+  constructor(private readonly authService: EmployeeAuthService) { }
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)
   AdminApp_Employee_getProfile(
     @Employee() employeeDto: AuthEmployeeDecoratorInterface,
   ): AuthEmployee {
+    const { employee } = employeeDto;
     const authUserIns = new AuthEmployee();
-    authUserIns.id = employeeDto.employee.id;
-    authUserIns.name = employeeDto.employee.name;
-    authUserIns.lastName = employeeDto.employee.lastName;
-    authUserIns.userName = employeeDto.employee.userName;
-    authUserIns.email = employeeDto.employee.email;
-    authUserIns.phone = employeeDto.employee.phone;
+    authUserIns.id = employee.id;
+    authUserIns.name = employee.name;
+    authUserIns.lastName = employee.lastName;
+    authUserIns.userName = employee.userName;
+    authUserIns.email = employee.email;
+    authUserIns.phone = employee.phone;
+    authUserIns.lengthOfOperationInMinute = employee.lengthOfOperationInMinute;
 
     return authUserIns;
   }

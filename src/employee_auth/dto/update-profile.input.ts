@@ -22,4 +22,7 @@ export class UpdateProfileInput {
 
   @Field({ nullable: true })
   deviceToken?: string;
+
+  @Field({ nullable: true })
+  lengthOfOperationInMinute?: number;
 }

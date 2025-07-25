@@ -72,6 +72,9 @@ type AuthEmployee {
   """user last name"""
   lastName: String!
 
+  """user device token"""
+  lengthOfOperationInMinute: Float
+
   """user name"""
   name: String!
 
@@ -283,6 +286,7 @@ type EmployeeAvailabilityAppointment {
 input EmployeeSignUpInput {
   email: String
   lastName: String!
+  lengthOfOperationInMinute: Float
   name: String!
   password: String!
   phone: String
@@ -421,6 +425,7 @@ input UpdateBlogInput {
 input UpdateEmployeeInput {
   email: String
   lastName: String
+  lengthOfOperationInMinute: Float
   name: String
   password: String
   phone: String
@@ -431,6 +436,7 @@ input UpdateProfileInput {
   deviceToken: String
   email: String
   lastName: String
+  lengthOfOperationInMinute: Float
   name: String
   password: String
   phone: String

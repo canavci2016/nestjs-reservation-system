@@ -22,4 +22,7 @@ export class AuthEmployee {
 
   @Field({ description: 'user device token', nullable: true })
   deviceToken?: string;
+
+  @Field({ description: 'user device token', nullable: true })
+  lengthOfOperationInMinute?: number;
 }
