@@ -51,19 +51,23 @@ export class EmployeeAvailabilityService {
       order: { availableDate: 'ASC', startTime: 'ASC' },
     });
 
-    const updatedTimeSlots = availableSlots.map((slot) => {
-      const target = moment(
+    let newSlots: Array<EmployeeAvailability & { refAppointments?: any[] }> = [
+      ...availableSlots,
+    ];
+
+    for (const slot of availableSlots) {
+      const start = moment(
         `${slot.availableDate} ${slot.startTime}`,
         'YYYY-MM-DD HH:mm',
       );
+      const end = moment(
+        `${slot.availableDate} ${slot.endTime}`,
+        'YYYY-MM-DD HH:mm',
+      );
 
-      for (const slotItem of availableSlots) {
-        const start = moment(
+      for (const slotItem of newSlots) {
+        const target = moment(
           `${slotItem.availableDate} ${slotItem.startTime}`,
-          'YYYY-MM-DD HH:mm',
-        );
-        const end = moment(
-          `${slotItem.availableDate} ${slotItem.endTime}`,
           'YYYY-MM-DD HH:mm',
         );
 
@@ -72,16 +76,19 @@ export class EmployeeAvailabilityService {
         if (
           isBetween &&
           slotItem.id != slot.id &&
-          slotItem.appointments.length > 0
+          slot.appointments.length > 0
         ) {
-          slot.appointments.push(...slotItem.appointments);
+          slotItem.refAppointments = [...(slotItem.refAppointments || []), ...slot.appointments];
         }
       }
+    }
 
+    newSlots = newSlots.map((slot) => {
+      slot.appointments.push(...(slot.refAppointments || []));
       return slot;
     });
 
-    return updatedTimeSlots;
+    return newSlots;
   }
 
   async save(payload: Partial<EmployeeAvailability>[]) {
