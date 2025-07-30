@@ -8,6 +8,7 @@ import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import * as moment from 'moment';
 import { EmployeeService } from 'src/employee/employee.service';
 import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
+import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 
 @Injectable()
 export class EmployeeAvailabilityService {
@@ -51,42 +52,50 @@ export class EmployeeAvailabilityService {
       order: { availableDate: 'ASC', startTime: 'ASC' },
     });
 
-    let newSlots: Array<EmployeeAvailability & { refAppointments?: any[] }> = [
-      ...availableSlots,
-    ];
+    const newSlots = availableSlots.map((av) => ({
+      ...av,
+      acceptNewAppointments: true,
+    }));
 
-    for (const slot of availableSlots) {
-      const start = moment(
-        `${slot.availableDate} ${slot.startTime}`,
-        'YYYY-MM-DD HH:mm',
+    for (let index = 0; index < newSlots.length; index++) {
+      const slot = newSlots[index];
+
+      const unpendingAppoints = slot.appointments.filter(
+        (app) => app.status != UserEmployeeAppointmentStatus.PENDING,
       );
-      const end = moment(
-        `${slot.availableDate} ${slot.endTime}`,
+
+      if (unpendingAppoints.length == slot.capacity) {
+        slot.acceptNewAppointments = false;
+        continue;
+      }
+
+      const target = moment(
+        `${slot.availableDate} ${slot.startTime}`,
         'YYYY-MM-DD HH:mm',
       );
 
       for (const slotItem of newSlots) {
-        const target = moment(
-          `${slotItem.availableDate} ${slotItem.startTime}`,
+        if (slot.id == slotItem.id) {
+          continue;
+        }
+
+        const start = moment(
+          `${slot.availableDate} ${slotItem.startTime}`,
+          'YYYY-MM-DD HH:mm',
+        );
+        const end = moment(
+          `${slot.availableDate} ${slotItem.endTime}`,
           'YYYY-MM-DD HH:mm',
         );
 
         const isBetween = target.isBetween(start, end);
 
-        if (
-          isBetween &&
-          slotItem.id != slot.id &&
-          slot.appointments.length > 0
-        ) {
-          slotItem.refAppointments = [...(slotItem.refAppointments || []), ...slot.appointments];
+        if (isBetween && slotItem.appointments.length > 0) {
+          slot.acceptNewAppointments = false;
+          break;
         }
       }
     }
-
-    newSlots = newSlots.map((slot) => {
-      slot.appointments.push(...(slot.refAppointments || []));
-      return slot;
-    });
 
     return newSlots;
   }

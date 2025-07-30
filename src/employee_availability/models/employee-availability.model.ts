@@ -22,4 +22,9 @@ export class EmployeeAvailability {
 
   @Field({ description: 'the number of people whom can attend to the session' })
   capacity: number;
+
+  @Field({
+    description: 'a symbol used to specify if new appointments are accepted',
+  })
+  acceptNewAppointments: boolean;
 }

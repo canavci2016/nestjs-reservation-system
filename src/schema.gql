@@ -256,6 +256,9 @@ type Employee {
 }
 
 type EmployeeAvailability {
+  """a symbol used to specify if new appointments are accepted"""
+  acceptNewAppointments: Boolean!
+
   """user package expires type"""
   appointments: [EmployeeAvailabilityAppointment!]!
 
