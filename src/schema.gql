@@ -262,6 +262,9 @@ type EmployeeAvailability {
   """availability date"""
   availableDate: String!
 
+  """the number of people whom can attend to the session"""
+  capacity: Float!
+
   """availability end date"""
   endTime: String!
 

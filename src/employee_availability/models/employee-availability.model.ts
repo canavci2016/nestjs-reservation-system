@@ -19,4 +19,7 @@ export class EmployeeAvailability {
     description: 'user package expires type',
   })
   appointments: Array<EmployeeAvailabilityAppointment>;
+
+  @Field({ description: 'the number of people whom can attend to the session' })
+  capacity: number;
 }
