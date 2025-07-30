@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
   PreconditionFailedException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
@@ -56,6 +57,18 @@ export class UserEmployeeAppointmentService {
         throw new NotFoundException('userid and availability is inconsistent');
       }
 
+      const histories = await this.history({
+        employeeAvailabilityId: availability.id,
+      });
+
+      const validAppointments = histories.filter(
+        (hst) => hst.status != UserEmployeeAppointmentStatus.REJECTED,
+      );
+
+      if (validAppointments.length >= availability.capacity) {
+        throw new UnauthorizedException('capacity of the session is exceeded');
+      }
+
       const booking = await this.findOne({
         employeeAvailabilityId: params.employeeAvailabilityId,
         userId: params.userId,
@@ -92,7 +105,10 @@ export class UserEmployeeAppointmentService {
 
   async history(
     params: Partial<
-      Pick<UserEmployeeAppointment, 'id' | 'userId' | 'status'>
+      Pick<
+        UserEmployeeAppointment,
+        'id' | 'userId' | 'status' | 'employeeAvailabilityId'
+      >
     > & {
       employeeId?: string;
       companyId?: string;
@@ -111,6 +127,10 @@ export class UserEmployeeAppointmentService {
 
     if (params?.userId) {
       whereQuery['userId'] = params.userId;
+    }
+
+    if (params?.employeeAvailabilityId) {
+      whereQuery['employeeAvailabilityId'] = params.employeeAvailabilityId;
     }
 
     if (params.status) {
@@ -208,6 +228,26 @@ export class UserEmployeeAppointmentService {
 
     if (appointment.status == UserEmployeeAppointmentStatus.ACCEPTED) {
       throw new PreconditionFailedException('appointment is already accepted');
+    }
+
+    const availability = await this.employeeAvailabilityService.findOne({
+      id: appointment.employeeAvailabilityId,
+    });
+
+    if (!availability) {
+      throw new NotFoundException('availibilty must be have been deleted');
+    }
+
+    const histories = await this.history({
+      employeeAvailabilityId: appointment.employeeAvailabilityId,
+    });
+
+    const validAppointments = histories.filter(
+      (hst) => hst.status != UserEmployeeAppointmentStatus.REJECTED,
+    );
+
+    if (validAppointments.length >= availability.capacity) {
+      throw new UnauthorizedException('capacity of the session is exceeded');
     }
 
     const result = await this.updateById(condition.id, {

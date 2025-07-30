@@ -27,4 +27,7 @@ export class EmployeeAvailability {
     description: 'a symbol used to specify if new appointments are accepted',
   })
   acceptNewAppointments: boolean;
+
+  @Field({ description: 'the number of valid appointments' })
+  numberOfAppointments: number;
 }

@@ -55,16 +55,18 @@ export class EmployeeAvailabilityService {
     const newSlots = availableSlots.map((av) => ({
       ...av,
       acceptNewAppointments: true,
+      numberOfAppointments: 0,
     }));
 
     for (let index = 0; index < newSlots.length; index++) {
       const slot = newSlots[index];
 
-      const unpendingAppoints = slot.appointments.filter(
-        (app) => app.status != UserEmployeeAppointmentStatus.PENDING,
+      const validAppointments = slot.appointments.filter(
+        (app) => app.status != UserEmployeeAppointmentStatus.REJECTED,
       );
+      slot.numberOfAppointments = validAppointments.length;
 
-      if (unpendingAppoints.length == slot.capacity) {
+      if (validAppointments.length == slot.capacity) {
         slot.acceptNewAppointments = false;
         continue;
       }

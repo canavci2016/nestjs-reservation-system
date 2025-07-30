@@ -274,6 +274,9 @@ type EmployeeAvailability {
   """availability unique id"""
   id: String!
 
+  """the number of valid appointments"""
+  numberOfAppointments: Float!
+
   """availability start date"""
   startTime: String!
 }
