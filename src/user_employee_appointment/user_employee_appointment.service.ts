@@ -238,16 +238,18 @@ export class UserEmployeeAppointmentService {
       throw new NotFoundException('availibilty must be have been deleted');
     }
 
-    const histories = await this.history({
-      employeeAvailabilityId: appointment.employeeAvailabilityId,
-    });
+    if (appointment.status == UserEmployeeAppointmentStatus.REJECTED) {
+      const histories = await this.history({
+        employeeAvailabilityId: appointment.employeeAvailabilityId,
+      });
 
-    const validAppointments = histories.filter(
-      (hst) => hst.status != UserEmployeeAppointmentStatus.REJECTED,
-    );
+      const validAppointments = histories.filter(
+        (hst) => hst.status != UserEmployeeAppointmentStatus.REJECTED,
+      );
 
-    if (validAppointments.length >= availability.capacity) {
-      throw new UnauthorizedException('capacity of the session is exceeded');
+      if (validAppointments.length >= availability.capacity) {
+        throw new UnauthorizedException('capacity of the session is exceeded');
+      }
     }
 
     const result = await this.updateById(condition.id, {
