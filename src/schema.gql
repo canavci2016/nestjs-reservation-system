@@ -293,6 +293,26 @@ type EmployeeAvailabilityAppointment {
 
   """appointment status"""
   status: String!
+
+  """user package expires type"""
+  user: EmployeeAvailabilityAppointmentUser!
+}
+
+type EmployeeAvailabilityAppointmentUser {
+  """appointment users email"""
+  email: String
+
+  """appointment unique id"""
+  id: String!
+
+  """appointment users last name"""
+  lastName: String!
+
+  """appointment users name"""
+  name: String!
+
+  """appointment users phone"""
+  phone: String
 }
 
 input EmployeeSignUpInput {

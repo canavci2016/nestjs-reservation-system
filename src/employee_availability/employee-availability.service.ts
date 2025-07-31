@@ -48,7 +48,7 @@ export class EmployeeAvailabilityService {
 
     const availableSlots = await this.repository.find({
       where: whereQuery,
-      relations: { appointments: true },
+      relations: { appointments: { user: true } },
       order: { availableDate: 'ASC', startTime: 'ASC' },
     });
 
@@ -56,6 +56,11 @@ export class EmployeeAvailabilityService {
       ...av,
       acceptNewAppointments: true,
       numberOfAppointments: 0,
+      appointments: av.appointments.map((ap) => ({
+        ...ap,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        user: ap['__user__'],
+      })),
     }));
 
     for (let index = 0; index < newSlots.length; index++) {

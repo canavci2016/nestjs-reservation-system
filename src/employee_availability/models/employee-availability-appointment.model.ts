@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { EmployeeAvailabilityAppointmentUser } from './employee-availability-appointment-user.model';
 
 @ObjectType()
 export class EmployeeAvailabilityAppointment {
@@ -13,4 +14,9 @@ export class EmployeeAvailabilityAppointment {
 
   @Field({ description: 'availability created date' })
   createdAt: Date;
+
+  @Field((type) => EmployeeAvailabilityAppointmentUser, {
+    description: 'user package expires type',
+  })
+  user: EmployeeAvailabilityAppointmentUser;
 }
