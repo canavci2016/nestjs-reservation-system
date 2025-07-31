@@ -19,6 +19,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
 
 @Resolver()
 export class EmployeeAvailabilityResolver {
@@ -69,6 +70,26 @@ export class EmployeeAvailabilityResolver {
     }));
 
     const res = await this.availabilityService.save(data);
+    return true;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Company_Employee_Availability_update(
+    @Args('id') id: string,
+    @Args('payload') payload: UpdateEmployeeAvailabilityInput,
+  ): Promise<boolean> {
+    const res = await this.availabilityService.updateById(id, payload);
+    return true;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminApp_Employee_Employee_Availability_update(
+    @Args('id') id: string,
+    @Args('payload') payload: UpdateEmployeeAvailabilityInput,
+  ): Promise<boolean> {
+    const res = await this.availabilityService.updateById(id, payload);
     return true;
   }
 

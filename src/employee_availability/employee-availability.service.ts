@@ -150,4 +150,13 @@ export class EmployeeAvailabilityService {
 
     return result;
   }
+
+  async updateById(id: string, payload: Partial<EmployeeAvailability>) {
+    return await this.repository
+      .createQueryBuilder()
+      .update(EmployeeAvailability)
+      .set(payload)
+      .where({ id: id })
+      .execute();
+  }
 }
