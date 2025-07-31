@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { AuthEmployeeCompany } from './auth-employee-company.model';
 
 @ObjectType()
 export class AuthEmployee {
@@ -25,4 +26,9 @@ export class AuthEmployee {
 
   @Field({ description: 'user device token', nullable: true })
   lengthOfOperationInMinute?: number;
+
+  @Field((type) => AuthEmployeeCompany, {
+    description: 'company object',
+  })
+  company: AuthEmployeeCompany;
 }

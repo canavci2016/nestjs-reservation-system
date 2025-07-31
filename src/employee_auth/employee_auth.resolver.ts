@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeAuthService } from './employee_auth.service';
 import { Employee } from './employee.decorator';
@@ -13,20 +13,13 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)
-  AdminApp_Employee_getProfile(
+  async AdminApp_Employee_getProfile(
     @Employee() employeeDto: AuthEmployeeDecoratorInterface,
-  ): AuthEmployee {
-    const { employee } = employeeDto;
-    const authUserIns = new AuthEmployee();
-    authUserIns.id = employee.id;
-    authUserIns.name = employee.name;
-    authUserIns.lastName = employee.lastName;
-    authUserIns.userName = employee.userName;
-    authUserIns.email = employee.email;
-    authUserIns.phone = employee.phone;
-    authUserIns.lengthOfOperationInMinute = employee.lengthOfOperationInMinute;
+  ) {
+    const employeeService = this.authService.getEmployeeService();
 
-    return authUserIns;
+    const employee = await employeeService.findOne({ id: employeeDto.sub });
+    return employee;
   }
 
   @UseGuards(EmployeeAuthGuard)

@@ -6,8 +6,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { EmployeeAvailability } from './employee-availability.entity';
+import { Company } from './company.entity';
 
 @Entity()
 export class Employee {
@@ -43,6 +46,10 @@ export class Employee {
 
   @OneToMany((type) => EmployeeAvailability, (model) => model.employee)
   availabilities: EmployeeAvailability[];
+
+  @ManyToOne((type) => Company)
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne
+  company: Promise<Company>;
 
   @Column({ default: 60, type: 'integer' })
   lengthOfOperationInMinute: number;

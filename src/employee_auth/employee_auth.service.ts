@@ -61,4 +61,8 @@ export class EmployeeAuthService {
 
     return company;
   }
+
+  getEmployeeService() {
+    return this.employeeService;
+  }
 }
