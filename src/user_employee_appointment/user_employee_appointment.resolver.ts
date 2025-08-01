@@ -137,6 +137,7 @@ export class UserEmployeeAppointmentResolver {
 
     const userModel = await appointment.user;
     const availabilityModel = await appointment.employeeAvailability;
+    const employeeModel = await availabilityModel.employee;
 
     const attributes = {
       action: {
@@ -154,6 +155,10 @@ export class UserEmployeeAppointmentResolver {
       availabilityModel: {
         DataType: 'String',
         StringValue: JSON.stringify(availabilityModel),
+      },
+      employeeModel: {
+        DataType: 'String',
+        StringValue: JSON.stringify(employeeModel),
       },
     };
 
