@@ -20,6 +20,7 @@ import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointme
 import { AwsService } from 'src/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -55,32 +56,20 @@ export class UserEmployeeAppointmentResolver {
       id: availabilityModel.employeeId,
     });
 
+    if (!employee) {
+      throw new NotFoundException('employee is not present');
+    }
+
     const company = await userModel.company;
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'CLIENTAPP_APPOINTMENT_BOOK',
-      },
-      employeeModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(employee),
-      },
-      companyModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(company),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'CLIENTAPP_APPOINTMENT_BOOK')
+      .setStr('employeeModel', employee)
+      .setStr('companyModel', company)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
 
     return true;
   }
@@ -139,30 +128,14 @@ export class UserEmployeeAppointmentResolver {
     const availabilityModel = await appointment.employeeAvailability;
     const employeeModel = await availabilityModel.employee;
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_ADD',
-      },
-      companyModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(company.company),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-      employeeModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(employeeModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_COMPANY_APPOINTMENT_ADD')
+      .setStr('companyModel', company.company)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel)
+      .setStr('employeeModel', employeeModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
     return true;
   }
 
@@ -188,26 +161,13 @@ export class UserEmployeeAppointmentResolver {
     const userModel = await appointment.user;
     const availabilityModel = await appointment.employeeAvailability;
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_ADD',
-      },
-      employeeModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(employee.employee),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_EMPLOYEE_APPOINTMENT_ADD')
+      .setStr('employeeModel', employee.employee)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
     return true;
   }
 
@@ -279,26 +239,13 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid availibity');
     }
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_ACCEPT',
-      },
-      employeeModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(employeeDto.employee),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attrs = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_EMPLOYEE_APPOINTMENT_ACCEPT')
+      .setStr('employeeModel', employeeDto.employee)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attrs.getObj());
 
     return Boolean(response.MessageId);
   }
@@ -333,26 +280,13 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid availibity');
     }
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_EMPLOYEE_APPOINTMENT_REJECT',
-      },
-      employeeModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(employeeDto.employee),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_EMPLOYEE_APPOINTMENT_REJECT')
+      .setStr('employeeModel', employeeDto.employee)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
 
     return Boolean(response.MessageId);
   }
@@ -387,26 +321,13 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid availibity');
     }
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_ACCEPT',
-      },
-      companyModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(company.company),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_COMPANY_APPOINTMENT_ACCEPT')
+      .setStr('companyModel', company.company)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
 
     return Boolean(response.MessageId);
   }
@@ -441,26 +362,13 @@ export class UserEmployeeAppointmentResolver {
       throw new NotFoundException('there is no valid availibity');
     }
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_COMPANY_APPOINTMENT_REJECT',
-      },
-      companyModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(company.company),
-      },
-      userModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(userModel),
-      },
-      availabilityModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(availabilityModel),
-      },
-    };
+    const attributes = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_COMPANY_APPOINTMENT_REJECT')
+      .setStr('companyModel', company.company)
+      .setStr('userModel', userModel)
+      .setStr('availabilityModel', availabilityModel);
 
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
 
     return Boolean(response.MessageId);
   }

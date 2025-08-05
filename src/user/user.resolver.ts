@@ -22,6 +22,7 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 
 @Resolver()
 export class UserResolver {
@@ -60,31 +61,18 @@ export class UserResolver {
 
     const setPasswordUrl = `${process.env.APP_URL}/user/set-password?token=${token.content}`;
 
-    const attributes = {
-      action: { DataType: 'String', StringValue: 'CLIENTAPP_CREATE_ACCOUNT' },
-      name: { DataType: 'String', StringValue: userModel.name },
-      lastName: { DataType: 'String', StringValue: userModel.lastName },
-      passwordChangeUrl: {
-        DataType: 'String',
-        StringValue: setPasswordUrl,
-      },
-    };
     if (userModel.email) {
-      attributes['email'] = {
-        DataType: 'String',
-        StringValue: userModel.email,
-      };
-    }
-    if (userModel.phone) {
-      attributes['phone'] = {
-        DataType: 'String',
-        StringValue: userModel.phone,
-      };
-    }
+      const attributes = new AwsSqsMessageQueryBuilder()
+        .setStr('action', 'CLIENTAPP_CREATE_ACCOUNT')
+        .setStr('name', userModel.name)
+        .setStr('lastName', userModel.lastName)
+        .setStr('passwordChangeUrl', setPasswordUrl)
+        .setStr('email', userModel.email);
 
-    if (userModel.email) {
-      const response = await this.awsService.pushIntoQueue(attributes);
-      console.log(response);
+      if (userModel.phone) {
+        attributes.setStr('phone', userModel.phone);
+      }
+      const response = await this.awsService.pushIntoQueue(attributes.getObj());
     }
 
     return Boolean(userModel);

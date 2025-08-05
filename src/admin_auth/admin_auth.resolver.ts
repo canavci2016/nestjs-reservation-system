@@ -6,6 +6,7 @@ import { TokenService } from 'src/token/token.service';
 import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsService } from 'src/aws/aws.service';
+import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -42,21 +43,12 @@ export class AdminAuthResolver {
 
     const forgetPasswordUrl = `${process.env.APP_URL}/admin-auth/set-password?token=${token.content}`;
 
-    const attributes = {
-      action: {
-        DataType: 'String',
-        StringValue: 'ADMINAPP_AUTH_FORGETPASSWORD',
-      },
-      adminModel: {
-        DataType: 'String',
-        StringValue: JSON.stringify(res.model),
-      },
-      forgetPasswordUrl: {
-        DataType: 'String',
-        StringValue: forgetPasswordUrl,
-      },
-    };
-    const response = await this.awsService.pushIntoQueue(attributes);
+    const attrs = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_AUTH_FORGETPASSWORD')
+      .setStr('adminModel', res.model)
+      .setStr('forgetPasswordUrl', forgetPasswordUrl);
+
+    const response = await this.awsService.pushIntoQueue(attrs.getObj());
     console.log(response);
     return true;
   }
