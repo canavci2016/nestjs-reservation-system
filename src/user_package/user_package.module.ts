@@ -8,4 +8,4 @@ import { UserModule } from 'src/user/user.module';
   providers: [UserPackageService, UserPackageResolver],
   exports: [UserPackageService],
 })
-export class UserPackageModule {}
+export class UserPackageModule { }

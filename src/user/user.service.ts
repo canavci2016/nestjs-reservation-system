@@ -3,20 +3,28 @@ import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
 import { User } from 'src/database/entities/user.entity';
-import { FindAllOptions } from './interfaces/find-all-option.interface';
 import * as bcrypt from 'bcrypt';
+import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
+    @InjectRepository(User)
+    private userAndCUP: Repository<UserAndCompanyUserPackage>,
   ) {
-    console.log('CompanyService initialized');
+    console.log('UserService initialized');
   }
 
-  findAll(options: FindAllOptions | null = null) {
-    const query = {};
+  async findAll(
+    options: {
+      q?: string;
+      companyId?: string;
+      pagination?: Pagination;
+    } | null = null,
+  ) {
     const whereQuery = {};
 
     if (options?.companyId) {
@@ -27,16 +35,41 @@ export class UserService {
       whereQuery['name'] = Like(`%${options.q}%`);
     }
 
-    query['where'] = whereQuery;
-
     const take = options?.pagination?.length || 10;
     const page = options?.pagination?.number || 1;
     const skip = (page - 1) * take;
-    query['take'] = take;
-    query['skip'] = skip;
-    query['order'] = { createdAt: 'desc' };
+    const alias = 'user';
 
-    return this.repository.find(query);
+    const queryBuilder = this.repository.createQueryBuilder(alias);
+    queryBuilder
+      .where(whereQuery)
+      .take(take)
+      .skip(skip)
+      .addSelect((subQuery) => {
+        const tableAlias = 'u_and_c_u_p';
+        return subQuery
+          .select(`${tableAlias}.id`, 'id')
+          .from(UserAndCompanyUserPackage, tableAlias)
+          .where(`${tableAlias}.userId = ${alias}.id`)
+          .andWhere(`${tableAlias}.startDate <= :date`, { date: new Date() })
+          .andWhere(`${tableAlias}.endDate >= :date`, { date: new Date() })
+          .andWhere(`${tableAlias}.quota > :quota`, { quota: 0 })
+          .andWhere(`${tableAlias}.numberOfUsage < ${tableAlias}.quota`)
+          .limit(1);
+      }, 'user_activePackageId')
+      .orderBy(`${alias}.createdAt`, 'DESC');
+    const users: Array<User> = await queryBuilder.getRawMany();
+
+    const updatedUsers = users.map((user) => {
+      const newUserObj: User = new User();
+      for (const [key, value] of Object.entries(user)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        newUserObj[key.replace(`${alias}_`, '')] = value;
+      }
+      return newUserObj;
+    });
+
+    return updatedUsers;
   }
 
   findOne(payload: Partial<Omit<User, 'company'>>) {

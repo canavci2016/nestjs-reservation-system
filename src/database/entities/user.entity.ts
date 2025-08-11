@@ -7,8 +7,10 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Company } from './company.entity';
+import { UserAndCompanyUserPackage } from './user-and-company-user-package.entity';
 
 @Entity()
 export class User {
@@ -46,6 +48,9 @@ export class User {
   @JoinColumn({ name: 'companyId', referencedColumnName: 'id' }) // this decorator is optional for @ManyToOne, but required for @OneToOne
   company: Promise<Company>;
 
+  @OneToMany((type) => UserAndCompanyUserPackage, (model) => model.user)
+  packages: UserAndCompanyUserPackage[];
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -61,4 +66,6 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  activePackageId?: string;
 }

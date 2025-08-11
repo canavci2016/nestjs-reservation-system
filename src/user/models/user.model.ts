@@ -22,4 +22,7 @@ export class User {
 
   @Field({ description: 'user email', nullable: true })
   createdAt?: Date;
+
+  @Field({ description: 'the id of activePackage', nullable: true })
+  activePackageId?: string;
 }

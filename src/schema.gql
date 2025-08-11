@@ -503,6 +503,9 @@ input UpdateProfileInput {
 scalar Upload
 
 type User {
+  """the id of activePackage"""
+  activePackageId: String
+
   """user email"""
   createdAt: DateTime
 
