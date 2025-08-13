@@ -7,7 +7,7 @@ import {
 import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { UserService } from 'src/user/user.service';
-import { LessThan, LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
 import * as moment from 'moment';
 
 export interface FindAllOptions {
@@ -56,7 +56,7 @@ export class UserPackageService {
     return this.repository.find(query);
   }
 
-  findAllForUserAndPackage(
+  async findAllForUserAndPackage(
     options: FindAllOptionsForUserAndCompanyPackage | null = null,
   ) {
     const query = {};
@@ -82,7 +82,27 @@ export class UserPackageService {
       companyUserPackage: true,
     };
 
-    return this.userAndCompanyUserPackageRepository.find(query);
+    const packages = await this.userAndCompanyUserPackageRepository.find(query);
+
+    const updatedPackages = packages.map((pck) => {
+      const newPackage = { ...pck, valid: false };
+      const now = moment();
+      const startDate = moment(pck.startDate);
+      const endDate = moment(pck.endDate);
+
+      if (
+        now.isSameOrAfter(startDate) &&
+        now.isSameOrBefore(endDate) &&
+        pck.quota > 0 &&
+        pck.numberOfUsage < pck.quota
+      ) {
+        newPackage.valid = true;
+      }
+
+      return newPackage;
+    });
+
+    return updatedPackages;
   }
 
   async save(payload: Partial<CompanyUserPackage>) {

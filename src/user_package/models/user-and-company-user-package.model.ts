@@ -26,4 +26,7 @@ export class UserAndCompanyUserPackage {
 
   @Field((type) => CompanyUserPackage)
   companyUserPackage: CompanyUserPackage;
+
+  @Field({ description: 'ensure it is still valid' })
+  valid: boolean;
 }

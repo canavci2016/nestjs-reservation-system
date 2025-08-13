@@ -561,6 +561,9 @@ type UserAndCompanyUserPackage {
 
   """user package user id """
   userId: String!
+
+  """ensure it is still valid"""
+  valid: Boolean!
 }
 
 type UserEmployeeAppointment {
