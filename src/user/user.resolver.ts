@@ -111,6 +111,32 @@ export class UserResolver {
   }
 
   @UseGuards(CompanyAuthGuard)
+  @Query(() => User)
+  async AdminApp_Company_User_detail(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('id', { nullable: true }) id: string,
+  ) {
+    const model = await this.userService.findOne({
+      companyId: company.sub,
+      id: id,
+    });
+    return model;
+  }
+
+  @UseGuards(EmployeeAuthGuard)
+  @Query(() => User)
+  async AdminApp_Employee_User_detail(
+    @Employee() employee: AuthEmployeeDecoratorInterface,
+    @Args('id', { nullable: true }) id: string,
+  ) {
+    const model = await this.userService.findOne({
+      companyId: employee.employee.companyId,
+      id: id,
+    });
+    return model;
+  }
+
+  @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_User_update(
     @Company() company: AuthCompanyDecoratorInterface,

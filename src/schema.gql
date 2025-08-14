@@ -409,12 +409,14 @@ type Query {
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_Company_User_detail(id: String): User!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Company_getProfile: SuperAdminCompany!
   AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Employee_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_Employee_User_detail(id: String): User!
   AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_getProfile: AuthEmployee!
   CLientApp_UserPackage_list(pagination: PaginationInput): [UserAndCompanyUserPackage!]!
