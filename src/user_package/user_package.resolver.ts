@@ -124,13 +124,13 @@ export class UserPackageResolver {
       throw new NotFoundException('user isnot found');
     }
 
-    const package =
+    const packageModel =
       await this.packageService.findOneForUserAndCompanyUserPackagePivot({
         userId: userId,
         id: packageId,
       });
 
-    if (!user) {
+    if (!packageModel) {
       throw new NotFoundException('package isnot found');
     }
 
