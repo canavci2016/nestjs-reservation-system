@@ -19,6 +19,7 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { CompanyUpdateUserPackageCommonTableInput } from './dto/company-update-user-package-common-table.input';
 
 @Resolver()
 export class UserPackageResolver {
@@ -104,6 +105,41 @@ export class UserPackageResolver {
     }));
 
     return result;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => Boolean)
+  async AdminApp_Company_UserPackage_updateForAUser(
+    @Company() company: AuthCompanyDecoratorInterface,
+    @Args('user') userId: string,
+    @Args('packageId') packageId: string,
+    @Args('payload') payload: CompanyUpdateUserPackageCommonTableInput,
+  ) {
+    const user = await this.userService.findOne({
+      companyId: company.sub,
+      id: userId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
+    const package =
+      await this.packageService.findOneForUserAndCompanyUserPackagePivot({
+        userId: userId,
+        id: packageId,
+      });
+
+    if (!user) {
+      throw new NotFoundException('package isnot found');
+    }
+
+    const update = await this.packageService.updateUserAndCompanyPackage(
+      packageId,
+      payload,
+    );
+
+    return Boolean(update?.affected);
   }
 
   @UseGuards(CompanyAuthGuard)
