@@ -213,6 +213,20 @@ input CompanyUpdateInput {
   userName: String
 }
 
+input CompanyUpdateUserPackageCommonTableInput {
+  """user package end date"""
+  endDate: DateTime
+
+  """user package usage stats"""
+  numberOfUsage: Float
+
+  """user package quota"""
+  quota: Float
+
+  """user package start date"""
+  startDate: DateTime
+}
+
 input CompanyUpdateUserPackageInput {
   expiresInNumber: Float
   expiresInType: CompanyUserPackageExpiresType
@@ -409,6 +423,7 @@ type Query {
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_Company_UserPackage_updateForAUser(packageId: String!, payload: CompanyUpdateUserPackageCommonTableInput!, user: String!): Boolean!
   AdminApp_Company_User_detail(id: String): User!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Company_getProfile: SuperAdminCompany!
