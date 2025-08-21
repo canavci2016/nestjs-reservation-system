@@ -205,6 +205,7 @@ export class UserPackageService {
         quota: MoreThan(0),
         numberOfUsage: Raw((alias) => `${alias} < "quota"`),
       },
+      order: { createdAt: 'ASC' },
     });
 
     return activePackages;
