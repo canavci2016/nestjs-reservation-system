@@ -363,20 +363,11 @@ export class UserEmployeeAppointmentService {
 
     const packages = await this.userPackageService.getActivePackagesForUser(
       user.id,
+      defaultPackageId,
     );
 
     if (packages.length == 0) {
       throw new NotFoundException('active package is not found for the user');
-    }
-
-    if (defaultPackageId) {
-      const activePackage = packages.find((it) => it.id == defaultPackageId);
-      if (!activePackage) {
-        throw new NotFoundException(
-          `package ${defaultPackageId} is not active`,
-        );
-      }
-      return activePackage;
     }
 
     return packages[0];

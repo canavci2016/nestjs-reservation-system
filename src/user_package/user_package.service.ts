@@ -196,19 +196,28 @@ export class UserPackageService {
     }
   }
 
-  async getActivePackagesForUser(userId: string) {
-    const activePackages = await this.userPackagerepository.find({
-      where: {
-        userId: userId,
-        startDate: LessThanOrEqual(new Date()),
-        endDate: MoreThan(new Date()),
-        quota: MoreThan(0),
-        numberOfUsage: Raw((alias) => `${alias} < "quota"`),
-      },
+  async getActivePackagesForUser(
+    userId: string,
+    packageId: string | null = null,
+  ) {
+    const whereQuery = {
+      userId: userId,
+      startDate: LessThanOrEqual(new Date()),
+      endDate: MoreThan(new Date()),
+      quota: MoreThan(0),
+      numberOfUsage: Raw((alias) => `${alias} < "quota"`),
+    };
+
+    if (packageId) {
+      whereQuery['id'] = packageId;
+    }
+
+    const packages = await this.userPackagerepository.find({
+      where: whereQuery,
       order: { createdAt: 'ASC' },
     });
 
-    return activePackages;
+    return packages;
   }
 
   async updateUserAndCompanyPackage(
