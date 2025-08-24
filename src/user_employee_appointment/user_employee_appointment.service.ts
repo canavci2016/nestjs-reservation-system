@@ -66,15 +66,16 @@ export class UserEmployeeAppointmentService {
       );
 
       if (validAppointments.length >= availability.capacity) {
-        throw new UnauthorizedException('capacity of the session is exceeded');
+        throw new UnauthorizedException(
+          `the capacity ${availability.capacity} can not be exceeded`,
+        );
       }
 
-      const booking = await this.findOne({
-        employeeAvailabilityId: params.employeeAvailabilityId,
-        userId: params.userId,
-      });
+      const usersBookings = validAppointments.filter(
+        (app) => app.userId == params.userId,
+      );
 
-      if (booking) {
+      if (usersBookings.length > 0) {
         throw new ConflictException('user has already booked this time slot');
       }
 
