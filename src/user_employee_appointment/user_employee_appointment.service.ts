@@ -37,14 +37,14 @@ export class UserEmployeeAppointmentService {
     > & { companyId: string; userCompanyPackageId?: string },
   ) {
     try {
-      const companyId = params.companyId;
-      const user = await this.userService.findOne({ id: params.userId });
+      const { companyId, userId, employeeAvailabilityId } = params;
+      const user = await this.userService.findOne({ id: userId });
       if (!user) {
         throw new NotFoundException('user doesnt exists');
       }
 
       const availability = await this.employeeAvailabilityService.findOne({
-        id: params.employeeAvailabilityId,
+        id: employeeAvailabilityId,
       });
 
       if (!availability) {
@@ -72,7 +72,7 @@ export class UserEmployeeAppointmentService {
       }
 
       const usersBookings = validAppointments.filter(
-        (app) => app.userId == params.userId,
+        (app) => app.userId == userId,
       );
 
       if (usersBookings.length > 0) {
@@ -85,8 +85,8 @@ export class UserEmployeeAppointmentService {
       );
 
       const res = await this.save({
-        employeeAvailabilityId: params.employeeAvailabilityId,
-        userId: params.userId,
+        employeeAvailabilityId: employeeAvailabilityId,
+        userId: userId,
         userAndCompanyUserPackageId: activePackage?.id,
       });
 
