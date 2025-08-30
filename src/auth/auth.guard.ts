@@ -7,10 +7,15 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { UserService } from 'src/user/user.service';
+import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userService: UserService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -22,14 +27,18 @@ export class AuthGuard implements CanActivate {
     try {
       const secret = process.env.APP_KEY;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: secret,
-      });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      request['user'] = payload;
+      const payload: Omit<AuthUserDecoratorInterface, 'user'> =
+        await this.jwtService.verifyAsync(token, {
+          secret: secret,
+        });
+
+      const user = await this.userService.findOne({ id: payload.sub });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      request['user'] = { ...payload, user };
     } catch {
       throw new UnauthorizedException();
     }

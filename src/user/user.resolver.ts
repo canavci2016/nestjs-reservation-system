@@ -1,9 +1,5 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import {
-  ConflictException,
-  NotFoundException,
-  UseGuards,
-} from '@nestjs/common';
+import { ConflictException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from 'src/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -15,8 +11,6 @@ import { UserUpdateInput } from './dto/user-update.input';
 import { TokenService } from 'src/token/token.service';
 import * as moment from 'moment';
 import { TokenTypes } from 'src/token/token-types.enum';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { User as UserDecorator } from 'src/auth/auth.decorator';
 import { AwsService } from 'src/aws/aws.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
@@ -176,20 +170,6 @@ export class UserResolver {
     });
 
     return Boolean(model.affected);
-  }
-
-  @UseGuards(AuthGuard)
-  @Mutation(() => User)
-  async ClientApp_Profile_detail(
-    @UserDecorator() userDto: { sub: string },
-  ): Promise<User> {
-    const user = await this.userService.findOne({ id: userDto.sub });
-
-    if (!user) {
-      throw new NotFoundException('user isnot found');
-    }
-
-    return user;
   }
 
   @UseGuards(CompanyAuthGuard)

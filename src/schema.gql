@@ -397,7 +397,6 @@ type Mutation {
   AdminApp_Employee_updateProfile(payload: UpdateProfileInput!): Boolean!
   ClientApp_Appointment_book(payload: BookAppointmentInput!): Boolean!
   ClientApp_Appointment_reject(comment: String, id: String!): Boolean!
-  ClientApp_Profile_detail: User!
   ClientApp_Profile_update(payload: UserUpdateInput!, userId: String!): Boolean!
   ClientApp_User_login(password: String!, userName: String!): String!
   ClientApp_User_signUp(payload: UserSignUpInput!): String!
