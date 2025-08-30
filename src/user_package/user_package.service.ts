@@ -94,7 +94,8 @@ export class UserPackageService {
         now.isSameOrAfter(startDate) &&
         now.isSameOrBefore(endDate) &&
         pck.quota > 0 &&
-        pck.numberOfUsage < pck.quota
+        pck.numberOfUsage < pck.quota &&
+        pck.companyUserPackage.isActive
       ) {
         newPackage.valid = true;
       }
