@@ -20,6 +20,8 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
+import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
+import { CompanyApp } from 'src/company_auth/company_app.decorator';
 
 @Resolver()
 export class EmployeeAvailabilityResolver {
@@ -127,11 +129,11 @@ export class EmployeeAvailabilityResolver {
     return Boolean(res.affected);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CompanyAppGuard)
   @UseInterceptors(ExtractAuthUserInterceptor)
   @Query(() => [EmployeeAvailability])
   async ClientApp_Employee_Availability_list(
-    @User() user: { sub: string },
+    @CompanyApp() company: { sub: string },
     @Args() args: ListAvailabilityArgs,
   ): Promise<EmployeeAvailability[]> {
     const result = await this.availabilityService.getAvailableTimeSlots(args);

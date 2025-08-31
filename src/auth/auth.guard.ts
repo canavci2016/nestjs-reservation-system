@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +16,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private userService: UserService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -35,11 +36,15 @@ export class AuthGuard implements CanActivate {
       const user = await this.userService.findOne({ id: payload.sub });
 
       if (!user) {
-        throw new UnauthorizedException();
+        throw new NotFoundException('user is not found');
       }
 
       request['user'] = { ...payload, user };
-    } catch {
+    } catch (e: any) {
+
+      if (e instanceof NotFoundException) {
+        throw e;
+      }
       throw new UnauthorizedException();
     }
     return true;
