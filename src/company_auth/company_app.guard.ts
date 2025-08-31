@@ -10,7 +10,7 @@ import { CompanyService } from 'src/company/company.service';
 
 @Injectable()
 export class CompanyAppGuard implements CanActivate {
-  constructor(private service: CompanyService) {}
+  constructor(private service: CompanyService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -26,8 +26,6 @@ export class CompanyAppGuard implements CanActivate {
       if (!payload) {
         throw new UnauthorizedException();
       }
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
       request['company_app'] = payload;
     } catch {
       throw new UnauthorizedException();

@@ -25,7 +25,7 @@ export class CompanyAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload: AuthCompanyDecoratorInterface =
+      const payload: Omit<AuthCompanyDecoratorInterface, 'company'> =
         await this.jwtService.verifyAsync(token, {
           secret: process.env.APP_SECRET,
         });

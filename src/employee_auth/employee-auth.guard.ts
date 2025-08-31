@@ -15,7 +15,7 @@ export class EmployeeAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private employeeService: EmployeeService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
@@ -25,7 +25,7 @@ export class EmployeeAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload: AuthEmployeeDecoratorInterface =
+      const payload: Omit<AuthEmployeeDecoratorInterface, 'employee'> =
         await this.jwtService.verifyAsync(token, {
           secret: process.env.APP_SECRET,
         });

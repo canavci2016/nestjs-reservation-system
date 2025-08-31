@@ -3,7 +3,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { CompanyService } from 'src/company/company.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -14,9 +13,10 @@ export class CompanyAuthService {
     private readonly companyService: CompanyService,
     private readonly jwtService: JwtService,
   ) { }
-  async signInByEmailAndPassword(
-    field: SignInByEmailAndPassword,
-  ): Promise<{ access_token: string }> {
+  async signInByEmailAndPassword(field: {
+    userName: string;
+    password: string;
+  }): Promise<{ access_token: string }> {
     const user = await this.companyService.findOne({
       userName: field.userName,
     });
