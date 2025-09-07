@@ -492,6 +492,9 @@ input UpdateBlogInput {
 input UpdateEmployeeAvailabilityInput {
   """availability capacity"""
   capacity: Float! = 1
+
+  """availability end time"""
+  endTime: String
 }
 
 input UpdateEmployeeInput {
