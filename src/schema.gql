@@ -441,6 +441,7 @@ type Query {
   ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
   ClientApp_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   ClientApp_Employee_list(pagination: PaginationInput): [Employee!]!
+  ClientApp_User_ForgetPassword(userNameOrEmail: String!): Boolean!
   ClientApp_User_profile: AuthUser!
   ClienyApp_Company_detail: SuperAdminCompany!
   Company_profile: Company!

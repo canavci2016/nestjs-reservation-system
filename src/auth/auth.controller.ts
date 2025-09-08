@@ -1,0 +1,63 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Res,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
+import { TokenService } from 'src/token/token.service';
+import { TokenGuard } from 'src/token/token.guard';
+import { Token } from 'src/token/token.decorator';
+import { Response } from 'express';
+import Handlebars from 'handlebars';
+import { readFile } from 'fs/promises';
+import { UserSetPasswordInput } from './dto/user-set-password.input';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+export class AuthController {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) { }
+
+  @UseGuards(TokenGuard)
+  @Get('/set-password')
+  async getSetPassword(
+    @Token() tokenModel: { owner_id: string; content: string },
+    @Res() res: Response,
+  ) {
+    const user = await this.authService.findUserById(tokenModel.owner_id);
+
+    const rawContent = await readFile('src/auth/views/set-password.hbs', {
+      encoding: 'utf-8',
+    });
+    const template = Handlebars.compile(rawContent);
+
+    const fullName = user.name + ' ' + user.lastName;
+
+    const content = template({ fullName, token: tokenModel.content });
+
+    return res.send(content);
+  }
+
+  @UseGuards(TokenGuard)
+  @Post('/set-password')
+  async postSetPassword(
+    @Token()
+    tokenModel: { id: string; owner_id: string; content: string },
+    @Body(new ValidationPipe()) setPasswordDto: UserSetPasswordInput,
+    @Res() res: Response,
+  ) {
+    const user = await this.authService.updateById(tokenModel.owner_id, {
+      password: setPasswordDto.password,
+    });
+
+    const revokeToken = await this.tokenService.updateById(tokenModel.id, {
+      revoked: true,
+    });
+    return res.send('password is updated please close the tab');
+  }
+}

@@ -11,12 +11,19 @@ import { UserSignUpInput } from './dto/user-signup.input';
 import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/user/user.service';
+import { TokenService } from 'src/token/token.service';
+import { TokenTypes } from 'src/token/token-types.enum';
+import * as moment from 'moment';
+import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { AwsService } from 'src/aws/aws.service';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+    private readonly awsService: AwsService,
   ) { }
 
   @UseGuards(CompanyAppGuard)
@@ -79,5 +86,35 @@ export class AuthResolver {
   ): Promise<boolean> {
     const res = await this.authService.updateById(authUser.sub, payload);
     return Boolean(res.affected);
+  }
+
+  @UseGuards(CompanyAppGuard)
+  @Query(() => Boolean)
+  async ClientApp_User_ForgetPassword(
+    @Args('userNameOrEmail') userNameOrEmail: string,
+    @CompanyApp() company: { id: string },
+  ): Promise<boolean> {
+    const res = await this.authService.findByUsernameOrEmail({
+      userNameOrEmail: userNameOrEmail,
+      companyId: company.id,
+    });
+
+    const token = await this.tokenService.save({
+      owner_type: 'user',
+      owner_id: res.id,
+      action: TokenTypes.FORGET_PASSWORD,
+      expiresAt: moment().add(2, 'days').toDate(),
+    });
+
+    const forgetPasswordUrl = `${process.env.APP_URL}/auth/set-password?token=${token.content}`;
+
+    const attrs = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'CLIENTAPP_USER_FORGETPASSWORD')
+      .setStr('userModel', res)
+      .setStr('forgetPasswordUrl', forgetPasswordUrl);
+
+    const response = await this.awsService.pushIntoQueue(attrs.getObj());
+    console.log(response);
+    return true;
   }
 }

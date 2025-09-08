@@ -58,11 +58,39 @@ export class AuthService {
     return user;
   }
 
+  async findByUsernameOrEmail(payload: {
+    userNameOrEmail: string;
+    companyId: string;
+  }) {
+    let user = await this.userService.findOne({
+      userName: payload.userNameOrEmail,
+      companyId: payload.companyId,
+    });
+
+    if (user) {
+      return user;
+    }
+    user = await this.userService.findOne({
+      email: payload.userNameOrEmail,
+      companyId: payload.companyId,
+    });
+
+    if (user) {
+      return user;
+    }
+
+    throw new NotFoundException(
+      'there is no account associated with given credentials',
+    );
+  }
+
   async updateById(
     id: string,
-    payload: Pick<
-      User,
-      'name' | 'lastName' | 'password' | 'email' | 'phone' | 'deviceToken'
+    payload: Partial<
+      Pick<
+        User,
+        'name' | 'lastName' | 'password' | 'email' | 'phone' | 'deviceToken'
+      >
     >,
   ) {
     const res = await this.userService.updateById(id, payload);
