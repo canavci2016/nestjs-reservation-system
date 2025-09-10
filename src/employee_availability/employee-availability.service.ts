@@ -73,30 +73,24 @@ export class EmployeeAvailabilityService {
     for (let index = 0; index < sortedSlots.length; index++) {
       const slot = sortedSlots[index];
 
-      if (!slot.acceptNewAppointments) {
-        continue;
-      }
-
       const validAppointments = slot.appointments.filter(
         (app) => app.status != UserEmployeeAppointmentStatus.REJECTED,
       );
       slot.numberOfAppointments = validAppointments.length;
-
       if (validAppointments.length == slot.capacity) {
         slot.acceptNewAppointments = false;
-        continue;
       }
 
       const slotStartTime = moment(slot.startDayTime, 'YYYY-MM-DD HH:mm');
       const slotStartEndTime = moment(slot.endDayTime, 'YYYY-MM-DD HH:mm');
 
       for (let ind = index + 1; ind < sortedSlots.length; ind++) {
-        const slotItem = sortedSlots[index];
+        const slotItem = sortedSlots[ind];
 
         const targetTime = moment(slotItem.startDayTime, 'YYYY-MM-DD HH:mm');
         const isBetween = targetTime.isBetween(slotStartTime, slotStartEndTime);
 
-        if (isBetween) {
+        if (isBetween && validAppointments.length > 0) {
           sortedSlots[ind].acceptNewAppointments = false;
           continue;
         }
