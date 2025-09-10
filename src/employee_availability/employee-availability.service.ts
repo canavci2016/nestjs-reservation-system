@@ -56,6 +56,9 @@ export class EmployeeAvailabilityService {
       ...av,
       acceptNewAppointments: true,
       numberOfAppointments: 0,
+      startDayTime: av.availableDate + ' ' + av.startTime,
+      startDayTimeInUnix: moment(av.availableDate + ' ' + av.startTime).unix(),
+      endDayTime: av.availableDate + ' ' + av.endTime,
       appointments: av.appointments.map((ap) => ({
         ...ap,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -63,8 +66,16 @@ export class EmployeeAvailabilityService {
       })),
     }));
 
-    for (let index = 0; index < newSlots.length; index++) {
-      const slot = newSlots[index];
+    const sortedSlots = newSlots.sort((a, b) => {
+      return a.startDayTimeInUnix - b.startDayTimeInUnix;
+    });
+
+    for (let index = 0; index < sortedSlots.length; index++) {
+      const slot = sortedSlots[index];
+
+      if (!slot.acceptNewAppointments) {
+        continue;
+      }
 
       const validAppointments = slot.appointments.filter(
         (app) => app.status != UserEmployeeAppointmentStatus.REJECTED,
@@ -76,35 +87,23 @@ export class EmployeeAvailabilityService {
         continue;
       }
 
-      const target = moment(
-        `${slot.availableDate} ${slot.startTime}`,
-        'YYYY-MM-DD HH:mm',
-      );
+      const slotStartTime = moment(slot.startDayTime, 'YYYY-MM-DD HH:mm');
+      const slotStartEndTime = moment(slot.endDayTime, 'YYYY-MM-DD HH:mm');
 
-      for (const slotItem of newSlots) {
-        if (slot.id == slotItem.id) {
+      for (let ind = index + 1; ind < sortedSlots.length; ind++) {
+        const slotItem = sortedSlots[index];
+
+        const targetTime = moment(slotItem.startDayTime, 'YYYY-MM-DD HH:mm');
+        const isBetween = targetTime.isBetween(slotStartTime, slotStartEndTime);
+
+        if (isBetween) {
+          sortedSlots[ind].acceptNewAppointments = false;
           continue;
-        }
-
-        const start = moment(
-          `${slot.availableDate} ${slotItem.startTime}`,
-          'YYYY-MM-DD HH:mm',
-        );
-        const end = moment(
-          `${slot.availableDate} ${slotItem.endTime}`,
-          'YYYY-MM-DD HH:mm',
-        );
-
-        const isBetween = target.isBetween(start, end);
-
-        if (isBetween && slotItem.appointments.length > 0) {
-          slot.acceptNewAppointments = false;
-          break;
         }
       }
     }
 
-    return newSlots;
+    return sortedSlots;
   }
 
   async save(payload: Partial<EmployeeAvailability>[]) {
