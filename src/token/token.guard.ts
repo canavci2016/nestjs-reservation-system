@@ -9,11 +9,13 @@ import { MoreThan } from 'typeorm/find-options/operator/MoreThan';
 
 @Injectable()
 export class TokenGuard implements CanActivate {
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: TokenService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token: string = request.query.token;
+    const request: { query: { token?: string } } = context
+      .switchToHttp()
+      .getRequest();
+    const token = request.query.token;
 
     const tokenModel = await this.tokenService.findOne({
       content: token,
