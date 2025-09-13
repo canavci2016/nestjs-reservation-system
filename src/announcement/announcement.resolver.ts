@@ -11,10 +11,15 @@ import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { AwsService } from 'src/aws/aws.service';
 
 @Resolver()
 export class AnnouncementResolver {
-  constructor(private readonly announcementService: AnnouncementService) { }
+  constructor(
+    private readonly announcementService: AnnouncementService,
+    private readonly awsService: AwsService,
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -27,6 +32,13 @@ export class AnnouncementResolver {
       companyId: company.sub,
       isActive: true,
     });
+
+    const attrs = new AwsSqsMessageQueryBuilder()
+      .setStr('action', 'ADMINAPP_COMPANY_ANNOUNCEMENT_ADD')
+      .setStr('announcementModel', model);
+
+    const response = await this.awsService.pushIntoQueue(attrs.getObj());
+
     return Boolean(model);
   }
 
