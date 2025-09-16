@@ -16,6 +16,7 @@ import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/aws/aws.service';
+import { ConfigService } from 'src/config/config.service';
 
 @Resolver()
 export class AuthResolver {
@@ -24,6 +25,7 @@ export class AuthResolver {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
+    private readonly configService: ConfigService,
   ) { }
 
   @UseGuards(CompanyAppGuard)
@@ -106,7 +108,8 @@ export class AuthResolver {
       expiresAt: moment().add(2, 'days').toDate(),
     });
 
-    const forgetPasswordUrl = `${process.env.APP_URL}/auth/set-password?token=${token.content}`;
+    const appUrl = this.configService.get('APP_URL');
+    const forgetPasswordUrl = `${appUrl}/auth/set-password?token=${token.content}`;
 
     const attrs = new AwsSqsMessageQueryBuilder()
       .setStr('action', 'CLIENTAPP_USER_FORGETPASSWORD')

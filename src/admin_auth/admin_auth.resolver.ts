@@ -7,6 +7,7 @@ import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsService } from 'src/aws/aws.service';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { ConfigService } from 'src/config/config.service';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -14,6 +15,7 @@ export class AdminAuthResolver {
     private readonly authService: AdminAuthService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
+    private readonly configService: ConfigService,
   ) { }
 
   @Mutation(() => AuthAdmin)
@@ -41,7 +43,8 @@ export class AdminAuthResolver {
       expiresAt: moment().add(2, 'days').toDate(),
     });
 
-    const forgetPasswordUrl = `${process.env.APP_URL}/admin-auth/set-password?token=${token.content}`;
+    const appUrl = this.configService.get('APP_URL');
+    const forgetPasswordUrl = `${appUrl}/admin-auth/set-password?token=${token.content}`;
 
     const attrs = new AwsSqsMessageQueryBuilder()
       .setStr('action', 'ADMINAPP_AUTH_FORGETPASSWORD')

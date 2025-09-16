@@ -7,6 +7,7 @@ import { Blog } from 'src/database/entities/blog.entity';
 import { FileUpload } from './interfaces/file-upload.interface';
 import { S3Client } from '@aws-sdk/client-s3';
 import { UploadService } from 'src/upload/upload.service';
+import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class BlogService {
@@ -16,8 +17,10 @@ export class BlogService {
     @InjectRepository(Blog)
     private repository: Repository<Blog>,
     private readonly uploadService: UploadService,
+    private readonly configService: ConfigService,
   ) {
-    this.s3Client = new S3Client({ region: process.env.AWS_REGION });
+    const region = this.configService.get('AWS_REGION');
+    this.s3Client = new S3Client({ region: region });
     console.log('BlogService initialized');
   }
 

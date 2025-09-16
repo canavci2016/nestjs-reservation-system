@@ -17,6 +17,7 @@ import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { ConfigService } from 'src/config/config.service';
 
 @Resolver()
 export class UserResolver {
@@ -24,6 +25,7 @@ export class UserResolver {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
+    private readonly configService: ConfigService,
   ) { }
 
   @UseGuards(CompanyAuthGuard)
@@ -53,7 +55,8 @@ export class UserResolver {
       expiresAt: moment().add(2, 'days').toDate(),
     });
 
-    const setPasswordUrl = `${process.env.APP_URL}/user/set-password?token=${token.content}`;
+    const appUrl = this.configService.get('APP_URL');
+    const setPasswordUrl = `${appUrl}/user/set-password?token=${token.content}`;
 
     if (userModel.email) {
       const attributes = new AwsSqsMessageQueryBuilder()

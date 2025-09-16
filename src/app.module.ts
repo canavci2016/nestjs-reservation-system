@@ -25,6 +25,7 @@ import { TokenModule } from './token/token.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule as BuiltInConfigModule } from './config/config.module';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -84,6 +85,8 @@ const configFactory = {
     UserPackageModule,
     TokenModule,
     AwsModule,
+    ConfigModule,
+    BuiltInConfigModule.register({ folder: './', isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [AppService, configFactory, AwsService],
