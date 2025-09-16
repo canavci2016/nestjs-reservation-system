@@ -84,7 +84,7 @@ export class AuthResolver {
     @User() authUser: AuthUserDecoratorInterface,
     @Args('payload') payload: UserUpdateProfileInput,
   ): Promise<boolean> {
-    const res = await this.authService.updateById(authUser.sub, payload);
+    const res = await this.userService.updateById(authUser.sub, payload);
     return Boolean(res.affected);
   }
 

@@ -15,12 +15,14 @@ import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
 import { AuthService } from './auth.service';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
+    private readonly userService: UserService,
   ) { }
 
   @UseGuards(TokenGuard)
@@ -51,7 +53,8 @@ export class AuthController {
     @Body(new ValidationPipe()) setPasswordDto: UserSetPasswordInput,
     @Res() res: Response,
   ) {
-    const user = await this.authService.updateById(tokenModel.owner_id, {
+ 
+    const user = await this.userService.updateById(tokenModel.owner_id, {
       password: setPasswordDto.password,
     });
 
