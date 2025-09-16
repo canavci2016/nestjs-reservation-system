@@ -5,7 +5,7 @@ import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 import { Announcement } from 'src/database/entities/announcement.entity';
 import { FileUpload } from './interfaces/file-upload.interface';
-import { UploadService } from 'src/upload/upload.service';
+import { AwsService } from 'src/aws/aws.service';
 
 interface FindAllOptions {
   companyId?: string;
@@ -18,7 +18,7 @@ export class AnnouncementService {
   constructor(
     @InjectRepository(Announcement)
     private repository: Repository<Announcement>,
-    private readonly uploadService: UploadService,
+    private readonly awsService: AwsService,
   ) {
     console.log('BlogService initialized');
   }
@@ -53,7 +53,7 @@ export class AnnouncementService {
       const imageFile: FileUpload = await payload.photo;
       const fileName = `${payload.companyId}/announcement/${Date.now()}_${imageFile.filename}`;
 
-      const filePath = await this.uploadService.uploadOnS3AsStream(
+      const filePath = await this.awsService.uploadOnS3AsStream(
         imageFile.createReadStream,
         fileName,
       );
@@ -83,7 +83,7 @@ export class AnnouncementService {
       const imageFile: FileUpload = await payload.photo;
       const fileName = `${payload.companyId}/announcement/${Date.now()}_${imageFile.filename}`;
 
-      const filePath = await this.uploadService.uploadOnS3AsStream(
+      const filePath = await this.awsService.uploadOnS3AsStream(
         imageFile.createReadStream,
         fileName,
       );

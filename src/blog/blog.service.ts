@@ -5,22 +5,16 @@ import { SaveBlog } from './interfaces/save-blog.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Blog } from 'src/database/entities/blog.entity';
 import { FileUpload } from './interfaces/file-upload.interface';
-import { S3Client } from '@aws-sdk/client-s3';
-import { UploadService } from 'src/upload/upload.service';
-import { ConfigService } from 'src/config/config.service';
+import { AwsService } from 'src/aws/aws.service';
 
 @Injectable()
 export class BlogService {
-  s3Client: S3Client;
 
   constructor(
     @InjectRepository(Blog)
     private repository: Repository<Blog>,
-    private readonly uploadService: UploadService,
-    private readonly configService: ConfigService,
+    private readonly awsService: AwsService,
   ) {
-    const region = this.configService.get('AWS_REGION');
-    this.s3Client = new S3Client({ region: region });
     console.log('BlogService initialized');
   }
 
@@ -54,7 +48,7 @@ export class BlogService {
       const imageFile: FileUpload = await payload.photo;
       const fileName = `${payload.companyId}/blog/${Date.now()}_${imageFile.filename}`;
 
-      const filePath = await this.uploadService.uploadOnS3AsStream(
+      const filePath = await this.awsService.uploadOnS3AsStream(
         imageFile.createReadStream,
         fileName,
       );
@@ -84,7 +78,7 @@ export class BlogService {
       const imageFile: FileUpload = await payload.photo;
       const fileName = `${payload.companyId}/blog/${Date.now()}_${imageFile.filename}`;
 
-      const filePath = await this.uploadService.uploadOnS3AsStream(
+      const filePath = await this.awsService.uploadOnS3AsStream(
         imageFile.createReadStream,
         fileName,
       );

@@ -2,11 +2,10 @@ import { Module } from '@nestjs/common';
 import { CompanyModule } from 'src/company/company.module';
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResolver } from './announcement.resolver';
-import { UploadModule } from 'src/upload/upload.module';
 
 @Module({
-  imports: [CompanyModule, UploadModule],
+  imports: [CompanyModule],
   providers: [AnnouncementService, AnnouncementResolver],
   exports: [AnnouncementService],
 })
-export class AnnouncementModule {}
+export class AnnouncementModule { }

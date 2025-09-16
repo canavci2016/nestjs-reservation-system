@@ -19,7 +19,6 @@ import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { AdminAuthModule } from './admin_auth/admin_auth.module';
 import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
-import { UploadModule } from './upload/upload.module';
 import { UserPackageModule } from './user_package/user_package.module';
 import { TokenModule } from './token/token.module';
 import { AwsService } from './aws/aws.service';
@@ -81,7 +80,6 @@ const configFactory = {
     EmployeeAuthModule,
     AdminAuthModule,
     SuperadminAuthModule,
-    UploadModule,
     UserPackageModule,
     TokenModule,
     AwsModule,
