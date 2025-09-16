@@ -8,15 +8,17 @@ import {
 import * as Stream from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 import { S3Client } from '@aws-sdk/client-s3';
+import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class AwsService {
   sqsClient: SQSClient;
   s3Client: S3Client;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
+    const region = this.configService.get('AWS_REGION');
     this.sqsClient = new SQSClient({});
-    this.s3Client = new S3Client({ region: process.env.AWS_REGION });
+    this.s3Client = new S3Client({ region: region });
   }
 
   async pushIntoQueue(attributes: Record<string, MessageAttributeValue>) {
