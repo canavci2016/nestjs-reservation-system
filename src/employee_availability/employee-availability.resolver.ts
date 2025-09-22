@@ -1,8 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeAvailabilityService } from './employee-availability.service';
-import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { ExtractAuthUserInterceptor } from 'src/auth/interceptors/extract-auth-user.interceptor';
-import { User } from 'src/auth/auth.decorator';
+import { UseGuards } from '@nestjs/common';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';
 import { Employee } from 'src/employee_auth/employee.decorator';
@@ -18,7 +16,6 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
@@ -130,7 +127,6 @@ export class EmployeeAvailabilityResolver {
   }
 
   @UseGuards(CompanyAppGuard)
-  @UseInterceptors(ExtractAuthUserInterceptor)
   @Query(() => [EmployeeAvailability])
   async ClientApp_Employee_Availability_list(
     @CompanyApp() company: { sub: string },
