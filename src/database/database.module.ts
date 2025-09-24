@@ -11,6 +11,8 @@ import { SuperAdmin } from './entities/super-admin.entity';
 import { CompanyUserPackage } from './entities/company-user-package.entity';
 import { UserAndCompanyUserPackage } from './entities/user-and-company-user-package.entity';
 import { Token } from './entities/token.entity';
+import { EmployeeSubscriber } from './subscribers/employee.subscriber';
+import { CompanySubscriber } from './subscribers/company.subscriber';
 
 @Global()
 @Module({
@@ -29,6 +31,7 @@ import { Token } from './entities/token.entity';
       Token,
     ]),
   ],
+  providers: [EmployeeSubscriber, CompanySubscriber],
   exports: [TypeOrmModule],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

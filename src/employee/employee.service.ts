@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmployeeService {
@@ -47,10 +46,6 @@ export class EmployeeService {
   }
 
   async save(payload: Partial<Omit<Employee, 'availabilities'>>) {
-    if (payload.password) {
-      payload.password = await bcrypt.hash(payload.password, 10);
-    }
-
     return this.repository.save(payload);
   }
 
@@ -79,10 +74,6 @@ export class EmployeeService {
     condition: Pick<Employee, 'id' | 'companyId'>,
     payload: Partial<Employee>,
   ) {
-    if (payload.password) {
-      payload.password = await bcrypt.hash(payload.password, 10);
-    }
-
     return await this.repository
       .createQueryBuilder()
       .update(Employee)

@@ -2,7 +2,6 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CompanyService {
@@ -33,17 +32,10 @@ export class CompanyService {
       );
     }
 
-    if (company.password) {
-      company.password = await this.generateToken(company.password);
-    }
     return this.repository.save(company);
   }
 
   async updateById(id: string, payload: Partial<Company>) {
-    if (payload.password) {
-      payload.password = await this.generateToken(payload.password);
-    }
-
     if (Object.keys(payload).length > 0) {
       return await this.repository
         .createQueryBuilder()
@@ -65,9 +57,5 @@ export class CompanyService {
       .execute();
 
     return result;
-  }
-
-  generateToken(password: string) {
-    return bcrypt.hash(password, 10);
   }
 }
