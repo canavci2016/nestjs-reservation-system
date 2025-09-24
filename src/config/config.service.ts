@@ -17,7 +17,7 @@ export class ConfigService {
     console.log(this.envConfig);
   }
 
-  get(key: string): string {
-    return this.envConfig[key];
+  get<Type = string>(key: string): Type | undefined {
+    return this.envConfig[key] as Type;
   }
 }
