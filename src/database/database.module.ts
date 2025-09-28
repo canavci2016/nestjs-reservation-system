@@ -13,6 +13,7 @@ import { UserAndCompanyUserPackage } from './entities/user-and-company-user-pack
 import { Token } from './entities/token.entity';
 import { EmployeeSubscriber } from './subscribers/employee.subscriber';
 import { CompanySubscriber } from './subscribers/company.subscriber';
+import { Reporting } from './entities/reporting.entity';
 
 @Global()
 @Module({
@@ -29,6 +30,7 @@ import { CompanySubscriber } from './subscribers/company.subscriber';
       CompanyUserPackage,
       UserAndCompanyUserPackage,
       Token,
+      Reporting,
     ]),
   ],
   providers: [EmployeeSubscriber, CompanySubscriber],
