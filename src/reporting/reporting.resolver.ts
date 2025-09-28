@@ -7,7 +7,7 @@ export class ReportingResolver {
   constructor(private readonly reportingService: ReportingService) { }
 
   @Mutation(() => Boolean)
-  async CLientApp_Reporting_Add(
+  async CLientApp_Reporting_add(
     @Args('payload') payload: ReportingAddInput,
   ): Promise<boolean> {
     const model = await this.reportingService.save(payload);
