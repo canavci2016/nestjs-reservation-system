@@ -417,7 +417,7 @@ input PaginationInput {
 type Query {
   AdminApp_Auth_ForgetPassword(userNameOrEmail: String!): Boolean!
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
-  AdminApp_Company_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
+  AdminApp_Company_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!

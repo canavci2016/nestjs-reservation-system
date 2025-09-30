@@ -21,6 +21,7 @@ import { AwsService } from 'src/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {
@@ -176,6 +177,7 @@ export class UserEmployeeAppointmentResolver {
   async AdminApp_Company_Appointment_list(
     @Company() companyDto: AuthCompanyDecoratorInterface,
     @Args() args: SearchAppointmentArgs,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Promise<UserEmployeeAppointment[]> {
     const startDate = args.startDate || moment().format('YYYY-MM-DD');
     const endDate = args.endDate || moment().format('YYYY-MM-DD');
