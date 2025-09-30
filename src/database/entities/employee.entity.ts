@@ -44,6 +44,9 @@ export class Employee {
   @Column({ nullable: true })
   deviceToken?: string;
 
+  @Column({ nullable: true })
+  photoUrl?: string;
+
   @OneToMany((type) => EmployeeAvailability, (model) => model.employee)
   availabilities: EmployeeAvailability[];
 

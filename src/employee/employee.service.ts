@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
+import { FileUpload } from 'src/core/interfaces/file-upload.interface';
+import { AwsService } from 'src/aws/aws.service';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectRepository(Employee)
     private repository: Repository<Employee>,
+    private readonly awsService: AwsService,
   ) {
     console.log('CompanyService initialized');
   }
@@ -45,8 +48,30 @@ export class EmployeeService {
     return this.repository.findOneBy(payload);
   }
 
-  async save(payload: Partial<Omit<Employee, 'availabilities'>>) {
-    return this.repository.save(payload);
+  async save(
+    payload: Partial<
+      Omit<Employee, 'availabilities'> & { photo: Promise<FileUpload> }
+    >,
+  ) {
+    const model = await this.repository.save(payload);
+
+    if (typeof payload.photo != 'undefined' || payload.photo != null) {
+      const imageFile: FileUpload = await payload.photo;
+      const fileName = `${payload.companyId}/employees/${model.id}/profile`;
+
+      const filePath = await this.awsService.uploadOnS3AsStream(
+        imageFile.createReadStream,
+        fileName,
+      );
+
+      const res = await this.updateById(model.id, {
+        photoUrl: filePath.Location,
+      });
+
+      return true;
+    }
+
+    return false;
   }
 
   async updateById(id: string, payload: Partial<Employee>) {
@@ -72,12 +97,25 @@ export class EmployeeService {
 
   async updateByIdAndCompany(
     condition: Pick<Employee, 'id' | 'companyId'>,
-    payload: Partial<Employee>,
+    payload: Partial<Employee> & { photo: Promise<FileUpload> },
   ) {
+    const { photo, ...data } = payload;
+    if (typeof photo != 'undefined' || photo != null) {
+      const imageFile: FileUpload = await photo;
+      const fileName = `${condition.companyId}/employees/${condition.id}/profile`;
+
+      const filePath = await this.awsService.uploadOnS3AsStream(
+        imageFile.createReadStream,
+        fileName,
+      );
+
+      data.photoUrl = filePath.Location;
+    }
+
     return await this.repository
       .createQueryBuilder()
       .update(Employee)
-      .set(payload)
+      .set(data)
       .where(condition)
       .execute();
   }
