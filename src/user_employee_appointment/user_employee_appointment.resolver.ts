@@ -21,7 +21,6 @@ import { AwsService } from 'src/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
-import { Pagination } from 'src/pagination/interfaces/pagination.interface';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {

@@ -353,6 +353,7 @@ input EmployeeSignUpInput {
   name: String!
   password: String!
   phone: String
+  photo: Upload
   userName: String!
 }
 
@@ -511,6 +512,7 @@ input UpdateEmployeeInput {
   name: String
   password: String
   phone: String
+  photo: Upload
   userName: String
 }
 

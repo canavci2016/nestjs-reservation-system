@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { FileUpload } from '../interfaces/file-upload.interface';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @InputType()
 export class UpdateBlogInput {

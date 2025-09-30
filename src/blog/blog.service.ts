@@ -4,12 +4,11 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Blog } from 'src/database/entities/blog.entity';
-import { FileUpload } from './interfaces/file-upload.interface';
 import { AwsService } from 'src/aws/aws.service';
+import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @Injectable()
 export class BlogService {
-
   constructor(
     @InjectRepository(Blog)
     private repository: Repository<Blog>,
