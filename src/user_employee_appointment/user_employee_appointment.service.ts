@@ -166,11 +166,14 @@ export class UserEmployeeAppointmentService {
 
     const query: Record<any, any> = {};
 
-    const take = params?.pagination?.length || 10;
-    const page = params?.pagination?.number || 1;
-    const skip = (page - 1) * take;
-    query['take'] = take;
-    query['skip'] = skip;
+    if (params.pagination) {
+      const take = params?.pagination?.length || 10;
+      const page = params?.pagination?.number || 1;
+      const skip = (page - 1) * take;
+      query['take'] = take;
+      query['skip'] = skip;
+    }
+
     query['order'] = { createdAt: 'desc' };
     query['relations'] = {
       employeeAvailability: { employee: true },
