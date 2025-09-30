@@ -2,21 +2,24 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Employee {
-  @Field({ description: 'user unique id' })
+  @Field({ description: 'employee unique id' })
   id: string;
 
-  @Field({ description: 'user name' })
+  @Field({ description: 'employee name' })
   name: string;
 
-  @Field({ description: 'user last name' })
+  @Field({ description: 'employee last name' })
   lastName: string;
 
-  @Field({ description: 'user nick name' })
+  @Field({ description: 'employee nick name' })
   userName: string;
 
-  @Field({ description: 'user phone', nullable: true })
+  @Field({ description: 'employee phone', nullable: true })
   phone?: string;
 
-  @Field({ description: 'user email', nullable: true })
+  @Field({ description: 'employee email', nullable: true })
   email?: string;
+
+  @Field({ description: 'employee photo url', nullable: true })
+  photoUrl?: string;
 }

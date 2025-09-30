@@ -267,22 +267,25 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Employee {
-  """user email"""
+  """employee email"""
   email: String
 
-  """user unique id"""
+  """employee unique id"""
   id: String!
 
-  """user last name"""
+  """employee last name"""
   lastName: String!
 
-  """user name"""
+  """employee name"""
   name: String!
 
-  """user phone"""
+  """employee phone"""
   phone: String
 
-  """user nick name"""
+  """employee photo url"""
+  photoUrl: String
+
+  """employee nick name"""
   userName: String!
 }
 
