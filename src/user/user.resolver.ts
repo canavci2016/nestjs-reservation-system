@@ -17,7 +17,7 @@ import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Resolver()
 export class UserResolver {

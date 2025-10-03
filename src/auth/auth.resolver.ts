@@ -16,7 +16,7 @@ import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/aws/aws.service';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Resolver()
 export class AuthResolver {

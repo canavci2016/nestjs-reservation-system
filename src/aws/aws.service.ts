@@ -8,7 +8,7 @@ import {
 import * as Stream from 'stream';
 import { Upload } from '@aws-sdk/lib-storage';
 import { S3Client } from '@aws-sdk/client-s3';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Injectable()
 export class AwsService {
