@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
-import { Match } from 'src/validation/match.decorator';
+import { Match } from 'src/core/validation/match.decorator';
 
 export class UserSetPasswordInput {
   @IsNotEmpty()
