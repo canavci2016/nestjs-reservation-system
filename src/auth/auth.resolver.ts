@@ -120,4 +120,10 @@ export class AuthResolver {
     console.log(response);
     return true;
   }
+
+  @UseGuards(AuthGuard)
+  @Query(() => String)
+  ClientApp_User_check(@User() authUser: AuthUserDecoratorInterface) {
+    return authUser.sub;
+  }
 }
