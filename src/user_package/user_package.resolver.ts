@@ -6,7 +6,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { CompanyUpdateUserPackageInput } from './dto/company-update-user-package.input';
 import { CompanyAddUserPackageInput } from './dto/company-add-user-package.input';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { CompanyUserPackage } from './models/company-user-package.model';
 import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package.input';
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
@@ -18,7 +18,7 @@ import { User } from 'src/auth/auth.decorator';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { CompanyUpdateUserPackageCommonTableInput } from './dto/company-update-user-package-common-table.input';
 
 @Resolver()

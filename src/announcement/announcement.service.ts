@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
-import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { Announcement } from 'src/database/entities/announcement.entity';
 import { FileUpload } from './interfaces/file-upload.interface';
 import { AwsService } from 'src/aws/aws.service';

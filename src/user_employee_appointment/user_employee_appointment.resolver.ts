@@ -15,11 +15,11 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
 import { AwsService } from 'src/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 
 @Resolver()

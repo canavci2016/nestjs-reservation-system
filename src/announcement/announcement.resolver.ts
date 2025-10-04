@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { Announcement } from './models/announcement.model';
 import { AddAnnouncementInput } from './dto/add-announcement.input';
@@ -10,7 +10,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/aws/aws.service';
 

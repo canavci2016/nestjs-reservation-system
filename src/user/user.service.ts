@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
 import { User } from 'src/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 
 @Injectable()

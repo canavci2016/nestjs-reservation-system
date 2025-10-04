@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { ConflictException, UseGuards } from '@nestjs/common';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { Company } from 'src/company_auth/company_auth.decorator';
@@ -15,7 +15,7 @@ import { AwsService } from 'src/aws/aws.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
 import { ConfigService } from 'src/core/modules/config/config.service';
 

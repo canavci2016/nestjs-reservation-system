@@ -1,4 +1,4 @@
-import { Pagination } from 'src/pagination/interfaces/pagination.interface';
+import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 
 export interface FindAllOptions {
   companyId?: string;

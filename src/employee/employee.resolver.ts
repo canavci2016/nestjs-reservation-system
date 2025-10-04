@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { EmployeeSignUpInput } from './dto/user-signup.input';
 import { Employee } from './models/employee.model';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -14,7 +14,7 @@ import { CompanyService } from 'src/company/company.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 
 @Resolver()
 export class EmployeeResolver {

@@ -3,14 +3,14 @@ import { BlogService } from './blog.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { AddBlogInput } from './dto/add-blog.input';
 import { Blog } from './models/blog.model';
-import { PaginationInput } from 'src/pagination/dto/pagination.input';
+import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateBlogInput } from './dto/update-blog.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { PaginationPipe } from 'src/pagination/pagination.pipe';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 
 @Resolver()
 export class BlogResolver {
