@@ -36,7 +36,7 @@ export class BlogService {
     const skip = (page - 1) * take;
     query['take'] = take;
     query['skip'] = skip;
-    query['order'] = { createdAt: 'desc' };
+    query['order'] = { updatedAt: 'desc' };
 
     return this.repository.find(query);
   }
