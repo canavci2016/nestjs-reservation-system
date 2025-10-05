@@ -21,8 +21,6 @@ import { AdminAuthModule } from './admin_auth/admin_auth.module';
 import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
 import { UserPackageModule } from './user_package/user_package.module';
 import { TokenModule } from './token/token.module';
-import { AwsService } from './aws/aws.service';
-import { AwsModule } from './aws/aws.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ReportingModule } from './reporting/reporting.module';
 import { CoreModule } from './core/core.module';
@@ -83,12 +81,11 @@ const configFactory = {
     SuperadminAuthModule,
     UserPackageModule,
     TokenModule,
-    AwsModule,
     ConfigModule,
     ReportingModule,
     CoreModule,
   ],
   controllers: [AppController],
-  providers: [AppService, configFactory, AwsService],
+  providers: [AppService, configFactory],
 })
 export class AppModule { }

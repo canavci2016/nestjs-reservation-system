@@ -11,12 +11,12 @@ import { UserUpdateInput } from './dto/user-update.input';
 import { TokenService } from 'src/token/token.service';
 import * as moment from 'moment';
 import { TokenTypes } from 'src/token/token-types.enum';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Resolver()

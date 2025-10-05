@@ -5,7 +5,7 @@ import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { Announcement } from 'src/database/entities/announcement.entity';
 import { FileUpload } from './interfaces/file-upload.interface';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 
 interface FindAllOptions {
   companyId?: string;

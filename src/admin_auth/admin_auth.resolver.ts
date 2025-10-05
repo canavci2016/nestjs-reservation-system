@@ -5,8 +5,8 @@ import { AuthAdmin } from './model/auth-admin.model';
 import { TokenService } from 'src/token/token.service';
 import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
-import { AwsService } from 'src/aws/aws.service';
-import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { AwsService } from 'src/core/modules/aws/aws.service';
+import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Resolver()

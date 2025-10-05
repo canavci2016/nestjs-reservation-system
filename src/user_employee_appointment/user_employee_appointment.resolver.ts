@@ -17,10 +17,10 @@ import { CompanyBookAppointmentInput } from './dto/company-book-appointment.inpu
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
+import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 
 @Resolver()
 export class UserEmployeeAppointmentResolver {

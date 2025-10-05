@@ -4,7 +4,7 @@ import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Employee } from 'src/database/entities/employee.entity';
 import { FileUpload } from 'src/core/interfaces/file-upload.interface';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 
 @Injectable()
 export class EmployeeService {

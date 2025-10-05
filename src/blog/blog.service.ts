@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Blog } from 'src/database/entities/blog.entity';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @Injectable()

@@ -11,8 +11,8 @@ import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { AwsSqsMessageQueryBuilder } from 'src/aws/aws-sqs-message-qb';
-import { AwsService } from 'src/aws/aws.service';
+import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
+import { AwsService } from 'src/core/modules/aws/aws.service';
 
 @Resolver()
 export class AnnouncementResolver {
