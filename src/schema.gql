@@ -406,6 +406,7 @@ type Mutation {
   ClientApp_User_login(password: String!, userName: String!): String!
   ClientApp_User_signUp(payload: UserSignUpInput!): String!
   ClientApp_User_update(payload: UserUpdateProfileInput!): Boolean!
+  ClientApp_User_updatePassword(payload: UserUpdatePasswordInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
   SuperAdmin_Auth_updateProfile(payload: SuperAdminUpdateProfileInput!): Boolean!
   SuperAdmin_Company_add(payload: CompanyAddInput!): Boolean!
@@ -704,6 +705,11 @@ input UserUpdateInput {
   password: String!
   phone: String
   userName: String!
+}
+
+input UserUpdatePasswordInput {
+  password: String!
+  passwordConfirmation: String!
 }
 
 input UserUpdateProfileInput {

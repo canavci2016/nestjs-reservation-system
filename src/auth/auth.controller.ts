@@ -53,7 +53,6 @@ export class AuthController {
     @Body(new ValidationPipe()) setPasswordDto: UserSetPasswordInput,
     @Res() res: Response,
   ) {
- 
     const user = await this.userService.updateById(tokenModel.owner_id, {
       password: setPasswordDto.password,
     });

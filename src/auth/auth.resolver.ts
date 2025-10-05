@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { ConflictException, UseGuards } from '@nestjs/common';
+import { ConflictException, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { UserLoginArgs } from './dto/user-login.args';
@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { ConfigService } from 'src/core/modules/config/config.service';
+import { UserUpdatePasswordInput } from './dto/user-update-password';
 
 @Resolver()
 export class AuthResolver {
@@ -87,6 +88,18 @@ export class AuthResolver {
     @Args('payload') payload: UserUpdateProfileInput,
   ): Promise<boolean> {
     const res = await this.userService.updateById(authUser.sub, payload);
+    return Boolean(res.affected);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async ClientApp_User_updatePassword(
+    @User() authUser: AuthUserDecoratorInterface,
+    @Args('payload', new ValidationPipe()) payload: UserUpdatePasswordInput,
+  ): Promise<boolean> {
+    const res = await this.userService.updateById(authUser.sub, {
+      password: payload.password,
+    });
     return Boolean(res.affected);
   }
 
