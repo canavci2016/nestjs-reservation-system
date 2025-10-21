@@ -11,7 +11,7 @@ export class UserUpdateInput {
   @Field()
   userName: string;
 
-  @Field()
+  @Field({ nullable: true })
   password: string;
 
   @Field({ nullable: true })
