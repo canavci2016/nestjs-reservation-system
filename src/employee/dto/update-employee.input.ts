@@ -1,30 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
-import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
-import { FileUpload } from 'src/core/interfaces/file-upload.interface';
+import { InputType, PartialType } from '@nestjs/graphql';
+import { EmployeeSignUpInput } from './user-signup.input';
 
 @InputType()
-export class UpdateEmployeeInput {
-  @Field({ nullable: true })
-  name?: string;
-
-  @Field({ nullable: true })
-  lastName?: string;
-
-  @Field({ nullable: true })
-  userName?: string;
-
-  @Field({ nullable: true })
-  password?: string;
-
-  @Field({ nullable: true })
-  phone?: string;
-
-  @Field({ nullable: true })
-  email?: string;
-
-  @Field({ nullable: true })
-  lengthOfOperationInMinute?: number;
-
-  @Field(() => GraphQLUpload, { nullable: true })
-  photo: Promise<FileUpload>;
-}
+export class UpdateEmployeeInput extends PartialType(EmployeeSignUpInput) {}

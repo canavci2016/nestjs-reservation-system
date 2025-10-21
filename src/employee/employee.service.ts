@@ -97,7 +97,7 @@ export class EmployeeService {
 
   async updateByIdAndCompany(
     condition: Pick<Employee, 'id' | 'companyId'>,
-    payload: Partial<Employee> & { photo: Promise<FileUpload> },
+    payload: Partial<Employee> & { photo?: Promise<FileUpload> },
   ) {
     const { photo, ...data } = payload;
     if (typeof photo != 'undefined' || photo != null) {

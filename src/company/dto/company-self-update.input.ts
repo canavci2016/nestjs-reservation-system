@@ -1,25 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { CompanyAddInput } from './company-add.input';
 
 @InputType()
-export class CompanySelfUpdateInput {
-  @Field({ nullable: true })
-  secretKey: string;
-
-  @Field({ nullable: true })
-  name: string;
-
-  @Field({ nullable: true })
-  userName: string;
-
-  @Field({ nullable: true })
-  password: string;
-
-  @Field({ nullable: true })
-  isActive?: boolean;
-
-  @Field({ nullable: true })
-  enableUserPackageSystem?: boolean;
-
+export class CompanySelfUpdateInput extends PartialType(CompanyAddInput) {
   @Field({ nullable: true })
   deviceToken?: string;
 }

@@ -700,11 +700,11 @@ input UserSignUpInput {
 input UserUpdateInput {
   email: String
   isActive: Boolean
-  lastName: String!
-  name: String!
+  lastName: String
+  name: String
   password: String
   phone: String
-  userName: String!
+  userName: String
 }
 
 input UserUpdatePasswordInput {
