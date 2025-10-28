@@ -1,0 +1,20 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { JwtService as NestJwtService } from '@nestjs/jwt';
+
+@Injectable()
+export class JwtService {
+  constructor(
+    @Inject('TOKEN_JWT_SECRET') private readonly secret: string,
+    private readonly jwtService: NestJwtService,
+  ) {
+    console.log(this.secret);
+    console.log('jwtService initialized');
+  }
+  async getToken(payload: Record<any, any>) {
+    return this.jwtService.signAsync(payload, { secret: this.secret });
+  }
+
+  async decodeToken<T extends object>(token: string): Promise<T> {
+    return this.jwtService.verifyAsync(token, { secret: this.secret });
+  }
+}
