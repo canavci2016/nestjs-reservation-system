@@ -104,7 +104,7 @@ export class AuthResolver {
   }
 
   @UseGuards(CompanyAppGuard)
-  @Query(() => Boolean)
+  @Mutation(() => Boolean)
   async ClientApp_User_ForgetPassword(
     @Args('userNameOrEmail') userNameOrEmail: string,
     @CompanyApp() company: { id: string },
