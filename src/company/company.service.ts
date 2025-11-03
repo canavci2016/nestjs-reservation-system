@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class CompanyService {
@@ -32,20 +33,42 @@ export class CompanyService {
       );
     }
 
-    return this.repository.save(company);
+    const savedCompany = await this.repository.save(company);
+    if (company.password) {
+      await this.updatePassword(savedCompany.id, company.password);
+    }
+
+    return savedCompany;
+  }
+
+  async generateHashedPassword(password: string): Promise<string> {
+    return argon2.hash(password, {
+      salt: Buffer.from('password12345678'), // 16 bytes salt
+    }); // Using a fixed salt for demonstration; in production, use a unique salt per password
+  }
+
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
+    const passwordHash = await this.generateHashedPassword(newPassword);
+    await this.updateById(userId, { password: passwordHash });
+  }
+
+  async verifyPassword(company: Company, password: string): Promise<boolean> {
+    return argon2.verify(company.password, password);
   }
 
   async updateById(id: string, payload: Partial<Company>) {
     if (Object.keys(payload).length > 0) {
-      return await this.repository
+      if (payload.password) {
+        await this.updatePassword(id, payload.password);
+      }
+
+      return this.repository
         .createQueryBuilder()
         .update(Company)
         .set(payload)
         .where('id = :id', { id })
         .execute();
     }
-
-    return this.repository.save(payload);
   }
 
   async deleteById(id: string) {

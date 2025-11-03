@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { CompanyService } from 'src/company/company.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CompanyAuthService {
@@ -23,7 +22,10 @@ export class CompanyAuthService {
     if (!user) {
       throw new NotFoundException();
     }
-    const result = await bcrypt.compare(field.password, user?.password);
+    const result = await this.companyService.verifyPassword(
+      user,
+      field.password,
+    );
 
     if (!result) {
       throw new UnauthorizedException();

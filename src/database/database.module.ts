@@ -12,7 +12,6 @@ import { CompanyUserPackage } from './entities/company-user-package.entity';
 import { UserAndCompanyUserPackage } from './entities/user-and-company-user-package.entity';
 import { Token } from './entities/token.entity';
 import { EmployeeSubscriber } from './subscribers/employee.subscriber';
-import { CompanySubscriber } from './subscribers/company.subscriber';
 import { Reporting } from './entities/reporting.entity';
 
 @Global()
@@ -33,7 +32,7 @@ import { Reporting } from './entities/reporting.entity';
       Reporting,
     ]),
   ],
-  providers: [EmployeeSubscriber, CompanySubscriber],
+  providers: [EmployeeSubscriber],
   exports: [TypeOrmModule],
 })
 export class DatabaseModule { }
