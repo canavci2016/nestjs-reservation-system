@@ -24,6 +24,9 @@ export class Company {
   @Column()
   name: string;
 
+  @Column({ unique: true, nullable: true })
+  email?: string;
+
   @Column({ nullable: true })
   tax?: string;
 

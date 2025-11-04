@@ -144,6 +144,9 @@ input BookAppointmentInput {
 }
 
 type Company {
+  """company email"""
+  email: String
+
   """company unique id"""
   id: String!
 
@@ -161,6 +164,7 @@ type Company {
 }
 
 input CompanyAddInput {
+  email: String
   enableUserPackageSystem: Boolean
   isActive: Boolean
   name: String!
@@ -196,6 +200,7 @@ input CompanyDetachUserPackageInput {
 
 input CompanySelfUpdateInput {
   deviceToken: String
+  email: String
   enableUserPackageSystem: Boolean
   isActive: Boolean
   name: String
@@ -205,6 +210,7 @@ input CompanySelfUpdateInput {
 }
 
 input CompanyUpdateInput {
+  email: String
   enableUserPackageSystem: Boolean
   isActive: Boolean
   name: String
@@ -463,6 +469,9 @@ input ReportingAddInput {
 }
 
 type SuperAdminCompany {
+  """company email"""
+  email: String
+
   """determine if a  company enabled user packaging system"""
   enableUserPackageSystem: Boolean
 

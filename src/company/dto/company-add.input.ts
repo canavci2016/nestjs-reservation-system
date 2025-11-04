@@ -8,6 +8,9 @@ export class CompanyAddInput {
   @Field()
   name: string;
 
+  @Field({ nullable: true })
+  email?: string;
+
   @Field()
   userName: string;
 

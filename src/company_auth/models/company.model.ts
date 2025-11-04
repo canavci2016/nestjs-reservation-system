@@ -11,6 +11,9 @@ export class Company {
   @Field({ description: 'company name' })
   name: string;
 
+  @Field({ description: 'company email', nullable: true })
+  email?: string;
+
   @Field({ description: 'company tax', nullable: true })
   tax?: string;
 
