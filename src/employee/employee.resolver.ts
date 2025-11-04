@@ -15,6 +15,9 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
+import { Admin } from 'src/admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuthGuard } from 'src/admin_auth/admin-auth.guard';
 
 @Resolver()
 export class EmployeeResolver {
@@ -52,6 +55,7 @@ export class EmployeeResolver {
     return Boolean(employee);
   }
 
+  //TODO: remove this use AdminApp_Employee_list
   @UseGuards(CompanyAuthGuard)
   @Query(() => [Employee])
   async AdminApp_Company_Employee_list(
@@ -66,6 +70,7 @@ export class EmployeeResolver {
     return models;
   }
 
+  //TODO: remove this use AdminApp_Employee_list
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [Employee])
   AdminApp_Employee_Employee_list(
@@ -73,6 +78,24 @@ export class EmployeeResolver {
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
   ): Employee[] {
     const models = [employee.employee];
+    return models;
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Query(() => [Employee])
+  async AdminApp_Employee_list(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
+  ): Promise<Employee[]> {
+    if (admin.employee?.employee) {
+      return [admin.employee.employee];
+    }
+
+    const models = await this.employeeService.findAll({
+      companyId: admin?.company?.company?.id,
+      pagination: pagination,
+    });
     return models;
   }
 

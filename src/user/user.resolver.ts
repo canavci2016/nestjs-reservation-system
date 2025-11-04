@@ -18,6 +18,9 @@ import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/aut
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { ConfigService } from 'src/core/modules/config/config.service';
+import { AdminAuthGuard } from 'src/admin_auth/admin-auth.guard';
+import { Admin } from 'src/admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
 
 @Resolver()
 export class UserResolver {
@@ -75,6 +78,7 @@ export class UserResolver {
     return Boolean(userModel);
   }
 
+  //TODO: remove this use AdminApp_User_list
   @UseGuards(CompanyAuthGuard)
   @Query(() => [User])
   async AdminApp_Company_User_list(
@@ -91,6 +95,24 @@ export class UserResolver {
     return models;
   }
 
+  @UseGuards(AdminAuthGuard)
+  @Query(() => [User])
+  async AdminApp_User_list(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('q', { nullable: true }) q: string,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
+  ): Promise<User[]> {
+    const models = await this.userService.findAll({
+      q,
+      companyId:
+        admin?.company?.company?.id || admin?.employee?.employee?.companyId,
+      pagination: pagination,
+    });
+    return models;
+  }
+
+  //TODO: remove this use AdminApp_User_list
   @UseGuards(EmployeeAuthGuard)
   @Query(() => [User])
   async AdminApp_Employee_User_list(

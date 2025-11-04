@@ -440,6 +440,8 @@ type Query {
   AdminApp_Employee_User_detail(id: String): User!
   AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [User!]!
   AdminApp_Employee_getProfile: AuthEmployee!
+  AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
+  AdminApp_User_list(pagination: PaginationInput, q: String): [User!]!
   CLientApp_UserPackage_list(pagination: PaginationInput): [UserAndCompanyUserPackage!]!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
