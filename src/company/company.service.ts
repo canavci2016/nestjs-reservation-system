@@ -56,15 +56,24 @@ export class CompanyService {
   }
 
   async updateById(id: string, payload: Partial<Company>) {
-    if (Object.keys(payload).length > 0) {
-      if (payload.password?.trim()) {
-        payload.password = await this.generateHashedPassword(payload.password);
+    const payloadMap = new Map(Object.entries(payload));
+
+    if (payloadMap.size > 0) {
+      if (payloadMap.get('password')) {
+        payloadMap.set(
+          'password',
+          await this.generateHashedPassword(
+            payloadMap.get('password') as string,
+          ),
+        );
+      } else if (payloadMap.has('password')) {
+        payloadMap.delete('password');
       }
 
       return this.repository
         .createQueryBuilder()
         .update(Company)
-        .set(payload)
+        .set(Object.fromEntries(payloadMap))
         .where('id = :id', { id })
         .execute();
     }

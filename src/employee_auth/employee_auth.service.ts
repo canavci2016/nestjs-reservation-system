@@ -7,7 +7,6 @@ import { EmployeeService } from 'src/employee/employee.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateProfile } from './interfaces/update-profile';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class EmployeeAuthService {
@@ -27,7 +26,7 @@ export class EmployeeAuthService {
       throw new NotFoundException('employee is not found');
     }
 
-    const result = await bcrypt.compare(field.password, employee?.password);
+    const result = await this.employeeService.verifyPassword(employee, field.password);
 
     if (!result) {
       throw new UnauthorizedException('employee password is wrong');
@@ -51,7 +50,7 @@ export class EmployeeAuthService {
 
   async updateById(id: string, payload: Partial<UpdateProfile>) {
     const result = await this.employeeService.updateById(id, payload);
-    return Boolean(result.affected);
+    return Boolean(result?.affected);
   }
 
   async findByUserNameOrEmail(userNameOrEmail: string) {
@@ -64,5 +63,10 @@ export class EmployeeAuthService {
 
   getEmployeeService() {
     return this.employeeService;
+  }
+
+  async updatePassword(id: string, password: string) {
+    const employee = await this.employeeService.updatePassword(id, password);
+    return employee;
   }
 }
