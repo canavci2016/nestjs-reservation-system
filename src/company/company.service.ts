@@ -33,12 +33,11 @@ export class CompanyService {
       );
     }
 
-    const savedCompany = await this.repository.save(company);
-    if (company.password) {
-      await this.updatePassword(savedCompany.id, company.password);
+    if (company.password?.trim()) {
+      company.password = await this.generateHashedPassword(company.password);
     }
 
-    return savedCompany;
+    return await this.repository.save(company);
   }
 
   async generateHashedPassword(password: string): Promise<string> {
