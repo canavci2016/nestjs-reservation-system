@@ -58,8 +58,8 @@ export class CompanyService {
 
   async updateById(id: string, payload: Partial<Company>) {
     if (Object.keys(payload).length > 0) {
-      if (payload.password) {
-        await this.updatePassword(id, payload.password);
+      if (payload.password?.trim()) {
+        payload.password = await this.generateHashedPassword(payload.password);
       }
 
       return this.repository
