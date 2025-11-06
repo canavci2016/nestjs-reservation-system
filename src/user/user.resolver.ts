@@ -180,7 +180,7 @@ export class UserResolver {
       companyId: company.sub,
       isActive: payload.isActive || true,
     });
-    return Boolean(model.affected);
+    return Boolean(model?.affected);
   }
 
   @UseGuards(CompanyAuthGuard)
@@ -222,6 +222,6 @@ export class UserResolver {
       companyId: company.sub,
       isActive: payload.isActive || true,
     });
-    return Boolean(model.affected);
+    return Boolean(model?.affected);
   }
 }

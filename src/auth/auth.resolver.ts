@@ -88,7 +88,7 @@ export class AuthResolver {
     @Args('payload') payload: UserUpdateProfileInput,
   ): Promise<boolean> {
     const res = await this.userService.updateById(authUser.sub, payload);
-    return Boolean(res.affected);
+    return Boolean(res?.affected);
   }
 
   @UseGuards(AuthGuard)
@@ -100,7 +100,7 @@ export class AuthResolver {
     const res = await this.userService.updateById(authUser.sub, {
       password: payload.password,
     });
-    return Boolean(res.affected);
+    return Boolean(res?.affected);
   }
 
   @UseGuards(CompanyAppGuard)
@@ -130,8 +130,7 @@ export class AuthResolver {
       .setStr('forgetPasswordUrl', forgetPasswordUrl);
 
     const response = await this.awsService.pushIntoQueue(attrs.getObj());
-    console.log(response);
-    return true;
+    return response.MessageId ? true : false;
   }
 
   @UseGuards(AuthGuard)
