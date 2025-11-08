@@ -23,6 +23,9 @@ export class SuperAdminCompany {
   @Field({ description: 'company status' })
   isActive?: boolean;
 
+  @Field({ description: 'photo url', nullable: true })
+  photoUrl?: string;
+
   @Field({
     description: 'determine if a  company enabled user packaging system',
     nullable: true,

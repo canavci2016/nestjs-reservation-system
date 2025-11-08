@@ -490,6 +490,9 @@ type SuperAdminCompany {
   """company name"""
   name: String!
 
+  """photo url"""
+  photoUrl: String
+
   """company secret key"""
   secretKey: String!
 
