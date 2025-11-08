@@ -4,15 +4,14 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Blog } from 'src/database/entities/blog.entity';
-import { AwsService } from 'src/core/modules/aws/aws.service';
-import { FileUpload } from 'src/core/interfaces/file-upload.interface';
+import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog)
     private repository: Repository<Blog>,
-    private readonly awsService: AwsService,
+    private readonly fileUploadService: FileUploadService,
   ) {
     console.log('BlogService initialized');
   }
@@ -42,18 +41,11 @@ export class BlogService {
   }
 
   async save(payload: SaveBlog): Promise<Blog> {
-    let photoUrl = payload.photoUrl;
-    if (typeof payload.photo != 'undefined' || payload.photo != null) {
-      const imageFile: FileUpload = await payload.photo;
-      const fileName = `${payload.companyId}/blog/${Date.now()}_${imageFile.filename}`;
+    const uploadedPhotoUrl = await this.fileUploadService.blog(payload.photo, {
+      companyId: payload.companyId,
+    });
 
-      const filePath = await this.awsService.uploadOnS3AsStream(
-        imageFile.createReadStream,
-        fileName,
-      );
-      photoUrl = filePath.Location || photoUrl;
-    }
-    payload.photoUrl = photoUrl;
+    payload.photoUrl = uploadedPhotoUrl || payload.photoUrl;
     return this.repository.save(payload);
   }
 
@@ -72,19 +64,13 @@ export class BlogService {
     condition: Pick<Blog, 'id' | 'companyId'>,
     payload: Partial<SaveBlog>,
   ) {
-    let photoUrl = payload.photoUrl;
-    if (typeof payload.photo != 'undefined' || payload.photo != null) {
-      const imageFile: FileUpload = await payload.photo;
-      const fileName = `${payload.companyId}/blog/${Date.now()}_${imageFile.filename}`;
+    const uploadedPhotoUrl = await this.fileUploadService.blog(payload.photo, {
+      companyId: condition.companyId,
+    });
 
-      const filePath = await this.awsService.uploadOnS3AsStream(
-        imageFile.createReadStream,
-        fileName,
-      );
-      photoUrl = filePath.Location || photoUrl;
-      delete payload.photo;
+    if (uploadedPhotoUrl) {
+      payload.photoUrl = uploadedPhotoUrl;
     }
-    payload.photoUrl = photoUrl;
 
     return await this.repository
       .createQueryBuilder()

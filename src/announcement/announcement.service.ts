@@ -4,8 +4,7 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { Announcement } from 'src/database/entities/announcement.entity';
-import { FileUpload } from './interfaces/file-upload.interface';
-import { AwsService } from 'src/core/modules/aws/aws.service';
+import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
 
 interface FindAllOptions {
   companyId?: string;
@@ -18,7 +17,7 @@ export class AnnouncementService {
   constructor(
     @InjectRepository(Announcement)
     private repository: Repository<Announcement>,
-    private readonly awsService: AwsService,
+    private readonly fileUploadService: FileUploadService,
   ) {
     console.log('BlogService initialized');
   }
@@ -48,18 +47,13 @@ export class AnnouncementService {
   }
 
   async save(payload: SaveBlog): Promise<Announcement> {
-    let photoUrl = payload.photoUrl;
-    if (typeof payload.photo != 'undefined' || payload.photo != null) {
-      const imageFile: FileUpload = await payload.photo;
-      const fileName = `${payload.companyId}/announcement/${Date.now()}_${imageFile.filename}`;
-
-      const filePath = await this.awsService.uploadOnS3AsStream(
-        imageFile.createReadStream,
-        fileName,
-      );
-      photoUrl = filePath.Location || photoUrl;
-    }
-    payload.photoUrl = photoUrl;
+    const uploadedPhotoUrl = await this.fileUploadService.announcement(
+      payload.photo,
+      {
+        companyId: payload.companyId,
+      },
+    );
+    payload.photoUrl = uploadedPhotoUrl || payload.photoUrl;
     return this.repository.save(payload);
   }
 
@@ -78,19 +72,16 @@ export class AnnouncementService {
     condition: Pick<Announcement, 'id' | 'companyId'>,
     payload: Partial<SaveBlog>,
   ) {
-    let photoUrl = payload.photoUrl;
-    if (typeof payload.photo != 'undefined' || payload.photo != null) {
-      const imageFile: FileUpload = await payload.photo;
-      const fileName = `${payload.companyId}/announcement/${Date.now()}_${imageFile.filename}`;
+    const uploadedPhotoUrl = await this.fileUploadService.announcement(
+      payload.photo,
+      {
+        companyId: condition.companyId,
+      },
+    );
 
-      const filePath = await this.awsService.uploadOnS3AsStream(
-        imageFile.createReadStream,
-        fileName,
-      );
-      photoUrl = filePath.Location || photoUrl;
-      delete payload.photo;
+    if (uploadedPhotoUrl) {
+      payload.photoUrl = uploadedPhotoUrl;
     }
-    payload.photoUrl = photoUrl;
 
     return await this.repository
       .createQueryBuilder()
