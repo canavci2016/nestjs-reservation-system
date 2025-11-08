@@ -10,6 +10,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { CompanyService } from 'src/company/company.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { AuthAdminDecoratorInterface } from './interfaces/auth-admin-decorator.interface';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
@@ -17,9 +18,12 @@ export class AdminAuthGuard implements CanActivate {
     private jwtService: JwtService,
     private companyService: CompanyService,
     private employeeService: EmployeeService,
+    private reflector: Reflector,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req as Request;
     const token = this.extractTokenFromHeader(request);

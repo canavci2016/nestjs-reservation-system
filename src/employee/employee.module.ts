@@ -7,7 +7,11 @@ import { ClientAppEmployeeResolver } from './client-app.employee.resolver';
 @Global()
 @Module({
   imports: [AuthModule],
-  providers: [EmployeeService, AdminAppEmployeeResolver, ClientAppEmployeeResolver],
+  providers: [
+    EmployeeService,
+    AdminAppEmployeeResolver,
+    ClientAppEmployeeResolver,
+  ],
   exports: [EmployeeService],
 })
 export class EmployeeModule {}
