@@ -36,6 +36,9 @@ export class Company {
   @Column({ nullable: true })
   deviceToken?: string;
 
+  @Column({ nullable: true })
+  photoUrl?: string;
+
   @Column({ default: false })
   enableUserPackageSystem: boolean;
 

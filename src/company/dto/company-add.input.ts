@@ -1,4 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @InputType()
 export class CompanyAddInput {
@@ -22,4 +24,7 @@ export class CompanyAddInput {
 
   @Field({ nullable: true })
   enableUserPackageSystem?: boolean;
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  photo: Promise<FileUpload>;
 }

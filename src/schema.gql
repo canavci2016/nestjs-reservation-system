@@ -156,6 +156,9 @@ type Company {
   """company name"""
   name: String!
 
+  """company photo url"""
+  photoUrl: String
+
   """company secret key"""
   secretKey: String!
 
@@ -169,6 +172,7 @@ input CompanyAddInput {
   isActive: Boolean
   name: String!
   password: String!
+  photo: Upload
   secretKey: String!
   userName: String!
 }
@@ -205,6 +209,7 @@ input CompanySelfUpdateInput {
   isActive: Boolean
   name: String
   password: String
+  photo: Upload
   secretKey: String
   userName: String
 }
@@ -215,6 +220,7 @@ input CompanyUpdateInput {
   isActive: Boolean
   name: String
   password: String
+  photo: Upload
   secretKey: String
   userName: String
 }

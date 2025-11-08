@@ -14,6 +14,9 @@ export class Company {
   @Field({ description: 'company email', nullable: true })
   email?: string;
 
+  @Field({ description: 'company photo url', nullable: true })
+  photoUrl?: string;
+
   @Field({ description: 'company tax', nullable: true })
   tax?: string;
 

@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import * as argon2 from 'argon2';
+import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
+import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company)
     private repository: Repository<Company>,
+    private readonly fileUploadService: FileUploadService,
   ) {
     console.log('CompanyService initialized');
   }
@@ -25,7 +28,7 @@ export class CompanyService {
     return this.repository.findOneBy({ secretKey });
   }
 
-  async save(company: Partial<Company>) {
+  async save(company: Partial<Company & { photo?: Promise<FileUpload> }>) {
     const companyObj = await this.findOne({ userName: company.userName });
     if (companyObj) {
       throw new ConflictException(
@@ -37,7 +40,24 @@ export class CompanyService {
       company.password = await this.generateHashedPassword(company.password);
     }
 
-    return await this.repository.save(company);
+    const savedCompany = await this.repository.save(company);
+
+    // Handle photo upload after saving the company
+    if (company.photo) {
+      const uploadedPhotoUrl = await this.fileUploadService.company(
+        company.photo,
+        {
+          companyId: savedCompany.id,
+        },
+      );
+
+      if (uploadedPhotoUrl) {
+        await this.updateById(savedCompany.id, { photoUrl: uploadedPhotoUrl });
+        savedCompany.photoUrl = uploadedPhotoUrl;
+      }
+    }
+
+    return savedCompany;
   }
 
   async generateHashedPassword(password: string): Promise<string> {
@@ -55,8 +75,21 @@ export class CompanyService {
     return argon2.verify(company.password, password);
   }
 
-  async updateById(id: string, payload: Partial<Company>) {
-    const payloadMap = new Map(Object.entries(payload));
+  async updateById(
+    id: string,
+    payload: Partial<Company & { photo?: Promise<FileUpload> }>,
+  ) {
+    const { photo, ...data } = payload;
+    const payloadMap = new Map(Object.entries(data));
+
+    // Handle photo upload first
+    const uploadedPhotoUrl = await this.fileUploadService.company(photo, {
+      companyId: id,
+    });
+
+    if (uploadedPhotoUrl) {
+      payloadMap.set('photoUrl', uploadedPhotoUrl);
+    }
 
     if (payloadMap.size > 0) {
       if (payloadMap.get('password')) {
