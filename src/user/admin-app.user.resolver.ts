@@ -129,6 +129,21 @@ export class AdminAppUserResolver {
     return models;
   }
 
+  @AdminAuth()
+  @Query(() => User)
+  async AdminApp_User_detail(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('id', { nullable: true }) id: string,
+  ) {
+    const model = await this.userService.findOne({
+      companyId:
+        admin?.company?.company?.id || admin?.employee?.employee?.companyId,
+      id: id,
+    });
+    return model;
+  }
+
+  //TODO: remove this use AdminApp_User_detail
   @UseGuards(CompanyAuthGuard)
   @Query(() => User)
   async AdminApp_Company_User_detail(
@@ -142,6 +157,7 @@ export class AdminAppUserResolver {
     return model;
   }
 
+  //TODO: remove this use AdminApp_User_detail
   @UseGuards(EmployeeAuthGuard)
   @Query(() => User)
   async AdminApp_Employee_User_detail(
