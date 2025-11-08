@@ -8,8 +8,8 @@ import { UpdateProfileInput } from './dto/update-profile.input';
 import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 
 @Resolver()
-export class EmployeeAuthResolver {
-  constructor(private readonly authService: EmployeeAuthService) { }
+export class AdminAppEmployeeAuthResolver {
+  constructor(private readonly authService: EmployeeAuthService) {}
 
   @UseGuards(EmployeeAuthGuard)
   @Query(() => AuthEmployee)

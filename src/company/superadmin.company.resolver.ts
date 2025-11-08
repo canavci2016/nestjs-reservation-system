@@ -5,16 +5,10 @@ import { CompanyUpdateInput } from './dto/company-update.input';
 import { SuperAdminCompany } from './models/super-admin-company.model';
 import { SuperAdminAuthGuard } from 'src/superadmin_auth/superadmin_auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { CompanySelfUpdateInput } from './dto/company-self-update.input';
-import { Company } from 'src/company_auth/company_auth.decorator';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 
 @Resolver()
-export class CompanyResolver {
-  constructor(private readonly service: CompanyService) { }
+export class SuperAdminCompanyResolver {
+  constructor(private readonly service: CompanyService) {}
 
   @UseGuards(SuperAdminAuthGuard)
   @Mutation(() => Boolean)
@@ -47,29 +41,5 @@ export class CompanyResolver {
   async SuperAdmin_Company_delete(@Args('id') id: string) {
     const company = await this.service.deleteById(id);
     return Boolean(company.affected);
-  }
-
-  @UseGuards(CompanyAppGuard)
-  @Query(() => SuperAdminCompany)
-  ClienyApp_Company_detail(@CompanyApp() company: SuperAdminCompany) {
-    return company;
-  }
-
-  @UseGuards(CompanyAuthGuard)
-  @Mutation(() => Boolean)
-  async AdminApp_Company_updateProfile(
-    @Company() company: AuthCompanyDecoratorInterface,
-    @Args('payload') payload: CompanySelfUpdateInput,
-  ): Promise<boolean> {
-    const res = await this.service.updateById(company.sub, payload);
-    return true;
-  }
-
-  @UseGuards(CompanyAuthGuard)
-  @Query(() => SuperAdminCompany)
-  AdminApp_Company_getProfile(
-    @Company() company: AuthCompanyDecoratorInterface,
-  ) {
-    return company.company;
   }
 }

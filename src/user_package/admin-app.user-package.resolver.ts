@@ -12,9 +12,6 @@ import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
 import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
 import { UserService } from 'src/user/user.service';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
-import { User } from 'src/auth/auth.decorator';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
@@ -22,11 +19,11 @@ import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { CompanyUpdateUserPackageCommonTableInput } from './dto/company-update-user-package-common-table.input';
 
 @Resolver()
-export class UserPackageResolver {
+export class AdminAppUserPackageResolver {
   constructor(
     private readonly packageService: UserPackageService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -179,38 +176,6 @@ export class UserPackageResolver {
       id: payload.id,
     });
     return Boolean(model.affected);
-  }
-
-  @UseGuards(AuthGuard)
-  @Query(() => [UserAndCompanyUserPackage])
-  async CLientApp_UserPackage_list(
-    @User() authUser: AuthUserDecoratorInterface,
-    @Args('pagination', { nullable: true }, PaginationPipe)
-    pagination: PaginationInput,
-  ): Promise<UserAndCompanyUserPackage[]> {
-    const user = await this.userService.findOne({
-      id: authUser.sub,
-    });
-
-    if (!user) {
-      throw new NotFoundException('user isnot found');
-    }
-
-    const company = await user.company;
-
-    const models = await this.packageService.findAllForUserAndPackage({
-      userId: user.id,
-      companyId: company.id,
-      pagination: pagination,
-    });
-
-    const result = models.map((m) => ({
-      ...m,
-      startDate: m.startDate.toString(),
-      endDate: m.endDate.toString(),
-    }));
-
-    return result;
   }
 
   @UseGuards(EmployeeAuthGuard)

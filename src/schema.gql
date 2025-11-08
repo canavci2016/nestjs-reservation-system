@@ -454,17 +454,17 @@ type Query {
   AdminApp_Employee_getProfile: AuthEmployee!
   AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_User_list(pagination: PaginationInput, q: String): [User!]!
-  CLientApp_UserPackage_list(pagination: PaginationInput): [UserAndCompanyUserPackage!]!
   ClientApp_Announcement_detail(id: String!): Announcement!
   ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
   ClientApp_Appointment_history(endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   ClientApp_Blog_detail(id: String!): Blog!
   ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
+  ClientApp_Company_detail: SuperAdminCompany!
   ClientApp_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   ClientApp_Employee_list(pagination: PaginationInput): [Employee!]!
+  ClientApp_UserPackage_list(pagination: PaginationInput): [UserAndCompanyUserPackage!]!
   ClientApp_User_check: String!
   ClientApp_User_profile: AuthUser!
-  ClienyApp_Company_detail: SuperAdminCompany!
   Company_profile: Company!
   SuperAdmin_Company_list: [SuperAdminCompany!]!
 }

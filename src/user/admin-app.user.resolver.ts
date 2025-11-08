@@ -23,13 +23,13 @@ import { Admin } from 'src/admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
 
 @Resolver()
-export class UserResolver {
+export class AdminAppUserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -195,33 +195,5 @@ export class UserResolver {
     });
 
     return Boolean(model.affected);
-  }
-
-  @UseGuards(CompanyAuthGuard)
-  @Mutation(() => Boolean)
-  async ClientApp_Profile_update(
-    @Company() company: AuthCompanyDecoratorInterface,
-    @Args('userId') userId: string,
-    @Args('payload') payload: UserUpdateInput,
-  ): Promise<boolean> {
-    const user = await this.userService.findOne({ id: userId });
-
-    if (user?.userName != payload.userName) {
-      const isUserExists = await this.userService.findOne({
-        userName: payload.userName,
-        companyId: company.sub,
-      });
-
-      if (isUserExists) {
-        throw new ConflictException('user is already available');
-      }
-    }
-
-    const model = await this.userService.updateById(userId, {
-      ...payload,
-      companyId: company.sub,
-      isActive: payload.isActive || true,
-    });
-    return Boolean(model?.affected);
   }
 }
