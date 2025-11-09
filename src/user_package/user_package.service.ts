@@ -18,6 +18,9 @@ export interface FindAllOptions {
 
 export interface FindAllOptionsForUserAndCompanyPackage extends FindAllOptions {
   userId?: string;
+  filter?: {
+    valid?: boolean;
+  };
 }
 
 @Injectable()
@@ -84,7 +87,7 @@ export class UserPackageService {
 
     const packages = await this.userAndCompanyUserPackageRepository.find(query);
 
-    const updatedPackages = packages.map((pck) => {
+    let updatedPackages = packages.map((pck) => {
       const newPackage = { ...pck, valid: false };
       const now = moment();
       const startDate = moment(pck.startDate);
@@ -102,6 +105,12 @@ export class UserPackageService {
 
       return newPackage;
     });
+
+    if (options?.filter?.valid !== undefined) {
+      updatedPackages = updatedPackages.filter(
+        (pck) => pck.valid === options?.filter?.valid,
+      );
+    }
 
     return updatedPackages;
   }
