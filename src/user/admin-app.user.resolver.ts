@@ -8,9 +8,7 @@ import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
 import { User } from './models/user.model';
 import { UserUpdateInput } from './dto/user-update.input';
-import { TokenService } from 'src/token/token.service';
 import * as moment from 'moment';
-import { TokenTypes } from 'src/token/token-types.enum';
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
@@ -21,6 +19,8 @@ import { ConfigService } from 'src/core/modules/config/config.service';
 import { Admin } from 'src/admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
 import { AdminAuth } from 'src/admin_auth/admin-auth-with-role.decorator';
+import { TokenService } from 'src/core/modules/token/services/token.service';
+import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
 
 @Resolver()
 export class AdminAppUserResolver {

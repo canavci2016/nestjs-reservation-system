@@ -7,14 +7,14 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { TokenService } from 'src/token/token.service';
-import { TokenGuard } from 'src/token/token.guard';
-import { Token } from 'src/token/token.decorator';
 import { Response } from 'express';
 import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { AdminAuthService } from './admin_auth.service';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
+import { TokenGuard } from 'src/shared/modules/app-token/token.guard';
+import { TokenService } from 'src/core/modules/token/services/token.service';
+import { Token } from 'src/shared/modules/app-token/token.decorator';
 
 @Controller('admin-auth')
 export class AdminAuthController {
@@ -57,9 +57,12 @@ export class AdminAuthController {
       setPasswordDto,
     );
 
-    const revokeToken = await this.tokenService.updateById(tokenModel.id, {
-      revoked: true,
-    });
+    const revokeToken = await this.tokenService.updateBy(
+      { id: tokenModel.id },
+      {
+        revoked: true,
+      },
+    );
     return res.send('password is updated please close the tab');
   }
 }

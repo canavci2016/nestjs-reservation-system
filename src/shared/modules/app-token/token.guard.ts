@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { TokenService } from './token.service';
+import { TokenService } from 'src/core/modules/token/services/token.service';
 import { MoreThan } from 'typeorm/find-options/operator/MoreThan';
 
 @Injectable()

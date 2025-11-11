@@ -11,13 +11,13 @@ import { UserSignUpInput } from './dto/user-signup.input';
 import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/user/user.service';
-import { TokenService } from 'src/token/token.service';
-import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { ConfigService } from 'src/core/modules/config/config.service';
 import { UserUpdatePasswordInput } from './dto/user-update-password';
+import { TokenService } from 'src/core/modules/token/services/token.service';
+import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
 
 @Resolver()
 export class AuthResolver {

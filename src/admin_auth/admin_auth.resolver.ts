@@ -2,12 +2,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminAuthService } from './admin_auth.service';
 import { AdminAppAuthLoginArgs } from './dto/adminapp-auth-login.args';
 import { AuthAdmin } from './model/auth-admin.model';
-import { TokenService } from 'src/token/token.service';
-import { TokenTypes } from 'src/token/token-types.enum';
 import * as moment from 'moment';
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { ConfigService } from 'src/core/modules/config/config.service';
+import { TokenService } from 'src/core/modules/token/services/token.service';
+import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -52,7 +52,6 @@ export class AdminAuthResolver {
       .setStr('forgetPasswordUrl', forgetPasswordUrl);
 
     const response = await this.awsService.pushIntoQueue(attrs.getObj());
-    console.log(response);
-    return true;
+    return response.$metadata.httpStatusCode === 200;
   }
 }

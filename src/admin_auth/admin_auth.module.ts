@@ -3,12 +3,12 @@ import { AdminAuthService } from './admin_auth.service';
 import { EmployeeAuthModule } from 'src/employee_auth/employee_auth.module';
 import { CompanyAuthModule } from 'src/company_auth/company_auth.module';
 import { AdminAuthResolver } from './admin_auth.resolver';
-import { TokenModule } from 'src/token/token.module';
 import { AdminAuthController } from './admin-auth.controller';
+import { AppTokenModule } from 'src/shared/modules/app-token/app-token.module';
 
 @Module({
-  imports: [EmployeeAuthModule, CompanyAuthModule, TokenModule],
+  imports: [EmployeeAuthModule, CompanyAuthModule, AppTokenModule],
   providers: [AdminAuthService, AdminAuthResolver],
   controllers: [AdminAuthController],
 })
-export class AdminAuthModule { }
+export class AdminAuthModule {}
