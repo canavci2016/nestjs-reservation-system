@@ -11,22 +11,13 @@ import { UserSignUpInput } from './dto/user-signup.input';
 import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/user/user.service';
-import * as moment from 'moment';
-import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
-import { AwsService } from 'src/core/modules/aws/aws.service';
-import { ConfigService } from 'src/core/modules/config/config.service';
 import { UserUpdatePasswordInput } from './dto/user-update-password';
-import { TokenService } from 'src/core/modules/token/services/token.service';
-import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly tokenService: TokenService,
-    private readonly awsService: AwsService,
-    private readonly configService: ConfigService,
   ) { }
 
   @UseGuards(CompanyAppGuard)
@@ -109,28 +100,11 @@ export class AuthResolver {
     @Args('userNameOrEmail') userNameOrEmail: string,
     @CompanyApp() company: { id: string },
   ): Promise<boolean> {
-    const res = await this.authService.findByUsernameOrEmail({
-      userNameOrEmail: userNameOrEmail,
+    const res = await this.authService.forgetPassword({
+      userNameOrEmail,
       companyId: company.id,
     });
-
-    const token = await this.tokenService.save({
-      owner_type: 'user',
-      owner_id: res.id,
-      action: TokenTypes.FORGET_PASSWORD,
-      expiresAt: moment().add(2, 'days').toDate(),
-    });
-
-    const appUrl = this.configService.get('APP_URL');
-    const forgetPasswordUrl = `${appUrl}/auth/set-password?token=${token.content}`;
-
-    const attrs = new AwsSqsMessageQueryBuilder()
-      .setStr('action', 'CLIENTAPP_USER_FORGETPASSWORD')
-      .setStr('userModel', res)
-      .setStr('forgetPasswordUrl', forgetPasswordUrl);
-
-    const response = await this.awsService.pushIntoQueue(attrs.getObj());
-    return response.MessageId ? true : false;
+    return res;
   }
 
   @UseGuards(AuthGuard)
