@@ -8,6 +8,7 @@ import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-
 import { ConfigService } from 'src/core/modules/config/config.service';
 import { TokenService } from 'src/core/modules/token/services/token.service';
 import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
+import { RateLimiting } from 'src/shared/decorators/rate-limiting.decorator';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -30,6 +31,7 @@ export class AdminAuthResolver {
     return model;
   }
 
+  @RateLimiting({ limit: 4, expInMinutes: 1 })
   @Query(() => Boolean)
   async AdminApp_Auth_ForgetPassword(
     @Args('userNameOrEmail') userNameOrEmail: string,

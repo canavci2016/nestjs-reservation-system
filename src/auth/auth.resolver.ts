@@ -1,5 +1,6 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { ConflictException, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { CompanyApp } from 'src/company_auth/company_app.decorator';
 import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
 import { UserLoginArgs } from './dto/user-login.args';
@@ -12,6 +13,8 @@ import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/user/user.service';
 import { UserUpdatePasswordInput } from './dto/user-update-password';
+import { GqlRateLimitingGuard } from 'src/shared/guards/gql-rate-limiting.guard';
+import { RateLimiting } from 'src/shared/decorators/rate-limiting.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -41,7 +44,6 @@ export class AuthResolver {
     @CompanyApp() company: { id: string },
     @Args('payload') payload: UserSignUpInput,
   ): Promise<string> {
-
     const isUserExists = await this.userService.findOne({
       userName: payload.userName,
       companyId: company.id,
@@ -95,6 +97,7 @@ export class AuthResolver {
   }
 
   @UseGuards(CompanyAppGuard)
+  @RateLimiting({ limit: 6, expInMinutes: 1 })
   @Mutation(() => Boolean)
   async ClientApp_User_ForgetPassword(
     @Args('userNameOrEmail') userNameOrEmail: string,
