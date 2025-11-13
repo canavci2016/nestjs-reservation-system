@@ -92,8 +92,8 @@ export class ClientAppUserEmployeeAppointmentResolver {
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
-    const list = await this.appointmentService.reject({ id }, comment || '');
+    const res = await this.appointmentService.reject({ id }, comment || '');
 
-    return true;
+    return res;
   }
 }
