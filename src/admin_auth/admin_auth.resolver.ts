@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminAuthService } from './admin_auth.service';
 import { AdminAppAuthLoginArgs } from './dto/adminapp-auth-login.args';
-import { AuthAdmin } from './model/auth-admin.model';
+import { AuthAdminResponseDto } from './dto/auth-admin-response.dto';
 import * as moment from 'moment';
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
@@ -17,12 +17,12 @@ export class AdminAuthResolver {
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
-  @Mutation(() => AuthAdmin)
+  @Mutation(() => AuthAdminResponseDto)
   async AdminApp_Auth_login(
     @Args() loginArgs: AdminAppAuthLoginArgs,
-  ): Promise<AuthAdmin> {
+  ): Promise<AuthAdminResponseDto> {
     const model = await this.authService.signInByEmailAndPassword({
       userName: loginArgs.userName,
       password: loginArgs.password,

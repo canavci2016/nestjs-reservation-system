@@ -6,7 +6,7 @@ import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
-import { User } from './models/user.model';
+import { UserResponseDto } from './dto/user-response.dto';
 import { UserUpdateInput } from './dto/user-update.input';
 import * as moment from 'moment';
 import { AwsService } from 'src/core/modules/aws/aws.service';
@@ -29,7 +29,7 @@ export class AdminAppUserResolver {
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -80,13 +80,13 @@ export class AdminAppUserResolver {
 
   //TODO: remove this use AdminApp_User_list
   @UseGuards(CompanyAuthGuard)
-  @Query(() => [User])
+  @Query(() => [UserResponseDto])
   async AdminApp_Company_User_list(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('q', { nullable: true }) q: string,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
-  ): Promise<User[]> {
+  ): Promise<UserResponseDto[]> {
     const models = await this.userService.findAll({
       q,
       companyId: company.sub,
@@ -97,13 +97,13 @@ export class AdminAppUserResolver {
 
   //TODO: remove this use AdminApp_User_list
   @UseGuards(EmployeeAuthGuard)
-  @Query(() => [User])
+  @Query(() => [UserResponseDto])
   async AdminApp_Employee_User_list(
     @Employee() employee: AuthEmployeeDecoratorInterface,
     @Args('q', { nullable: true }) q: string,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
-  ): Promise<User[]> {
+  ): Promise<UserResponseDto[]> {
     const models = await this.userService.findAll({
       q,
       companyId: employee.employee.companyId,
@@ -113,13 +113,13 @@ export class AdminAppUserResolver {
   }
 
   @AdminAuth()
-  @Query(() => [User])
+  @Query(() => [UserResponseDto])
   async AdminApp_User_list(
     @Admin() admin: AuthAdminDecoratorInterface,
     @Args('q', { nullable: true }) q: string,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
-  ): Promise<User[]> {
+  ): Promise<UserResponseDto[]> {
     const models = await this.userService.findAll({
       q,
       companyId:
@@ -130,7 +130,7 @@ export class AdminAppUserResolver {
   }
 
   @AdminAuth()
-  @Query(() => User)
+  @Query(() => UserResponseDto)
   async AdminApp_User_detail(
     @Admin() admin: AuthAdminDecoratorInterface,
     @Args('id', { nullable: true }) id: string,
@@ -145,7 +145,7 @@ export class AdminAppUserResolver {
 
   //TODO: remove this use AdminApp_User_detail
   @UseGuards(CompanyAuthGuard)
-  @Query(() => User)
+  @Query(() => UserResponseDto)
   async AdminApp_Company_User_detail(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('id', { nullable: true }) id: string,
@@ -159,7 +159,7 @@ export class AdminAppUserResolver {
 
   //TODO: remove this use AdminApp_User_detail
   @UseGuards(EmployeeAuthGuard)
-  @Query(() => User)
+  @Query(() => UserResponseDto)
   async AdminApp_Employee_User_detail(
     @Employee() employee: AuthEmployeeDecoratorInterface,
     @Args('id', { nullable: true }) id: string,

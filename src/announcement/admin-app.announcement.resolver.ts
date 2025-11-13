@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
-import { Announcement } from './models/announcement.model';
+import { AnnouncementResponseDto } from './dto/announcement-response.dto';
 import { AddAnnouncementInput } from './dto/add-announcement.input';
 import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
@@ -37,7 +37,7 @@ export class AdminAppAnnouncementResolver {
 
     const response = await this.awsService.pushIntoQueue(attrs.getObj());
 
-    return Boolean(model);
+    return Boolean(response.$metadata.httpStatusCode === 200);
   }
 
   @UseGuards(CompanyAuthGuard)
@@ -59,12 +59,12 @@ export class AdminAppAnnouncementResolver {
   }
 
   @UseGuards(CompanyAuthGuard)
-  @Query(() => [Announcement])
+  @Query(() => [AnnouncementResponseDto])
   async AdminApp_Company_Announcement_list(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
-  ): Promise<Announcement[]> {
+  ): Promise<AnnouncementResponseDto[]> {
     const models = await this.announcementService.findAll({
       companyId: company.sub,
       pagination: pagination,

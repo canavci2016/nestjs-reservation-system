@@ -37,7 +37,7 @@ input AddEmployeeAvailabilitySingleInput {
   startTime: String!
 }
 
-type Announcement {
+type AnnouncementResponseDto {
   """announcement description"""
   description: String!
 
@@ -51,7 +51,7 @@ type Announcement {
   title: String!
 }
 
-type AuthAdmin {
+type AuthAdminResponseDto {
   """user name"""
   access_token: String!
 
@@ -373,7 +373,7 @@ input EmployeeSignUpInput {
 }
 
 type Mutation {
-  AdminApp_Auth_login(password: String!, userName: String!): AuthAdmin!
+  AdminApp_Auth_login(password: String!, userName: String!): AuthAdminResponseDto!
   AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
   AdminApp_Company_Announcement_delete(id: String!): Boolean!
   AdminApp_Company_Announcement_update(id: String!, payload: UpdateAnnouncementInput!): Boolean!
@@ -434,7 +434,7 @@ input PaginationInput {
 
 type Query {
   AdminApp_Auth_ForgetPassword(userNameOrEmail: String!): Boolean!
-  AdminApp_Company_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  AdminApp_Company_Announcement_list(pagination: PaginationInput): [AnnouncementResponseDto!]!
   AdminApp_Company_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
@@ -442,21 +442,21 @@ type Query {
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_Company_UserPackage_updateForAUser(packageId: String!, payload: CompanyUpdateUserPackageCommonTableInput!, user: String!): Boolean!
-  AdminApp_Company_User_detail(id: String): User!
-  AdminApp_Company_User_list(pagination: PaginationInput, q: String): [User!]!
+  AdminApp_Company_User_detail(id: String): UserResponseDto!
+  AdminApp_Company_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   AdminApp_Company_getProfile: SuperAdminCompany!
   AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Employee_Availability_list(endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Employee_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
-  AdminApp_Employee_User_detail(id: String): User!
-  AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [User!]!
+  AdminApp_Employee_User_detail(id: String): UserResponseDto!
+  AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   AdminApp_Employee_getProfile: AuthEmployee!
   AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
-  AdminApp_User_detail(id: String): User!
-  AdminApp_User_list(pagination: PaginationInput, q: String): [User!]!
-  ClientApp_Announcement_detail(id: String!): Announcement!
-  ClientApp_Announcement_list(pagination: PaginationInput): [Announcement!]!
+  AdminApp_User_detail(id: String): UserResponseDto!
+  AdminApp_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
+  ClientApp_Announcement_detail(id: String!): AnnouncementResponseDto!
+  ClientApp_Announcement_list(pagination: PaginationInput): [AnnouncementResponseDto!]!
   ClientApp_Appointment_history(endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus): [UserEmployeeAppointment!]!
   ClientApp_Blog_detail(id: String!): Blog!
   ClientApp_Blog_list(pagination: PaginationInput): [Blog!]!
@@ -555,32 +555,6 @@ input UpdateProfileInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
-
-type User {
-  """the id of activePackage"""
-  activePackageId: String
-
-  """user email"""
-  createdAt: DateTime
-
-  """user email"""
-  email: String
-
-  """user unique id"""
-  id: String!
-
-  """user last name"""
-  lastName: String!
-
-  """user name"""
-  name: String!
-
-  """user phone"""
-  phone: String
-
-  """user unique name"""
-  userName: String!
-}
 
 input UserAddInput {
   email: String
@@ -687,6 +661,32 @@ enum UserEmployeeAppointmentStatus {
 }
 
 type UserEmployeeAppointmentUser {
+  """user email"""
+  createdAt: DateTime
+
+  """user email"""
+  email: String
+
+  """user unique id"""
+  id: String!
+
+  """user last name"""
+  lastName: String!
+
+  """user name"""
+  name: String!
+
+  """user phone"""
+  phone: String
+
+  """user unique name"""
+  userName: String!
+}
+
+type UserResponseDto {
+  """the id of activePackage"""
+  activePackageId: String
+
   """user email"""
   createdAt: DateTime
 
