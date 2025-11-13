@@ -15,6 +15,10 @@ import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.inpu
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeService } from 'src/employee/employee.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
+import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
+import { Admin } from 'src/admin_auth/admin-auth.decorator';
+import { AdminAuthGuard } from 'src/admin_auth/admin-auth.guard';
+import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 
 @Resolver()
 export class AdminAppUserEmployeeAppointmentResolver {
@@ -92,8 +96,30 @@ export class AdminAppUserEmployeeAppointmentResolver {
     return true;
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @UseGuards(AdminAuthGuard)
   @Query(() => [UserEmployeeAppointment])
+  async AdminApp_Appointment_list(
+    @Admin() adminDto: AuthAdminDecoratorInterface,
+    @Args() args: SearchAppointmentArgs,
+    @Args('pagination', { nullable: true }, PaginationPipe) pagination: PaginationInput,
+  ): Promise<UserEmployeeAppointment[]> {
+    const params = {
+      companyId: adminDto.company?.company?.id,
+      startDate: args.startDate || moment().format('YYYY-MM-DD'),
+      endDate: args.endDate || moment().format('YYYY-MM-DD'),
+      status: args.status,
+      userId: args.userId,
+      employeeId: adminDto.employee?.employee?.id || args.employeeId,
+      pagination: pagination,
+    };
+    const list = await this.appointmentService.history(params);
+    return list;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => [UserEmployeeAppointment], {
+    deprecationReason: 'use the method AdminApp_Appointment_list instead',
+  })
   async AdminApp_Company_Appointment_list(
     @Company() companyDto: AuthCompanyDecoratorInterface,
     @Args() args: SearchAppointmentArgs,
@@ -113,7 +139,9 @@ export class AdminAppUserEmployeeAppointmentResolver {
   }
 
   @UseGuards(EmployeeAuthGuard)
-  @Query(() => [UserEmployeeAppointment])
+  @Query(() => [UserEmployeeAppointment], {
+    deprecationReason: 'use the method AdminApp_Appointment_list instead',
+  })
   async AdminApp_Employee_Appointment_list(
     @Employee() employeeDto: AuthEmployeeDecoratorInterface,
     @Args() args: SearchAppointmentArgs,

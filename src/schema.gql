@@ -433,9 +433,10 @@ input PaginationInput {
 }
 
 type Query {
+  AdminApp_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Auth_ForgetPassword(userNameOrEmail: String!): Boolean!
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [AnnouncementResponseDto!]!
-  AdminApp_Company_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
+  AdminApp_Company_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]! @deprecated(reason: "use the method AdminApp_Appointment_list instead")
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!
   AdminApp_Company_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
@@ -445,7 +446,7 @@ type Query {
   AdminApp_Company_User_detail(id: String): UserResponseDto!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   AdminApp_Company_getProfile: SuperAdminCompany!
-  AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
+  AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]! @deprecated(reason: "use the method AdminApp_Appointment_list instead")
   AdminApp_Employee_Availability_list(endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Employee_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
