@@ -22,4 +22,7 @@ export class Company {
 
   @Field({ description: 'company status' })
   isActive?: boolean;
+
+  @Field({ description: 'company packaging system enabled' })
+  enableUserPackageSystem: boolean;
 }
