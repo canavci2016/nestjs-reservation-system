@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindOptionsWhere, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
 import { UserService } from 'src/user/user.service';
 import {
@@ -164,6 +164,16 @@ export class UserEmployeeAppointmentService {
       };
     }
 
+    whereQuery['employeeAvailability'] = {
+      ...(whereQuery['employeeAvailability'] || {}),
+      employeeId: Not(IsNull()),
+    };
+
+    whereQuery['employeeAvailability'] = {
+      ...(whereQuery['employeeAvailability'] || {}),
+      employee: { deletedAt: IsNull() },
+    };
+
     const query: Record<any, any> = {};
 
     if (params.pagination) {
@@ -180,6 +190,7 @@ export class UserEmployeeAppointmentService {
       user: true,
     };
     query['where'] = whereQuery;
+    query['withDeleted'] = true;
 
     const rawHistories = await this.repository.find(query);
 
