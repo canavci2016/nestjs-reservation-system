@@ -9,6 +9,9 @@ import { ConfigService } from 'src/core/modules/config/config.service';
 import { TokenService } from 'src/core/modules/token/services/token.service';
 import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
 import { RateLimiting } from 'src/shared/decorators/rate-limiting.decorator';
+import { Admin } from './admin-auth.decorator';
+import { AdminAuth } from './admin-auth-with-role.decorator';
+import { AuthAdminDecoratorInterface } from './interfaces/auth-admin-decorator.interface';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -17,7 +20,7 @@ export class AdminAuthResolver {
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   @Mutation(() => AuthAdminResponseDto)
   async AdminApp_Auth_login(
@@ -55,5 +58,20 @@ export class AdminAuthResolver {
 
     const response = await this.awsService.pushIntoQueue(attrs.getObj());
     return response.$metadata.httpStatusCode === 200;
+  }
+
+  @AdminAuth()
+  @Mutation(() => Boolean)
+  async AdminApp_Auth_SetDeviceToken(
+    @Admin() adminDto: AuthAdminDecoratorInterface,
+    @Args('token') token: string,
+  ): Promise<boolean> {
+    const id =
+      adminDto?.employee?.employee?.id || adminDto?.company?.company?.id;
+    if (!id) {
+      throw new Error('Invalid admin data');
+    }
+    const res = await this.authService.updateById(id, { deviceToken: token });
+    return res;
   }
 }

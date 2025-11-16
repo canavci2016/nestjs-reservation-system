@@ -87,15 +87,17 @@ export class AdminAuthService {
     );
   }
 
-  async updateById(id: string, payload: { password: string }) {
-    const company = await this.companyService.updatePassword(
-      id,
-      payload.password,
-    );
+  async updatePassword(id: string, password: string) {
+    return this.companyService.updateById(id, { password });
+  }
 
-    const employee = await this.employeeService.updateById(id, {
-      password: payload.password,
-    });
+  async updateById(
+    id: string,
+    payload: { password?: string; deviceToken?: string },
+  ) {
+    const company = await this.companyService.updateById(id, payload);
+
+    const employee = await this.employeeService.updateById(id, payload);
 
     return true;
   }

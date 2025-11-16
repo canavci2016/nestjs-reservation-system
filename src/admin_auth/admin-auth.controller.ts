@@ -52,9 +52,9 @@ export class AdminAuthController {
     @Body(new ValidationPipe()) setPasswordDto: UserSetPasswordInput,
     @Res() res: Response,
   ) {
-    const admin = await this.adminAuthService.updateById(
+    const admin = await this.adminAuthService.updatePassword(
       tokenModel.owner_id,
-      setPasswordDto,
+      setPasswordDto.password,
     );
 
     const revokeToken = await this.tokenService.updateBy(

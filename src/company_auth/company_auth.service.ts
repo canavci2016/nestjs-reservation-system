@@ -51,8 +51,8 @@ export class CompanyAuthService {
     return company;
   }
 
-  async updatePassword(id: string, password: string) {
-    const company = await this.companyService.updateById(id, { password });
+  async updateById(id: string, payload: { password?: string; token?: string }) {
+    const company = await this.companyService.updateById(id, payload);
 
     return company;
   }
