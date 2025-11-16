@@ -15,6 +15,6 @@ export class CompanyAddUserPackageInput {
   @Field((type) => CompanyUserPackageExpiresType)
   expiresInType?: CompanyUserPackageExpiresType;
 
-  @Field()
-  isActive: boolean;
+  @Field({ nullable: true, defaultValue: true })
+  isActive?: boolean;
 }

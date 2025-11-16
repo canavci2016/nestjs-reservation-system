@@ -183,7 +183,7 @@ input CompanyAddInput {
 input CompanyAddUserPackageInput {
   expiresInNumber: Float!
   expiresInType: CompanyUserPackageExpiresType!
-  isActive: Boolean!
+  isActive: Boolean = true
   name: String!
   quota: Float!
 }
