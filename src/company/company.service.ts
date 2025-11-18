@@ -55,11 +55,15 @@ export class CompanyService {
       );
     }
 
-    if (companyMap.has('password')) {
-      companyMap.set(
-        'password',
-        await this.generateHashedPassword(companyMap.get('password') as string),
-      );
+    if (companyMap.get('email')) {
+      const companyObjWithEmail = await this.findOne({
+        email: companyMap.get('email') as string,
+      });
+      if (companyObjWithEmail) {
+        throw new ConflictException(
+          `company with email  "${companyMap.get('email') as string}" already exists`,
+        );
+      }
     }
 
     const savedCompany = await this.repository.save(
