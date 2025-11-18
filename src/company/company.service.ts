@@ -66,6 +66,13 @@ export class CompanyService {
       }
     }
 
+    if (companyMap.has('password')) {
+      companyMap.set(
+        'password',
+        await this.generateHashedPassword(companyMap.get('password') as string),
+      );
+    }
+
     const savedCompany = await this.repository.save(
       Object.fromEntries(companyMap),
     );
