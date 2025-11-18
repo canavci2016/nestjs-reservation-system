@@ -6,10 +6,11 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { UseGuards } from '@nestjs/common';
+import { CompanyAddInput } from './dto/company-add.input';
 
 @Resolver()
 export class AdminAppCompanyResolver {
-  constructor(private readonly service: CompanyService) {}
+  constructor(private readonly service: CompanyService) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -27,5 +28,13 @@ export class AdminAppCompanyResolver {
     @Company() company: AuthCompanyDecoratorInterface,
   ) {
     return company.company;
+  }
+
+  @Mutation(() => Boolean)
+  async AdminApp_Company_add(
+    @Args('payload') payload: CompanyAddInput,
+  ): Promise<boolean> {
+    const company = await this.service.save(payload);
+    return Boolean(company.id);
   }
 }
