@@ -29,30 +29,42 @@ export class CompanyService {
   }
 
   async save(company: Partial<Company & { photo?: Promise<FileUpload> }>) {
-    const companyObj = await this.findOne({ userName: company.userName });
+    const companyMap = new Map(Object.entries(company));
+
+    const companyObj = await this.findOne({
+      userName: companyMap.get('userName') as string,
+    });
+
     if (companyObj) {
       throw new ConflictException(
-        `company with username "${company.userName}" already exists`,
+        `company with username "${companyMap.get('userName') as string}" already exists`,
       );
     }
 
-    company.secretKey = company.secretKey || `API_SECRET_${Date.now()}`;
+    if (!companyMap.has('secretKey')) {
+      companyMap.set('secretKey', `API_SECRET_${Date.now()}`);
+    }
 
     const companyObjWithSecret = await this.findOneBySecretKey(
-      company.secretKey,
+      companyMap.get('secretKey') as string,
     );
 
     if (companyObjWithSecret) {
       throw new ConflictException(
-        `company with secret key "${company.secretKey}" already exists`,
+        `company with secret key "${companyMap.get('secretKey') as string}" already exists`,
       );
     }
 
-    if (company.password?.trim()) {
-      company.password = await this.generateHashedPassword(company.password);
+    if (companyMap.has('password')) {
+      companyMap.set(
+        'password',
+        await this.generateHashedPassword(companyMap.get('password') as string),
+      );
     }
 
-    const savedCompany = await this.repository.save(company);
+    const savedCompany = await this.repository.save(
+      Object.fromEntries(companyMap),
+    );
 
     // Handle photo upload after saving the company
     if (company.photo) {

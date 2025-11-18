@@ -3,6 +3,7 @@ import { CompanyAuthService } from 'src/company_auth/company_auth.service';
 import { EmployeeAuthService } from 'src/employee_auth/employee_auth.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { AdminAuthRole } from './admin-auth-role.enum';
+import { AdminAppAuthRegisterInput } from './dto/adminapp-auth-register.input';
 
 @Injectable()
 export class AdminAuthService {
@@ -100,5 +101,14 @@ export class AdminAuthService {
     const employee = await this.employeeService.updateById(id, payload);
 
     return true;
+  }
+
+  async registerCompany(dto: AdminAppAuthRegisterInput) {
+    const company = await this.companyService.register(dto);
+
+    return {
+      role: AdminAuthRole.COMPANY,
+      access_token: company.access_token,
+    };
   }
 }

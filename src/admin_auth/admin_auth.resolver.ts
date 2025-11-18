@@ -12,6 +12,7 @@ import { RateLimiting } from 'src/shared/decorators/rate-limiting.decorator';
 import { Admin } from './admin-auth.decorator';
 import { AdminAuth } from './admin-auth-with-role.decorator';
 import { AuthAdminDecoratorInterface } from './interfaces/auth-admin-decorator.interface';
+import { AdminAppAuthRegisterInput } from './dto/adminapp-auth-register.input';
 
 @Resolver()
 export class AdminAuthResolver {
@@ -73,5 +74,13 @@ export class AdminAuthResolver {
     }
     const res = await this.authService.updateById(id, { deviceToken: token });
     return res;
+  }
+
+  @Mutation(() => AuthAdminResponseDto)
+  async AdminApp_Auth_Register(
+    @Args('payload') payload: AdminAppAuthRegisterInput,
+  ): Promise<AuthAdminResponseDto> {
+    const company = await this.authService.registerCompany(payload);
+    return company;
   }
 }

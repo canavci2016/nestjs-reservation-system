@@ -56,4 +56,18 @@ export class CompanyAuthService {
 
     return company;
   }
+
+  async register(field: {
+    name: string;
+    userName: string;
+    password: string;
+    email?: string;
+  }): Promise<{ access_token: string }> {
+    const user = await this.companyService.save(field);
+    const loginResponse = await this.signInByEmailAndPassword({
+      userName: field.userName,
+      password: field.password,
+    });
+    return loginResponse;
+  }
 }

@@ -29,12 +29,4 @@ export class AdminAppCompanyResolver {
   ) {
     return company.company;
   }
-
-  @Mutation(() => Boolean)
-  async AdminApp_Company_add(
-    @Args('payload') payload: CompanyAddInput,
-  ): Promise<boolean> {
-    const company = await this.service.save(payload);
-    return Boolean(company.id);
-  }
 }
