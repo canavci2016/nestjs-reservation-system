@@ -1,10 +1,22 @@
-import { InputType, PickType } from '@nestjs/graphql';
-import { CompanyAddInput } from 'src/company/dto/company-add.input';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 @InputType()
-export class AdminAppAuthRegisterInput extends PickType(CompanyAddInput, [
-  'name',
-  'userName',
-  'password',
-  'email',
-] as const) { }
+export class AdminAppAuthRegisterInput {
+  @Field()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsEmail()
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field()
+  @IsString()
+  userName: string;
+
+  @Field()
+  @IsString()
+  password: string;
+}
