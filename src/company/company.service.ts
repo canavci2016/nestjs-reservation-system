@@ -36,6 +36,18 @@ export class CompanyService {
       );
     }
 
+    company.secretKey = company.secretKey || `API_SECRET_${Date.now()}`;
+
+    const companyObjWithSecret = await this.findOneBySecretKey(
+      company.secretKey,
+    );
+
+    if (companyObjWithSecret) {
+      throw new ConflictException(
+        `company with secret key "${company.secretKey}" already exists`,
+      );
+    }
+
     if (company.password?.trim()) {
       company.password = await this.generateHashedPassword(company.password);
     }

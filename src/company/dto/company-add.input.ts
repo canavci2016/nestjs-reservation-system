@@ -4,8 +4,8 @@ import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @InputType()
 export class CompanyAddInput {
-  @Field()
-  secretKey: string;
+  @Field({ nullable: true })
+  secretKey?: string;
 
   @Field()
   name: string;

@@ -176,7 +176,7 @@ input CompanyAddInput {
   name: String!
   password: String!
   photo: Upload
-  secretKey: String!
+  secretKey: String
   userName: String!
 }
 
