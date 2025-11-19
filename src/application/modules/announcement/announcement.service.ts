@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
-import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
-import { Announcement } from 'src/database/entities/announcement.entity';
-import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
+import { Pagination } from '../../../core/modules/pagination/interfaces/pagination.interface';
+import { Announcement } from '../../../database/entities/announcement.entity';
+import { FileUploadService } from '../../../shared/modules/file-upload/file-upload.service';
 
 interface FindAllOptions {
   companyId?: string;

@@ -1,15 +1,15 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
+import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResponseDto } from './dto/announcement-response.dto';
 import { AddAnnouncementInput } from './dto/add-announcement.input';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from '../../../company_auth/company_auth.decorator';
 import { UpdateAnnouncementInput } from './dto/update-announcement.input';
-import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
-import { AwsService } from 'src/core/modules/aws/aws.service';
+import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
+import { AwsSqsMessageQueryBuilder } from '../../../core/modules/aws/aws-sqs-message-qb';
+import { AwsService } from '../../../core/modules/aws/aws.service';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver()

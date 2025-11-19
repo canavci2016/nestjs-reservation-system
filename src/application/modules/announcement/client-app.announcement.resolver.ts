@@ -1,11 +1,11 @@
 import { Resolver, Args, Query } from '@nestjs/graphql';
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
+import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResponseDto } from './dto/announcement-response.dto';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
+import { CompanyAppGuard } from '../../../company_auth/company_app.guard';
+import { CompanyApp } from '../../../company_auth/company_app.decorator';
+import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 
 @Resolver()
 export class ClientAppAnnouncementResolver {
