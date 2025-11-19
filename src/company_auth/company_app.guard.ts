@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { CompanyService } from 'src/company/company.service';
+import { CompanyService } from 'src/application/modules/company/company.service';
 
 @Injectable()
 export class CompanyAppGuard implements CanActivate {

@@ -8,7 +8,7 @@ import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
 import { Company } from 'src/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateEmployeeInput } from './dto/update-employee.input';
-import { CompanyService } from 'src/company/company.service';
+import { CompanyService } from 'src/application/modules/company/company.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';

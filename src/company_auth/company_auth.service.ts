@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CompanyService } from 'src/company/company.service';
+import { CompanyService } from 'src/application/modules/company/company.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

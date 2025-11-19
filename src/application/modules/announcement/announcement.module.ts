@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CompanyModule } from '../../../company/company.module';
+import { CompanyModule } from '../company/company.module';
 import { AnnouncementService } from './announcement.service';
 import { ClientAppAnnouncementResolver } from './client-app.announcement.resolver';
 import { AdminAppAnnouncementResolver } from './admin-app.announcement.resolver';

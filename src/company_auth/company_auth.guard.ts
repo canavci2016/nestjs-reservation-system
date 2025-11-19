@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthCompanyDecoratorInterface } from './interfaces/auth-company-decorator.interface';
-import { CompanyService } from 'src/company/company.service';
+import { CompanyService } from 'src/application/modules/company/company.service';
 
 @Injectable()
 export class CompanyAuthGuard implements CanActivate {
