@@ -8,7 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ApplicationModule } from './application/application.module';
-import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
@@ -80,11 +79,10 @@ const configFactory = {
       },
     }),
     ApplicationModule,
-    EmployeeAvailabilityModule,
     DatabaseModule,
     CoreModule,
   ],
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule { }
+export class AppModule {}

@@ -12,6 +12,7 @@ import { UserEmployeeAppointmentModule } from './modules/user_employee_appointme
 import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.module';
 import { AdminAuthModule } from './modules/admin_auth/admin_auth.module';
 import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module';
+import { EmployeeAvailabilityModule } from './modules/employee_availability/employee-availability.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module
     UserEmployeeAppointmentModule,
     AdminAuthModule,
     EmployeeAuthModule,
+    EmployeeAvailabilityModule,
   ],
   exports: [
     BlogModule,
@@ -43,6 +45,7 @@ import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module
     UserEmployeeAppointmentModule,
     AdminAuthModule,
     EmployeeAuthModule,
+    EmployeeAvailabilityModule,
   ],
 })
 export class ApplicationModule {}

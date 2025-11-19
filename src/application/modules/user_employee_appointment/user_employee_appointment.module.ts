@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserEmployeeAppointmentService } from './user_employee_appointment.service';
 import { ClientAppUserEmployeeAppointmentResolver } from './client-app.user-employee-appointment.resolver';
 import { AdminAppUserEmployeeAppointmentResolver } from './admin-app.user-employee-appointment.resolver';
-import { EmployeeAvailabilityModule } from 'src/employee_availability/employee-availability.module';
+import { EmployeeAvailabilityModule } from '../employee_availability/employee-availability.module';
 import { AuthModule } from 'src/application/modules/auth/auth.module';
 import { UserModule } from 'src/application/modules/user/user.module';
 import { UserPackageModule } from 'src/application/modules/user_package/user_package.module';
