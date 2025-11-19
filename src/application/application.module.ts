@@ -8,6 +8,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { CompanyAuthModule } from './modules/company_auth/company_auth.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserPackageModule } from './modules/user_package/user_package.module';
+import { UserEmployeeAppointmentModule } from './modules/user_employee_appointment/user_employee_appointment.module';
 import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.
     AuthModule,
     UserPackageModule,
     SuperadminAuthModule,
+    UserEmployeeAppointmentModule,
   ],
   exports: [
     BlogModule,
@@ -34,6 +36,7 @@ import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.
     AuthModule,
     UserPackageModule,
     SuperadminAuthModule,
+    UserEmployeeAppointmentModule,
   ],
 })
 export class ApplicationModule {}

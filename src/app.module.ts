@@ -9,7 +9,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ApplicationModule } from './application/application.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
-import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { AdminAuthModule } from './admin_auth/admin_auth.module';
@@ -84,7 +83,6 @@ const configFactory = {
     }),
     ApplicationModule,
     EmployeeAvailabilityModule,
-    UserEmployeeAppointmentModule,
     DatabaseModule,
     EmployeeAuthModule,
     AdminAuthModule,
