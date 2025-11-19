@@ -3,9 +3,9 @@ import { PaginationInput } from '../../../core/modules/pagination/dto/pagination
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResponseDto } from './dto/announcement-response.dto';
 import { AddAnnouncementInput } from './dto/add-announcement.input';
-import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from '../../../company_auth/company_auth.decorator';
+import { CompanyAuthGuard } from '../company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from '../company_auth/company_auth.decorator';
 import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from '../../../core/modules/aws/aws-sqs-message-qb';

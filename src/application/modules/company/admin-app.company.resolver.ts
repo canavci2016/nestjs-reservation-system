@@ -2,9 +2,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CompanyService } from './company.service';
 import { SuperAdminCompany } from './models/super-admin-company.model';
 import { CompanySelfUpdateInput } from './dto/company-self-update.input';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { Company } from 'src/company_auth/company_auth.decorator';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { CompanyAuthGuard } from 'src/application/modules/company_auth/company_auth.guard';
+import { Company } from 'src/application/modules/company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';
 import { UseGuards } from '@nestjs/common';
 import { CompanyAddInput } from './dto/company-add.input';
 

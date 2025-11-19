@@ -1,7 +1,7 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { SuperAdminCompany } from './models/super-admin-company.model';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { CompanyAppGuard } from 'src/application/modules/company_auth/company_app.guard';
+import { CompanyApp } from 'src/application/modules/company_auth/company_app.decorator';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver()

@@ -4,8 +4,8 @@ import { UseGuards } from '@nestjs/common';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { CompanyAppGuard } from 'src/application/modules/company_auth/company_app.guard';
+import { CompanyApp } from 'src/application/modules/company_auth/company_app.decorator';
 
 @Resolver()
 export class ClientAppEmployeeAvailabilityResolver {

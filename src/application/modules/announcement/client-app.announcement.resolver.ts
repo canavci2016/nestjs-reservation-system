@@ -3,8 +3,8 @@ import { NotFoundException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResponseDto } from './dto/announcement-response.dto';
-import { CompanyAppGuard } from '../../../company_auth/company_app.guard';
-import { CompanyApp } from '../../../company_auth/company_app.decorator';
+import { CompanyAppGuard } from '../company_auth/company_app.guard';
+import { CompanyApp } from '../company_auth/company_app.decorator';
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 
 @Resolver()

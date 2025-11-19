@@ -3,8 +3,8 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { Employee } from './models/employee.model';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
+import { CompanyAppGuard } from 'src/application/modules/company_auth/company_app.guard';
+import { CompanyApp } from 'src/application/modules/company_auth/company_app.decorator';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 
 @Resolver()

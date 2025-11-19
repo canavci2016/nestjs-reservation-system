@@ -1,9 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserPackageService } from './user_package.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { Company } from 'src/company_auth/company_auth.decorator';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { CompanyAuthGuard } from 'src/application/modules/company_auth/company_auth.guard';
+import { Company } from 'src/application/modules/company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';
 import { CompanyUpdateUserPackageInput } from './dto/company-update-user-package.input';
 import { CompanyAddUserPackageInput } from './dto/company-add-user-package.input';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';

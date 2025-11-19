@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CompanyAuthService } from 'src/company_auth/company_auth.service';
+import { CompanyAuthService } from 'src/application/modules/company_auth/company_auth.service';
 import { EmployeeAuthService } from 'src/employee_auth/employee_auth.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { AdminAuthRole } from './admin-auth-role.enum';

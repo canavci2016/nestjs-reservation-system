@@ -1,9 +1,9 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { ConflictException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
-import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from '../../../company_auth/company_auth.decorator';
+import { CompanyAuthGuard } from '../company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from '../company_auth/company_auth.decorator';
 import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
 import { UserResponseDto } from './dto/user-response.dto';

@@ -11,9 +11,9 @@ import {
   EmployeeAppListAvailabilityArgs,
 } from './dto/employeeapp-list-availability.args';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { Company } from 'src/company_auth/company_auth.decorator';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
+import { CompanyAuthGuard } from 'src/application/modules/company_auth/company_auth.guard';
+import { Company } from 'src/application/modules/company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
 import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
 

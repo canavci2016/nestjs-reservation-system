@@ -4,9 +4,9 @@ import { UseGuards } from '@nestjs/common';
 import { AddBlogInput } from './dto/add-blog.input';
 import { Blog } from './models/blog.model';
 import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
-import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
-import { Company } from '../../../company_auth/company_auth.decorator';
-import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
+import { CompanyAuthGuard } from '../company_auth/company_auth.guard';
+import { Company } from '../company_auth/company_auth.decorator';
+import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateBlogInput } from './dto/update-blog.input';
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 

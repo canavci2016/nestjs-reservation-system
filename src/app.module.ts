@@ -7,7 +7,7 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { CompanyAuthModule } from './company_auth/company_auth.module';
+import { CompanyAuthModule } from './application/modules/company_auth/company_auth.module';
 import { AuthModule } from './auth/auth.module';
 import { ApplicationModule } from './application/application.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
