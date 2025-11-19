@@ -2,10 +2,10 @@ import { Resolver, Args, Query } from '@nestjs/graphql';
 import { BlogService } from './blog.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Blog } from './models/blog.model';
-import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
-import { CompanyAppGuard } from 'src/company_auth/company_app.guard';
-import { CompanyApp } from 'src/company_auth/company_app.decorator';
-import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
+import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
+import { CompanyAppGuard } from '../../../company_auth/company_app.guard';
+import { CompanyApp } from '../../../company_auth/company_app.decorator';
+import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 
 @Resolver()
 export class ClientAppBlogResolver {

@@ -11,7 +11,7 @@ import { CompanyModule } from './company/company.module';
 import { CompanyAuthModule } from './company_auth/company_auth.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { BlogModule } from './blog/blog.module';
+import { ApplicationModule } from './application/application.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { EmployeeModule } from './employee/employee.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
@@ -95,7 +95,7 @@ const configFactory = {
     }),
     UserModule,
     AuthModule,
-    BlogModule,
+    ApplicationModule,
     AnnouncementModule,
     EmployeeModule,
     EmployeeAvailabilityModule,
