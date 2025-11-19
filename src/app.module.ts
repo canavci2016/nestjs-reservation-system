@@ -11,7 +11,6 @@ import { ApplicationModule } from './application/application.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
-import { AdminAuthModule } from './admin_auth/admin_auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
@@ -85,7 +84,6 @@ const configFactory = {
     EmployeeAvailabilityModule,
     DatabaseModule,
     EmployeeAuthModule,
-    AdminAuthModule,
     ConfigModule,
     CoreModule,
   ],

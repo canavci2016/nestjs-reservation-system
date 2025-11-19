@@ -31,7 +31,7 @@ export class AdminAuthController {
   ) {
     const user = await this.adminAuthService.findById(tokenModel.owner_id);
 
-    const rawContent = await readFile('src/admin_auth/views/set-password.hbs', {
+    const rawContent = await readFile('src/application/modules/admin_auth/views/set-password.hbs', {
       encoding: 'utf-8',
     });
     const template = Handlebars.compile(rawContent);

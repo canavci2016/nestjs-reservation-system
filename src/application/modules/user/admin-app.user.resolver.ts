@@ -16,9 +16,9 @@ import { AuthEmployeeDecoratorInterface } from '../../../employee_auth/interface
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from '../../../core/modules/aws/aws-sqs-message-qb';
 import { ConfigService } from '../../../core/modules/config/config.service';
-import { Admin } from '../../../admin_auth/admin-auth.decorator';
-import { AuthAdminDecoratorInterface } from '../../../admin_auth/interfaces/auth-admin-decorator.interface';
-import { AdminAuth } from '../../../admin_auth/admin-auth-with-role.decorator';
+import { Admin } from '../admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 import { TokenService } from '../../../core/modules/token/services/token.service';
 import { TokenTypes } from '../../../shared/modules/app-token/token-types.enum';
 

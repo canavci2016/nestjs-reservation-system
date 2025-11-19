@@ -13,9 +13,9 @@ import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { Admin } from 'src/admin_auth/admin-auth.decorator';
-import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
-import { AdminAuthGuard } from 'src/admin_auth/admin-auth.guard';
+import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuthGuard } from 'src/application/modules/admin_auth/admin-auth.guard';
 
 @Resolver()
 export class AdminAppEmployeeResolver {

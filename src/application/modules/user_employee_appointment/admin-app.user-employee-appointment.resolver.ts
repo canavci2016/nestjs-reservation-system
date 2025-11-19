@@ -15,9 +15,9 @@ import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.inpu
 import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
-import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
-import { Admin } from 'src/admin_auth/admin-auth.decorator';
-import { AdminAuthGuard } from 'src/admin_auth/admin-auth.guard';
+import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
+import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
+import { AdminAuthGuard } from 'src/application/modules/admin_auth/admin-auth.guard';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 
 @Resolver()
