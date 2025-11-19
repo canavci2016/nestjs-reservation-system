@@ -31,9 +31,12 @@ export class AdminAuthController {
   ) {
     const user = await this.adminAuthService.findById(tokenModel.owner_id);
 
-    const rawContent = await readFile('src/application/modules/admin_auth/views/set-password.hbs', {
-      encoding: 'utf-8',
-    });
+    const rawContent = await readFile(
+      'src/application/modules/admin_auth/views/set-password.hbs',
+      {
+        encoding: 'utf-8',
+      },
+    );
     const template = Handlebars.compile(rawContent);
 
     const fullName = user.model.name;
@@ -42,7 +45,6 @@ export class AdminAuthController {
 
     return res.send(content);
   }
-
 
   @UseGuards(TokenGuard)
   @Post('/set-password')

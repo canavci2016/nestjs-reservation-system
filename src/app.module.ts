@@ -12,6 +12,8 @@ import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
+import { AcceptLanguageResolver, GraphQLWebsocketResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import * as path from 'path';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -77,12 +79,26 @@ const configFactory = {
           message,
         };
       },
+      context: (ctx) => ctx,
+      path: '/graphql',
     }),
     ApplicationModule,
     DatabaseModule,
     CoreModule,
+    I18nModule.forRoot({
+      fallbackLanguage: 'tr',
+      loaderOptions: {
+        path: path.join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [
+        GraphQLWebsocketResolver,
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule {}
+export class AppModule { }
