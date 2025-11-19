@@ -6,8 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { CompanyModule } from './company/company.module';
 import { CompanyAuthModule } from './company_auth/company_auth.module';
 import { UserModule } from './user/user.module';
@@ -25,6 +24,7 @@ import { UserPackageModule } from './user_package/user_package.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ReportingModule } from './reporting/reporting.module';
 import { CoreModule } from './core/core.module';
+import { GraphQLFormattedError } from 'graphql';
 
 const configFactory = {
   provide: 'CONFIG',
@@ -74,6 +74,20 @@ const configFactory = {
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       csrfPrevention: false,
+      formatError: (formattedError: GraphQLFormattedError, error: unknown) => {
+        const originalError = formattedError?.extensions?.originalError as
+          | { message: string[] }
+          | undefined;
+
+        const messages: string[] = originalError?.message || [];
+
+        const message = messages.length
+          ? messages.join(', ')
+          : formattedError.message;
+        return {
+          message,
+        };
+      },
     }),
     UserModule,
     AuthModule,

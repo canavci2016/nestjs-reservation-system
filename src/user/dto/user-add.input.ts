@@ -5,18 +5,20 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class UserAddInput {
   @Field()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'isim alanı boş olamaz ' })
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'soyisim alanı boş olamaz ' })
   @Field()
   lastName: string;
 
   @Field()
+  @IsNotEmpty({ message: 'kullanıcı adı alanı boş olamaz ' })
   userName: string;
 
   @Field()
+  @IsNotEmpty({ message: 'şifre alanı boş olamaz ' })
   password: string;
 
   @Field({ nullable: true })
@@ -25,7 +27,7 @@ export class UserAddInput {
   phone: string;
 
   @IsOptional()
-  @IsEmail({})
+  @IsEmail({}, { message: 'geçersiz email formatı' })
   @Field({ nullable: true })
   email: string;
 
