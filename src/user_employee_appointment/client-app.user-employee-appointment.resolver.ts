@@ -10,7 +10,7 @@ import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-de
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { ClientAppSearchAppointmentArgs } from './dto/clientapp-search-appointment.args';
 import { AwsService } from 'src/core/modules/aws/aws.service';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 

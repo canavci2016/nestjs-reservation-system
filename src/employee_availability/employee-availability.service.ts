@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import * as moment from 'moment';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { EmployeeAvailability } from 'src/database/entities/employee-availability.entity';
 import { UserEmployeeAppointmentStatus } from 'src/database/entities/user-employee-appointment.entity';
 

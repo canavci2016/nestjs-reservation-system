@@ -7,11 +7,9 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { CompanyModule } from './application/modules/company/company.module';
 import { CompanyAuthModule } from './company_auth/company_auth.module';
 import { AuthModule } from './auth/auth.module';
 import { ApplicationModule } from './application/application.module';
-import { EmployeeModule } from './employee/employee.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
 import { DatabaseModule } from './database/database.module';
@@ -46,7 +44,6 @@ const configFactory = {
       secret: process.env.APP_KEY,
       signOptions: { expiresIn: '10d' },
     }),
-    CompanyModule,
     CompanyAuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -71,7 +68,7 @@ const configFactory = {
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       csrfPrevention: false,
-      formatError: (formattedError: GraphQLFormattedError, error: unknown) => {
+      formatError: (formattedError: GraphQLFormattedError) => {
         const originalError = formattedError?.extensions?.originalError as
           | { message: string[] }
           | undefined;
@@ -92,7 +89,6 @@ const configFactory = {
     }),
     AuthModule,
     ApplicationModule,
-    EmployeeModule,
     EmployeeAvailabilityModule,
     UserEmployeeAppointmentModule,
     DatabaseModule,
@@ -106,4 +102,4 @@ const configFactory = {
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule { }
+export class AppModule {}

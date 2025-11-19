@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateProfile } from './interfaces/update-profile';

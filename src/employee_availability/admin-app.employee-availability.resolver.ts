@@ -4,7 +4,7 @@ import { UseGuards } from '@nestjs/common';
 import { EmployeeAvailability } from './models/employee-availability.model';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AddAvailabilityArgs } from './dto/add-availability.args';
 import {
   AdminAppCompanyEmployeeListAvailabilityArgs,

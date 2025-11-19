@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 
 @Injectable()

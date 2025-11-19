@@ -13,7 +13,7 @@ import { Company } from 'src/company_auth/company_auth.decorator';
 import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { AwsService } from 'src/core/modules/aws/aws.service';
-import { EmployeeService } from 'src/employee/employee.service';
+import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
 import { Admin } from 'src/admin_auth/admin-auth.decorator';
