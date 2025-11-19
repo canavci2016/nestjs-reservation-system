@@ -13,8 +13,6 @@ import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_
 import { DatabaseModule } from './database/database.module';
 import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { AdminAuthModule } from './admin_auth/admin_auth.module';
-import { SuperadminAuthModule } from './superadmin_auth/superadmin_auth.module';
-import { UserPackageModule } from './user_package/user_package.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
@@ -90,8 +88,6 @@ const configFactory = {
     DatabaseModule,
     EmployeeAuthModule,
     AdminAuthModule,
-    SuperadminAuthModule,
-    UserPackageModule,
     ConfigModule,
     CoreModule,
   ],

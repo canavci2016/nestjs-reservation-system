@@ -15,7 +15,7 @@ import {
   UserEmployeeAppointmentStatus,
 } from 'src/database/entities/user-employee-appointment.entity';
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
-import { UserPackageService } from 'src/user_package/user_package.service';
+import { UserPackageService } from 'src/application/modules/user_package/user_package.service';
 import { User } from 'src/database/entities/user.entity';
 
 @Injectable()

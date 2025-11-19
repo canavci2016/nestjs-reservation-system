@@ -7,6 +7,8 @@ import { CompanyModule } from './modules/company/company.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { CompanyAuthModule } from './modules/company_auth/company_auth.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UserPackageModule } from './modules/user_package/user_package.module';
+import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { AuthModule } from './modules/auth/auth.module';
     EmployeeModule,
     CompanyAuthModule,
     AuthModule,
+    UserPackageModule,
+    SuperadminAuthModule,
   ],
   exports: [
     BlogModule,
@@ -28,6 +32,8 @@ import { AuthModule } from './modules/auth/auth.module';
     EmployeeModule,
     CompanyAuthModule,
     AuthModule,
+    UserPackageModule,
+    SuperadminAuthModule,
   ],
 })
 export class ApplicationModule {}

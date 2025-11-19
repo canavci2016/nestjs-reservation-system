@@ -3,7 +3,7 @@ import { CompanyService } from './company.service';
 import { CompanyAddInput } from './dto/company-add.input';
 import { CompanyUpdateInput } from './dto/company-update.input';
 import { SuperAdminCompany } from './models/super-admin-company.model';
-import { SuperAdminAuthGuard } from 'src/superadmin_auth/superadmin_auth.guard';
+import { SuperAdminAuthGuard } from 'src/application/modules/superadmin_auth/superadmin_auth.guard';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver()
