@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { CompanyModule } from './modules/company/company.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { CompanyAuthModule } from './modules/company_auth/company_auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CompanyAuthModule } from './modules/company_auth/company_auth.module';
     CompanyModule,
     EmployeeModule,
     CompanyAuthModule,
+    AuthModule,
   ],
   exports: [
     BlogModule,
@@ -25,6 +27,7 @@ import { CompanyAuthModule } from './modules/company_auth/company_auth.module';
     CompanyModule,
     EmployeeModule,
     CompanyAuthModule,
+    AuthModule,
   ],
 })
 export class ApplicationModule {}

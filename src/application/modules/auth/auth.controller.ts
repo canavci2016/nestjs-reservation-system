@@ -33,7 +33,7 @@ export class AuthController {
   ) {
     const user = await this.authService.findUserById(tokenModel.owner_id);
 
-    const rawContent = await readFile('src/auth/views/set-password.hbs', {
+    const rawContent = await readFile('src/application/modules/auth/views/set-password.hbs', {
       encoding: 'utf-8',
     });
     const template = Handlebars.compile(rawContent);

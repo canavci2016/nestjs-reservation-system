@@ -7,8 +7,6 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { CompanyAuthModule } from './application/modules/company_auth/company_auth.module';
-import { AuthModule } from './auth/auth.module';
 import { ApplicationModule } from './application/application.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { UserEmployeeAppointmentModule } from './user_employee_appointment/user_employee_appointment.module';
@@ -44,7 +42,6 @@ const configFactory = {
       secret: process.env.APP_KEY,
       signOptions: { expiresIn: '10d' },
     }),
-    CompanyAuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -87,7 +84,6 @@ const configFactory = {
         };
       },
     }),
-    AuthModule,
     ApplicationModule,
     EmployeeAvailabilityModule,
     UserEmployeeAppointmentModule,
