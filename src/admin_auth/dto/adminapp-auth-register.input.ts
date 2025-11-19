@@ -5,22 +5,22 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class AdminAppAuthRegisterInput {
   @Field()
   @IsString()
-  @IsNotEmpty({ message: 'Şirket ismi boş kalamaz : name' })
+  @IsNotEmpty({ message: 'Şirket ismi boş kalamaz ' })
   name: string;
 
   @IsOptional()
-  @IsEmail({}, { message: 'Geçersiz email formatı : email' })
+  @IsEmail({}, { message: 'Geçersiz email formatı ' })
   @Field({ nullable: true })
   email?: string;
 
   @Field()
   @IsNotEmpty()
   @IsString()
-  @IsNotEmpty({ message: 'Kullanıcı adı boş kalamaz : userName' })
+  @IsNotEmpty({ message: 'Kullanıcı adı boş kalamaz ' })
   userName: string;
 
   @Field()
   @IsString()
-  @IsNotEmpty({ message: 'Şifre boş kalamaz : password' })
+  @IsNotEmpty({ message: 'Şifre boş kalamaz ' })
   password: string;
 }

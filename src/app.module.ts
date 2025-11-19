@@ -79,11 +79,15 @@ const configFactory = {
           | { message: string[] }
           | undefined;
 
-        const messages: string[] = originalError?.message || [];
+        const messages: string[] = [];
+        if (Array.isArray(originalError?.message)) {
+          messages.push(...originalError.message);
+        } else {
+          messages.push(formattedError.message);
+        }
 
-        const message = messages.length
-          ? messages.join(', ')
-          : formattedError.message;
+        const message =
+          messages.length > 0 ? messages.join(', ') : formattedError.message;
         return {
           message,
         };
@@ -108,4 +112,4 @@ const configFactory = {
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule {}
+export class AppModule { }
