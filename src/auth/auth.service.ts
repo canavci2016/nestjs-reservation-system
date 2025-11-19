@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Signup } from './interfaces/sign-up.interface';
@@ -22,7 +22,7 @@ export class AuthService {
     private readonly tokenService: TokenService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
-  ) { }
+  ) {}
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,

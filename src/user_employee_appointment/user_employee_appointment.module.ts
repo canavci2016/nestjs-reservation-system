@@ -4,7 +4,7 @@ import { ClientAppUserEmployeeAppointmentResolver } from './client-app.user-empl
 import { AdminAppUserEmployeeAppointmentResolver } from './admin-app.user-employee-appointment.resolver';
 import { EmployeeAvailabilityModule } from 'src/employee_availability/employee-availability.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from 'src/application/modules/user/user.module';
 import { UserPackageModule } from 'src/user_package/user_package.module';
 
 @Module({

@@ -9,7 +9,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CompanyModule } from './company/company.module';
 import { CompanyAuthModule } from './company_auth/company_auth.module';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ApplicationModule } from './application/application.module';
 import { EmployeeModule } from './employee/employee.module';
@@ -91,7 +90,6 @@ const configFactory = {
         };
       },
     }),
-    UserModule,
     AuthModule,
     ApplicationModule,
     EmployeeModule,

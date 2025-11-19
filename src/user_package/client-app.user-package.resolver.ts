@@ -3,7 +3,7 @@ import { UserPackageService } from './user_package.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthUserDecoratorInterface } from 'src/auth/interfaces/auth-employee-decorator.interface';
 import { User } from 'src/auth/auth.decorator';

@@ -12,7 +12,7 @@ import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
 import { AuthService } from './auth.service';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import { TokenGuard } from 'src/shared/modules/app-token/token.guard';
 import { TokenService } from 'src/core/modules/token/services/token.service';
 import { Token } from 'src/shared/modules/app-token/token.decorator';

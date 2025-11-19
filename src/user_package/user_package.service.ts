@@ -6,7 +6,7 @@ import {
 } from 'src/database/entities/company-user-package.entity';
 import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import { LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
 import * as moment from 'moment';
 

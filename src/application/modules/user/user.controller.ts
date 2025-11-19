@@ -13,9 +13,9 @@ import { Response } from 'express';
 import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
-import { TokenGuard } from 'src/shared/modules/app-token/token.guard';
-import { TokenService } from 'src/core/modules/token/services/token.service';
-import { Token } from 'src/shared/modules/app-token/token.decorator';
+import { TokenGuard } from '../../../shared/modules/app-token/token.guard';
+import { TokenService } from '../../../core/modules/token/services/token.service';
+import { Token } from '../../../shared/modules/app-token/token.decorator';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +32,7 @@ export class UserController {
   ) {
     const user = await this.userService.findOne({ id: tokenModel.owner_id });
 
-    const rawContent = await readFile('src/user/views/set-password.hbs', {
+    const rawContent = await readFile('src/application/modules/user/views/set-password.hbs', {
       encoding: 'utf-8',
     });
     const template = Handlebars.compile(rawContent);

@@ -11,7 +11,7 @@ import { CompanyUserPackage } from './models/company-user-package.model';
 import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package.input';
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
 import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
 import { Employee } from 'src/employee_auth/employee.decorator';
 import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';

@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
-import { User } from 'src/database/entities/user.entity';
+import { User } from '../../../database/entities/user.entity';
 import * as argon2 from 'argon2';
-import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
-import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
+import { Pagination } from '../../../core/modules/pagination/interfaces/pagination.interface';
+import { UserAndCompanyUserPackage } from '../../../database/entities/user-and-company-user-package.entity';
 
 @Injectable()
 export class UserService {

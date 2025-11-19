@@ -9,7 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from 'src/employee_availability/employee-availability.service';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/application/modules/user/user.service';
 import {
   UserEmployeeAppointment,
   UserEmployeeAppointmentStatus,

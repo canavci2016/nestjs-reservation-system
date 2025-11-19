@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AdminAppUserResolver } from './admin-app.user.resolver';
 import { ClientAppUserResolver } from './client-app.user.resolver';
-import { AppTokenModule } from 'src/shared/modules/app-token/app-token.module';
+import { AppTokenModule } from '../../../shared/modules/app-token/app-token.module';
 
 @Global()
 @Module({

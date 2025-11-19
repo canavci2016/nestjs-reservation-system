@@ -1,8 +1,8 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { ConflictException, UseGuards } from '@nestjs/common';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from '../../../company_auth/company_auth.decorator';
 import { UserService } from './user.service';
 import { UserUpdateInput } from './dto/user-update.input';
 

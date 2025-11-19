@@ -1,26 +1,26 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { ConflictException, UseGuards } from '@nestjs/common';
-import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
-import { CompanyAuthGuard } from 'src/company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from 'src/company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from 'src/company_auth/company_auth.decorator';
+import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
+import { CompanyAuthGuard } from '../../../company_auth/company_auth.guard';
+import { AuthCompanyDecoratorInterface } from '../../../company_auth/interfaces/auth-company-decorator.interface';
+import { Company } from '../../../company_auth/company_auth.decorator';
 import { UserService } from './user.service';
 import { UserAddInput } from './dto/user-add.input';
 import { UserResponseDto } from './dto/user-response.dto';
 import { UserUpdateInput } from './dto/user-update.input';
 import * as moment from 'moment';
-import { AwsService } from 'src/core/modules/aws/aws.service';
-import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
-import { Employee } from 'src/employee_auth/employee.decorator';
-import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
-import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
-import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
-import { ConfigService } from 'src/core/modules/config/config.service';
-import { Admin } from 'src/admin_auth/admin-auth.decorator';
-import { AuthAdminDecoratorInterface } from 'src/admin_auth/interfaces/auth-admin-decorator.interface';
-import { AdminAuth } from 'src/admin_auth/admin-auth-with-role.decorator';
-import { TokenService } from 'src/core/modules/token/services/token.service';
-import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
+import { AwsService } from '../../../core/modules/aws/aws.service';
+import { EmployeeAuthGuard } from '../../../employee_auth/employee-auth.guard';
+import { Employee } from '../../../employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from '../../../employee_auth/interfaces/auth-employee-decorator.interface';
+import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
+import { AwsSqsMessageQueryBuilder } from '../../../core/modules/aws/aws-sqs-message-qb';
+import { ConfigService } from '../../../core/modules/config/config.service';
+import { Admin } from '../../../admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from '../../../admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuth } from '../../../admin_auth/admin-auth-with-role.decorator';
+import { TokenService } from '../../../core/modules/token/services/token.service';
+import { TokenTypes } from '../../../shared/modules/app-token/token-types.enum';
 
 @Resolver()
 export class AdminAppUserResolver {
