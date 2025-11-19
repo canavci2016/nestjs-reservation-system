@@ -10,7 +10,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ApplicationModule } from './application/application.module';
 import { EmployeeAvailabilityModule } from './employee_availability/employee-availability.module';
 import { DatabaseModule } from './database/database.module';
-import { EmployeeAuthModule } from './employee_auth/employee_auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
@@ -83,11 +82,9 @@ const configFactory = {
     ApplicationModule,
     EmployeeAvailabilityModule,
     DatabaseModule,
-    EmployeeAuthModule,
-    ConfigModule,
     CoreModule,
   ],
   controllers: [AppController],
   providers: [AppService, configFactory],
 })
-export class AppModule {}
+export class AppModule { }

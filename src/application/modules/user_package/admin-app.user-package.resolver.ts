@@ -12,9 +12,9 @@ import { CompanyAttachUserPackageInput } from './dto/company-attach-user-package
 import { UserAndCompanyUserPackage } from './models/user-and-company-user-package.model';
 import { CompanyDetachUserPackageInput } from './dto/company-detach-user-package.input';
 import { UserService } from 'src/application/modules/user/user.service';
-import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
-import { Employee } from 'src/employee_auth/employee.decorator';
-import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { EmployeeAuthGuard } from 'src/application/modules/employee_auth/employee-auth.guard';
+import { Employee } from 'src/application/modules/employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { CompanyUpdateUserPackageCommonTableInput } from './dto/company-update-user-package-common-table.input';
 

@@ -2,15 +2,15 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeAvailabilityService } from './employee-availability.service';
 import { UseGuards } from '@nestjs/common';
 import { EmployeeAvailability } from './models/employee-availability.model';
-import { Employee } from 'src/employee_auth/employee.decorator';
-import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
+import { Employee } from 'src/application/modules/employee_auth/employee.decorator';
+import { EmployeeAuthGuard } from 'src/application/modules/employee_auth/employee-auth.guard';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AddAvailabilityArgs } from './dto/add-availability.args';
 import {
   AdminAppCompanyEmployeeListAvailabilityArgs,
   EmployeeAppListAvailabilityArgs,
 } from './dto/employeeapp-list-availability.args';
-import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee_auth/interfaces/auth-employee-decorator.interface';
 import { CompanyAuthGuard } from 'src/application/modules/company_auth/company_auth.guard';
 import { Company } from 'src/application/modules/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';

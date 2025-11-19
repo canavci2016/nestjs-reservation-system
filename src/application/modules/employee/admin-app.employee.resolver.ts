@@ -9,9 +9,9 @@ import { Company } from 'src/application/modules/company_auth/company_auth.decor
 import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';
 import { UpdateEmployeeInput } from './dto/update-employee.input';
 import { CompanyService } from 'src/application/modules/company/company.service';
-import { EmployeeAuthGuard } from 'src/employee_auth/employee-auth.guard';
-import { Employee as EmployeeDecorator } from 'src/employee_auth/employee.decorator';
-import { AuthEmployeeDecoratorInterface } from 'src/employee_auth/interfaces/auth-employee-decorator.interface';
+import { EmployeeAuthGuard } from 'src/application/modules/employee_auth/employee-auth.guard';
+import { Employee as EmployeeDecorator } from 'src/application/modules/employee_auth/employee.decorator';
+import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
