@@ -7,12 +7,14 @@ import { EmployeeService } from 'src/application/modules/employee/employee.servi
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateProfile } from './interfaces/update-profile';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class EmployeeAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly jwtService: JwtService,
+    private readonly i18n: I18nService,
   ) { }
 
   async signInByEmailAndPassword(
@@ -23,13 +25,22 @@ export class EmployeeAuthService {
     });
 
     if (!employee) {
-      throw new NotFoundException('employee is not found');
+      throw new NotFoundException(
+        this.i18n.translate('employee_auth.NOT_FOUND', {
+          args: { value: field.userName },
+        }),
+      );
     }
 
-    const result = await this.employeeService.verifyPassword(employee, field.password);
+    const result = await this.employeeService.verifyPassword(
+      employee,
+      field.password,
+    );
 
     if (!result) {
-      throw new UnauthorizedException('employee password is wrong');
+      throw new UnauthorizedException(
+        this.i18n.translate('employee_auth.PASSWORD_WRONG'),
+      );
     }
 
     const payload = { sub: employee.id, username: employee.userName };

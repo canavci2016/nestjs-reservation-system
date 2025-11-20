@@ -1,0 +1,4 @@
+{
+  "NOT_FOUND": "employee with value: \"{value}\" not found",
+  "PASSWORD_WRONG": "employee password is wrong"
+}

@@ -6,7 +6,7 @@ import { User } from '../../../database/entities/user.entity';
 import * as argon2 from 'argon2';
 import { Pagination } from '../../../core/modules/pagination/interfaces/pagination.interface';
 import { UserAndCompanyUserPackage } from '../../../database/entities/user-and-company-user-package.entity';
-import { I18nContext, I18nService } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class UserService {
