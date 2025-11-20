@@ -4,24 +4,22 @@ import { UseGuards } from '@nestjs/common';
 import { EmployeeAvailability } from './models/employee-availability.model';
 import { Employee } from '../employee_auth/employee.decorator';
 import { EmployeeAuthGuard } from '../employee_auth/employee-auth.guard';
-import { EmployeeService } from '../employee/employee.service';
 import { AddAvailabilityArgs } from './dto/add-availability.args';
-import {
-  AdminAppCompanyEmployeeListAvailabilityArgs,
-  EmployeeAppListAvailabilityArgs,
-} from './dto/employeeapp-list-availability.args';
+import { AdminAppCompanyEmployeeListAvailabilityArgs } from './dto/employeeapp-list-availability.args';
 import { AuthEmployeeDecoratorInterface } from '../employee_auth/interfaces/auth-employee-decorator.interface';
 import { CompanyAuthGuard } from '../company_auth/company_auth.guard';
 import { Company } from '../company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
 import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
+import { AdminAuthGuard } from '../admin_auth/admin-auth.guard';
+import { Admin } from '../admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
 
 @Resolver()
 export class AdminAppEmployeeAvailabilityResolver {
   constructor(
     private readonly availabilityService: EmployeeAvailabilityService,
-    private readonly employeeService: EmployeeService,
   ) {
     console.log('AdminAppEmployeeAvailabilityResolver initialized');
   }
@@ -43,15 +41,17 @@ export class AdminAppEmployeeAvailabilityResolver {
     return true;
   }
 
-  @UseGuards(EmployeeAuthGuard)
+  @UseGuards(AdminAuthGuard)
   @Query(() => [EmployeeAvailability])
   async AdminApp_Employee_Availability_list(
-    @Employee() employeeDto: AuthEmployeeDecoratorInterface,
-    @Args() args: EmployeeAppListAvailabilityArgs,
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args() args: AdminAppCompanyEmployeeListAvailabilityArgs,
   ): Promise<EmployeeAvailability[]> {
+    const employeeId = admin.employee?.employee?.id || args.employeeId;
+
     const result = await this.availabilityService.getAvailableTimeSlots({
-      employeeId: employeeDto.sub,
       ...args,
+      employeeId: employeeId,
     });
     return result;
   }
@@ -102,9 +102,10 @@ export class AdminAppEmployeeAvailabilityResolver {
     return Boolean(res.affected);
   }
 
-  //FIXME: when you have a employee's availability you could retrieve it regardless of its ownership
   @UseGuards(CompanyAuthGuard)
-  @Query(() => [EmployeeAvailability])
+  @Query(() => [EmployeeAvailability], {
+    deprecationReason: 'use AdminApp_Employee_Availability_list',
+  })
   async AdminApp_Company_Employee_Availability_list(
     @Company() companyDto: AuthEmployeeDecoratorInterface,
     @Args() args: AdminAppCompanyEmployeeListAvailabilityArgs,

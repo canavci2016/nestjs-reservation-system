@@ -101,10 +101,12 @@ export class AdminAppUserEmployeeAppointmentResolver {
   async AdminApp_Appointment_list(
     @Admin() adminDto: AuthAdminDecoratorInterface,
     @Args() args: SearchAppointmentArgs,
-    @Args('pagination', { nullable: true }, PaginationPipe) pagination: PaginationInput,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
   ): Promise<UserEmployeeAppointment[]> {
     const params = {
-      companyId: adminDto.company?.company?.id,
+      companyId:
+        adminDto.company?.company?.id || adminDto.employee?.employee?.companyId,
       startDate: args.startDate || moment().format('YYYY-MM-DD'),
       endDate: args.endDate || moment().format('YYYY-MM-DD'),
       status: args.status,

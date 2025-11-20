@@ -1,16 +1,13 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 
 @ArgsType()
-export class EmployeeAppListAvailabilityArgs {
+export class AdminAppCompanyEmployeeListAvailabilityArgs {
   @Field({ nullable: true })
   startDate?: string;
 
   @Field({ nullable: true })
   endDate?: string;
-}
 
-@ArgsType()
-export class AdminAppCompanyEmployeeListAvailabilityArgs extends EmployeeAppListAvailabilityArgs {
   @Field()
   employeeId: string;
 }

@@ -166,11 +166,6 @@ export class UserEmployeeAppointmentService {
 
     whereQuery['employeeAvailability'] = {
       ...(whereQuery['employeeAvailability'] || {}),
-      employeeId: Not(IsNull()),
-    };
-
-    whereQuery['employeeAvailability'] = {
-      ...(whereQuery['employeeAvailability'] || {}),
       employee: { deletedAt: IsNull() },
     };
 
