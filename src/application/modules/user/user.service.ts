@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SaveUser } from './interfaces/save-user.interface';
@@ -6,14 +6,14 @@ import { User } from '../../../database/entities/user.entity';
 import * as argon2 from 'argon2';
 import { Pagination } from '../../../core/modules/pagination/interfaces/pagination.interface';
 import { UserAndCompanyUserPackage } from '../../../database/entities/user-and-company-user-package.entity';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
-    @InjectRepository(User)
-    private userAndCUP: Repository<UserAndCompanyUserPackage>,
+    private readonly i18n: I18nService,
   ) {
     console.log('UserService initialized');
   }
@@ -77,6 +77,8 @@ export class UserService {
   }
 
   async save(payload: SaveUser): Promise<User> {
+    await this.checkIfUserNameIsInUse(payload.userName, payload.companyId);
+
     if (payload.password?.trim()) {
       payload.password = await this.generateHashedPassword(payload.password);
     }
@@ -88,6 +90,16 @@ export class UserService {
     const payloadMap = new Map(Object.entries(payload));
 
     if (payloadMap.size > 0) {
+      const userName = payloadMap.get('userName') as string | undefined;
+
+      if (userName) {
+        const user = await this.findOne({ id: id });
+
+        if (user && user.userName != userName) {
+          await this.checkIfUserNameIsInUse(userName, user.companyId);
+        }
+      }
+
       if (payloadMap.get('password')) {
         payloadMap.set(
           'password',
@@ -133,5 +145,20 @@ export class UserService {
       .execute();
 
     return result;
+  }
+
+  async checkIfUserNameIsInUse(userName: string, companyId: string) {
+    const user = await this.findOne({
+      userName: userName,
+      companyId: companyId,
+    });
+
+    if (user) {
+      throw new ConflictException(
+        this.i18n.translate('user.EXISTS', {
+          args: { value: userName },
+        }),
+      );
+    }
   }
 }

@@ -12,7 +12,12 @@ import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
-import { AcceptLanguageResolver, GraphQLWebsocketResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import {
+  AcceptLanguageResolver,
+  GraphQLWebsocketResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
 import * as path from 'path';
 
 const configFactory = {
@@ -96,6 +101,10 @@ const configFactory = {
         { use: QueryResolver, options: ['lang'] },
         AcceptLanguageResolver,
       ],
+      typesOutputPath: path.join(
+        __dirname,
+        '../src/generated/i18n.generated.ts',
+      ),
     }),
   ],
   controllers: [AppController],
