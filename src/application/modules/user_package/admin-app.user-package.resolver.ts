@@ -17,13 +17,17 @@ import { Employee } from 'src/application/modules/employee_auth/employee.decorat
 import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee_auth/interfaces/auth-employee-decorator.interface';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { CompanyUpdateUserPackageCommonTableInput } from './dto/company-update-user-package-common-table.input';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
+import { Admin } from '../admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuthRole } from '../admin_auth/admin-auth-role.enum';
 
 @Resolver()
 export class AdminAppUserPackageResolver {
   constructor(
     private readonly packageService: UserPackageService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -58,8 +62,26 @@ export class AdminAppUserPackageResolver {
     return Boolean(model.affected);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth(AdminAuthRole.COMPANY)
   @Query(() => [CompanyUserPackage])
+  async AdminApp_UserPackage_list(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('pagination', { nullable: true }, PaginationPipe)
+    pagination: PaginationInput,
+  ): Promise<CompanyUserPackage[]> {
+    const companyId =
+      admin.company?.company?.id || admin?.employee?.employee?.companyId;
+    const models = await this.packageService.findAll({
+      companyId: companyId,
+      pagination: pagination,
+    });
+    return models;
+  }
+
+  @UseGuards(CompanyAuthGuard)
+  @Query(() => [CompanyUserPackage], {
+    deprecationReason: 'use the method AdminApp_UserPackage_list',
+  })
   async AdminApp_Company_UserPackage_list(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)

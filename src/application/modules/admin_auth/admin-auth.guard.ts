@@ -11,6 +11,7 @@ import { CompanyService } from 'src/application/modules/company/company.service'
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AuthAdminDecoratorInterface } from './interfaces/auth-admin-decorator.interface';
 import { Reflector } from '@nestjs/core';
+import { AdminAuthRole } from './admin-auth-role.enum';
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
@@ -38,6 +39,14 @@ export class AdminAuthGuard implements CanActivate {
 
       const company = await this.companyService.findOne({ id: payload.sub });
       const employee = await this.employeeService.findOne({ id: payload.sub });
+
+      if (
+        roles.length > 0 &&
+        !roles.includes[AdminAuthRole.EMPLOYEE] &&
+        employee
+      ) {
+        throw new UnauthorizedException();
+      }
 
       if (company || employee) {
         request['admin'] = {
