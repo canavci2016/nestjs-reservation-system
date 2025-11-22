@@ -23,7 +23,8 @@ export class AdminAuthGuard implements CanActivate {
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles =
+      this.reflector.get<string[]>('roles', context.getHandler()) || [];
 
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req as Request;
@@ -41,8 +42,8 @@ export class AdminAuthGuard implements CanActivate {
       const employee = await this.employeeService.findOne({ id: payload.sub });
 
       if (
-        roles.length > 0 &&
-        !roles.includes[AdminAuthRole.EMPLOYEE] &&
+        roles?.length > 0 &&
+        !roles?.includes[AdminAuthRole.EMPLOYEE] &&
         employee
       ) {
         throw new UnauthorizedException();

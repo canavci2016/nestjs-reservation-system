@@ -15,7 +15,7 @@ import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
-import { AdminAuthGuard } from 'src/application/modules/admin_auth/admin-auth.guard';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 
 @Resolver()
 export class AdminAppEmployeeResolver {
@@ -79,7 +79,7 @@ export class AdminAppEmployeeResolver {
     return models;
   }
 
-  @UseGuards(AdminAuthGuard)
+  @AdminAuth()
   @Query(() => [Employee])
   async AdminApp_Employee_list(
     @Admin() admin: AuthAdminDecoratorInterface,
