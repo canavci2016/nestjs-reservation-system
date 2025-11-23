@@ -17,6 +17,7 @@ import {
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { UserPackageService } from 'src/application/modules/user_package/user_package.service';
 import { User } from 'src/database/entities/user.entity';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class UserEmployeeAppointmentService {
@@ -26,6 +27,7 @@ export class UserEmployeeAppointmentService {
     private readonly employeeAvailabilityService: EmployeeAvailabilityService,
     private readonly userService: UserService,
     private readonly userPackageService: UserPackageService,
+    private readonly i18n: I18nService,
   ) {
     console.log('EmployeeAvailabilityService initialized');
   }
@@ -67,7 +69,9 @@ export class UserEmployeeAppointmentService {
 
       if (validAppointments.length >= availability.capacity) {
         throw new UnauthorizedException(
-          `the capacity ${availability.capacity} can not be exceeded`,
+          this.i18n.translate('user_employee_appointment.CAPACITY_EXCEEDED', {
+            args: { value: availability.capacity },
+          }),
         );
       }
 
@@ -76,7 +80,11 @@ export class UserEmployeeAppointmentService {
       );
 
       if (usersBookings.length > 0) {
-        throw new ConflictException('user has already booked this time slot');
+        throw new UnauthorizedException(
+          this.i18n.translate('user_employee_appointment.ALREADY_BOOKED', {
+            args: { value: availability.capacity },
+          }),
+        );
       }
 
       const activePackage = await this.getActivePackageForUser(
@@ -258,7 +266,11 @@ export class UserEmployeeAppointmentService {
       );
 
       if (validAppointments.length >= availability.capacity) {
-        throw new UnauthorizedException('capacity of the session is exceeded');
+        throw new UnauthorizedException(
+          this.i18n.translate('user_employee_appointment.CAPACITY_EXCEEDED', {
+            args: { value: availability.capacity },
+          }),
+        );
       }
     }
 

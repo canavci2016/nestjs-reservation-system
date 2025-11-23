@@ -12,6 +12,10 @@ export type I18nTranslations = {
     "user": {
         "EXISTS": string;
     };
+    "user_employee_appointment": {
+        "CAPACITY_EXCEEDED": string;
+        "ALREADY_BOOKED": string;
+    };
     "validation": {
         "NOT_EMPTY": string;
         "INVALID_EMAIL": string;

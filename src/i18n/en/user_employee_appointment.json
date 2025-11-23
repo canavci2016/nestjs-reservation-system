@@ -1,0 +1,4 @@
+{
+  "CAPACITY_EXCEEDED": "the capacity \"{value}\" can not be exceeded",
+  "ALREADY_BOOKED": "You have already booked an appointment at this time."
+}

@@ -1,0 +1,4 @@
+{
+  "CAPACITY_EXCEEDED": "oturum kapasitesi \"{value}\" olarak belirlenmiştir aşılamaz",
+  "ALREADY_BOOKED": "Bu saatte zaten bir randevu aldınız."
+}
