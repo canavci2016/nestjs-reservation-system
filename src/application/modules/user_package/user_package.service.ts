@@ -33,7 +33,7 @@ export class UserPackageService {
     @InjectRepository(UserAndCompanyUserPackage)
     private userAndCompanyUserPackageRepository: Repository<UserAndCompanyUserPackage>,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   findOne(payload: Partial<CompanyUserPackage>) {
     return this.repository.findOneBy(payload);
@@ -60,6 +60,15 @@ export class UserPackageService {
   async findAllForUserAndPackage(
     options: FindAllOptionsForUserAndCompanyPackage | null = null,
   ) {
+    const user = await this.userService.findOne({
+      companyId: options?.companyId,
+      id: options?.userId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('user isnot found');
+    }
+
     const query = {};
     const whereQuery = {};
 
@@ -110,7 +119,13 @@ export class UserPackageService {
       );
     }
 
-    return updatedPackages;
+    const result = updatedPackages.map((m) => ({
+      ...m,
+      startDate: m.startDate.toString(),
+      endDate: m.endDate.toString(),
+    }));
+
+    return result;
   }
 
   async save(payload: Partial<CompanyUserPackage>) {

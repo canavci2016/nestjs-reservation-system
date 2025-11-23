@@ -453,7 +453,7 @@ type Query {
   AdminApp_Company_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]! @deprecated(reason: "use AdminApp_Employee_Availability_list")
   AdminApp_Company_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_Company_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]! @deprecated(reason: "use the method AdminApp_UserPackage_list")
-  AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_Company_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]! @deprecated(reason: "use AdminApp_UserPackage_listForAUser")
   AdminApp_Company_UserPackage_updateForAUser(packageId: String!, payload: CompanyUpdateUserPackageCommonTableInput!, user: String!): Boolean!
   AdminApp_Company_User_detail(id: String): UserResponseDto!
   AdminApp_Company_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
@@ -461,12 +461,13 @@ type Query {
   AdminApp_Employee_Appointment_list(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]! @deprecated(reason: "use the method AdminApp_Appointment_list instead")
   AdminApp_Employee_Availability_list(employeeId: String!, endDate: String, startDate: String): [EmployeeAvailability!]!
   AdminApp_Employee_Employee_list(pagination: PaginationInput): [Employee!]!
-  AdminApp_Employee_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_Employee_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]! @deprecated(reason: "use AdminApp_UserPackage_listForAUser")
   AdminApp_Employee_User_detail(id: String): UserResponseDto!
   AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   AdminApp_Employee_getProfile: AuthEmployee!
   AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
+  AdminApp_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_User_detail(id: String): UserResponseDto!
   AdminApp_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   ClientApp_Announcement_detail(id: String!): AnnouncementResponseDto!
