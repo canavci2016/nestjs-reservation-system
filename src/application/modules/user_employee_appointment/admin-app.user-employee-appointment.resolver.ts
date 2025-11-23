@@ -17,8 +17,8 @@ import { EmployeeService } from 'src/application/modules/employee/employee.servi
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
 import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
-import { AdminAuthGuard } from 'src/application/modules/admin_auth/admin-auth.guard';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 
 @Resolver()
 export class AdminAppUserEmployeeAppointmentResolver {
@@ -96,7 +96,7 @@ export class AdminAppUserEmployeeAppointmentResolver {
     return true;
   }
 
-  @UseGuards(AdminAuthGuard)
+  @AdminAuth()
   @Query(() => [UserEmployeeAppointment])
   async AdminApp_Appointment_list(
     @Admin() adminDto: AuthAdminDecoratorInterface,
