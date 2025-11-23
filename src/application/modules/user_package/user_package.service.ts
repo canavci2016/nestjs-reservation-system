@@ -122,7 +122,7 @@ export class UserPackageService {
   async deleteById(condition: Pick<CompanyUserPackage, 'id' | 'companyId'>) {
     const result = await this.repository
       .createQueryBuilder()
-      .delete()
+      .softDelete()
       .from(CompanyUserPackage)
       .where(condition)
       .execute();
