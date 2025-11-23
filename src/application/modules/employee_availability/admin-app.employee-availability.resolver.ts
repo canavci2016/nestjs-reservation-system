@@ -12,9 +12,9 @@ import { Company } from '../company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
 import { AddEmployeeAvailabilityArgs } from './dto/add-employee-availability.args';
 import { UpdateEmployeeAvailabilityInput } from './dto/update-employee-availability.input';
-import { AdminAuthGuard } from '../admin_auth/admin-auth.guard';
 import { Admin } from '../admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 
 @Resolver()
 export class AdminAppEmployeeAvailabilityResolver {
@@ -41,7 +41,7 @@ export class AdminAppEmployeeAvailabilityResolver {
     return true;
   }
 
-  @UseGuards(AdminAuthGuard)
+  @AdminAuth()
   @Query(() => [EmployeeAvailability])
   async AdminApp_Employee_Availability_list(
     @Admin() admin: AuthAdminDecoratorInterface,
