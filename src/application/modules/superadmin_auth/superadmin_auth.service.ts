@@ -16,9 +16,7 @@ export class SuperAdminAuthService {
     @InjectRepository(SuperAdmin)
     private repository: Repository<SuperAdmin>,
     private readonly jwtService: JwtService,
-  ) {
-    console.log('CompanyService initialized');
-  }
+  ) {}
 
   findAll() {
     return this.repository.find();

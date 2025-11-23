@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
@@ -8,12 +8,14 @@ import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
 @Injectable()
 export class CompanyService {
+  private readonly logger = new Logger(CompanyService.name);
+
   constructor(
     @InjectRepository(Company)
     private repository: Repository<Company>,
     private readonly fileUploadService: FileUploadService,
   ) {
-    console.log('CompanyService initialized');
+    this.logger.log('CompanyService initialized');
   }
 
   findAll(query: FindManyOptions = {}): Promise<Company[]> {

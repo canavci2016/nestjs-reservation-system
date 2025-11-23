@@ -6,10 +6,7 @@ export class JwtService {
   constructor(
     @Inject('TOKEN_JWT_SECRET') private readonly secret: string,
     private readonly jwtService: NestJwtService,
-  ) {
-    console.log(this.secret);
-    console.log('jwtService initialized');
-  }
+  ) {}
   async getToken(payload: Record<any, any>) {
     return this.jwtService.signAsync(payload, { secret: this.secret });
   }

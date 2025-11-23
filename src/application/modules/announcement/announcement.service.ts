@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
@@ -14,12 +14,14 @@ interface FindAllOptions {
 
 @Injectable()
 export class AnnouncementService {
+  private readonly logger = new Logger(AnnouncementService.name);
+
   constructor(
     @InjectRepository(Announcement)
     private repository: Repository<Announcement>,
     private readonly fileUploadService: FileUploadService,
   ) {
-    console.log('BlogService initialized');
+    this.logger.log('AnnouncementService initialized');
   }
 
   findOne(payload: Partial<Announcement>): Promise<Announcement | null> {

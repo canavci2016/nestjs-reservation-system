@@ -20,9 +20,7 @@ export class ClientAppUserEmployeeAppointmentResolver {
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
     private readonly employeeService: EmployeeService,
-  ) {
-    console.log('ClientAppUserEmployeeAppointmentResolver initialized');
-  }
+  ) {}
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)

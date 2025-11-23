@@ -20,9 +20,7 @@ import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 export class AdminAppEmployeeAvailabilityResolver {
   constructor(
     private readonly availabilityService: EmployeeAvailabilityService,
-  ) {
-    console.log('AdminAppEmployeeAvailabilityResolver initialized');
-  }
+  ) { }
 
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)

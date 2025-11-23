@@ -33,9 +33,7 @@ export class UserPackageService {
     @InjectRepository(UserAndCompanyUserPackage)
     private userAndCompanyUserPackageRepository: Repository<UserAndCompanyUserPackage>,
     private readonly userService: UserService,
-  ) {
-    console.log('UserPackageService initialized');
-  }
+  ) {}
 
   findOne(payload: Partial<CompanyUserPackage>) {
     return this.repository.findOneBy(payload);

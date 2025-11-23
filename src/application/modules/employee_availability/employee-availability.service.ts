@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,12 +13,14 @@ import { UserEmployeeAppointmentStatus } from '../../../database/entities/user-e
 
 @Injectable()
 export class EmployeeAvailabilityService {
+  private readonly logger = new Logger(EmployeeAvailabilityService.name);
+
   constructor(
     @InjectRepository(EmployeeAvailability)
     private repository: Repository<EmployeeAvailability>,
     private readonly employeeService: EmployeeService,
   ) {
-    console.log('EmployeeAvailabilityService initialized');
+    this.logger.log('EmployeeAvailabilityService initialized');
   }
 
   async getAvailableTimeSlots(payload: {

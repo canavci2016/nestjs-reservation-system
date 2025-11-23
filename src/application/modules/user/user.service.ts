@@ -14,9 +14,7 @@ export class UserService {
     @InjectRepository(User)
     private repository: Repository<User>,
     private readonly i18n: I18nService,
-  ) {
-    console.log('UserService initialized');
-  }
+  ) {}
 
   async findAll(
     options: {

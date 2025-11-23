@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
@@ -8,12 +8,14 @@ import { FileUploadService } from '../../../shared/modules/file-upload/file-uplo
 
 @Injectable()
 export class BlogService {
+  private readonly logger = new Logger(BlogService.name);
+
   constructor(
     @InjectRepository(Blog)
     private repository: Repository<Blog>,
     private readonly fileUploadService: FileUploadService,
   ) {
-    console.log('BlogService initialized');
+    this.logger.log('BlogService initialized');
   }
 
   findOne(payload: Partial<Omit<Blog, 'company'>>) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
@@ -9,12 +9,14 @@ import * as argon2 from 'argon2';
 
 @Injectable()
 export class EmployeeService {
+  private readonly logger = new Logger(EmployeeService.name);
+
   constructor(
     @InjectRepository(Employee)
     private repository: Repository<Employee>,
     private readonly awsService: AwsService,
   ) {
-    console.log('CompanyService initialized');
+    this.logger.log('EmployeeService initialized');
   }
 
   findAll(options: FindAllOptions | null = null): Promise<Employee[]> {

@@ -3,7 +3,6 @@ import { EmployeeAvailabilityService } from './employee-availability.service';
 import { UseGuards } from '@nestjs/common';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';
-import { EmployeeService } from '../employee/employee.service';
 import { CompanyAppGuard } from '../company_auth/company_app.guard';
 import { CompanyApp } from '../company_auth/company_app.decorator';
 
@@ -11,10 +10,7 @@ import { CompanyApp } from '../company_auth/company_app.decorator';
 export class ClientAppEmployeeAvailabilityResolver {
   constructor(
     private readonly availabilityService: EmployeeAvailabilityService,
-    private readonly employeeService: EmployeeService,
-  ) {
-    console.log('ClientAppEmployeeAvailabilityResolver initialized');
-  }
+  ) {}
 
   @UseGuards(CompanyAppGuard)
   @Query(() => [EmployeeAvailability])

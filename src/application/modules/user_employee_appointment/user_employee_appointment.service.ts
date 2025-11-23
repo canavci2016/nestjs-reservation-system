@@ -28,9 +28,7 @@ export class UserEmployeeAppointmentService {
     private readonly userService: UserService,
     private readonly userPackageService: UserPackageService,
     private readonly i18n: I18nService,
-  ) {
-    console.log('EmployeeAvailabilityService initialized');
-  }
+  ) {}
 
   async book(
     params: Pick<

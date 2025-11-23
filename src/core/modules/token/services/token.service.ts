@@ -10,9 +10,7 @@ export class TokenService {
     @InjectRepository(TokenEntity)
     private repository: Repository<TokenEntity>,
     private jwtService: JwtService,
-  ) {
-    console.log('CompanyService initialized');
-  }
+  ) {}
 
   async save(
     payload: Partial<Pick<TokenEntity, 'startAt' | 'content'>> &

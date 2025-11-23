@@ -13,7 +13,6 @@ import { Company } from 'src/application/modules/company_auth/company_auth.decor
 import { CompanyBookAppointmentInput } from './dto/company-book-appointment.input';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
 import { AwsService } from 'src/core/modules/aws/aws.service';
-import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AuthAdminDecoratorInterface } from 'src/application/modules/admin_auth/interfaces/auth-admin-decorator.interface';
 import { Admin } from 'src/application/modules/admin_auth/admin-auth.decorator';
@@ -25,10 +24,7 @@ export class AdminAppUserEmployeeAppointmentResolver {
   constructor(
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
-    private readonly employeeService: EmployeeService,
-  ) {
-    console.log('AdminAppUserEmployeeAppointmentResolver initialized');
-  }
+  ) {}
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
