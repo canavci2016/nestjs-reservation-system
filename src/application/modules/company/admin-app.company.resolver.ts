@@ -6,7 +6,6 @@ import { CompanyAuthGuard } from 'src/application/modules/company_auth/company_a
 import { Company } from 'src/application/modules/company_auth/company_auth.decorator';
 import { AuthCompanyDecoratorInterface } from 'src/application/modules/company_auth/interfaces/auth-company-decorator.interface';
 import { UseGuards } from '@nestjs/common';
-import { CompanyAddInput } from './dto/company-add.input';
 
 @Resolver()
 export class AdminAppCompanyResolver {

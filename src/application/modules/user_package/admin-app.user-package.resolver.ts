@@ -142,16 +142,22 @@ export class AdminAppUserPackageResolver {
     return Boolean(model.affected);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth(AdminAuthRole.COMPANY)
   @Mutation(() => Boolean)
   async AdminApp_Company_UserPackage_attach(
-    @Company() company: AuthCompanyDecoratorInterface,
+    @Admin() admin: AuthAdminDecoratorInterface,
     @Args('payload') payload: CompanyAttachUserPackageInput,
   ): Promise<boolean> {
+    const companyId =
+      admin.company?.company?.id || admin?.employee?.employee?.companyId;
+    if (!companyId) {
+      throw new NotFoundException('Company context is not found for admin');
+    }
+
     const model = await this.packageService.attachACompanyUserPackageToUser({
       userId: payload.userId,
       id: payload.id,
-      companyId: company.sub,
+      companyId: companyId,
     });
     return Boolean(model);
   }
