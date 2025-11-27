@@ -62,17 +62,15 @@ export class AdminAppUserPackageResolver {
     return Boolean(model.affected);
   }
 
-  @AdminAuth(AdminAuthRole.COMPANY)
+  @AdminAuth(AdminAuthRole.COMPANY, AdminAuthRole.EMPLOYEE)
   @Query(() => [CompanyUserPackage])
   async AdminApp_UserPackage_list(
     @Admin() admin: AuthAdminDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
   ): Promise<CompanyUserPackage[]> {
-    const companyId =
-      admin.company?.company?.id || admin?.employee?.employee?.companyId;
     const models = await this.packageService.findAll({
-      companyId: companyId,
+      companyId: admin.companyId,
       pagination: pagination,
     });
     return models;
@@ -148,16 +146,10 @@ export class AdminAppUserPackageResolver {
     @Admin() admin: AuthAdminDecoratorInterface,
     @Args('payload') payload: CompanyAttachUserPackageInput,
   ): Promise<boolean> {
-    const companyId =
-      admin.company?.company?.id || admin?.employee?.employee?.companyId;
-    if (!companyId) {
-      throw new NotFoundException('Company context is not found for admin');
-    }
-
     const model = await this.packageService.attachACompanyUserPackageToUser({
       userId: payload.userId,
       id: payload.id,
-      companyId: companyId,
+      companyId: admin.companyId,
     });
     return Boolean(model);
   }
@@ -182,12 +174,9 @@ export class AdminAppUserPackageResolver {
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
   ): Promise<UserAndCompanyUserPackage[]> {
-    const companyId =
-      admin.company?.company?.id || admin?.employee?.employee?.companyId;
-
     const models = await this.packageService.findAllForUserAndPackage({
       userId: userId,
-      companyId,
+      companyId: admin.companyId,
       pagination: pagination,
     });
 

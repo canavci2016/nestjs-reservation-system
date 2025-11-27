@@ -51,6 +51,9 @@ export class AdminAuthGuard implements CanActivate {
 
       if (company || employee) {
         request['admin'] = {
+          sub: payload.sub,
+          username: payload.username,
+          companyId: company?.id || employee?.companyId || '',
           company: { ...payload, company },
           employee: { ...payload, employee },
         };

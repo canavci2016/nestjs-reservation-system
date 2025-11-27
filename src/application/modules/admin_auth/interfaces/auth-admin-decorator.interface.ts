@@ -4,6 +4,7 @@ import { AuthEmployeeDecoratorInterface } from 'src/application/modules/employee
 export interface AuthAdminDecoratorInterface {
   sub: string;
   username: string;
+  companyId: string;
   company?: AuthCompanyDecoratorInterface;
   employee?: AuthEmployeeDecoratorInterface;
 }

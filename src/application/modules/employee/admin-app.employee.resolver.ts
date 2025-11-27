@@ -22,7 +22,7 @@ export class AdminAppEmployeeResolver {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly companyService: CompanyService,
-  ) {}
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -91,7 +91,7 @@ export class AdminAppEmployeeResolver {
     }
 
     const models = await this.employeeService.findAll({
-      companyId: admin?.company?.company?.id,
+      companyId: admin.companyId,
       pagination: pagination,
     });
     return models;

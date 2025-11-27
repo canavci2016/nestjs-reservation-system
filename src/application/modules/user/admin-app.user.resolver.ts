@@ -113,8 +113,7 @@ export class AdminAppUserResolver {
   ): Promise<UserResponseDto[]> {
     const models = await this.userService.findAll({
       q,
-      companyId:
-        admin?.company?.company?.id || admin?.employee?.employee?.companyId,
+      companyId: admin.companyId,
       pagination: pagination,
     });
     return models;
@@ -127,8 +126,7 @@ export class AdminAppUserResolver {
     @Args('id', { nullable: true }) id: string,
   ) {
     const model = await this.userService.findOne({
-      companyId:
-        admin?.company?.company?.id || admin?.employee?.employee?.companyId,
+      companyId: admin.companyId,
       id: id,
     });
     return model;
