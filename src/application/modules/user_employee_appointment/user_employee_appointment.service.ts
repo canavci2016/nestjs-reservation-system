@@ -28,7 +28,7 @@ export class UserEmployeeAppointmentService {
     private readonly userService: UserService,
     private readonly userPackageService: UserPackageService,
     private readonly i18n: I18nService,
-  ) {}
+  ) { }
 
   async book(
     params: Pick<
@@ -124,6 +124,63 @@ export class UserEmployeeAppointmentService {
       pagination?: Pagination;
     } = {},
   ) {
+    const [rawHistories] = await this.findAll({
+      ...params,
+      relations: {
+        employeeAvailability: { employee: true },
+        user: true,
+      },
+    });
+
+    const histories = rawHistories.map((item) => {
+      const obj = {
+        ...item,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        employeeAvailability: item['__employeeAvailability__'],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        user: item['__user__'],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        employee: item['__employeeAvailability__'].employee,
+      };
+
+      return obj;
+    });
+
+    return histories;
+  }
+
+  async count(
+    params: Partial<
+      Pick<
+        UserEmployeeAppointment,
+        'id' | 'userId' | 'status' | 'employeeAvailabilityId'
+      >
+    > & {
+      employeeId?: string;
+      companyId?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ) {
+    const [, count] = await this.findAll(params);
+    return count;
+  }
+
+  async findAll(
+    params: Partial<
+      Pick<
+        UserEmployeeAppointment,
+        'id' | 'userId' | 'status' | 'employeeAvailabilityId'
+      >
+    > & {
+      employeeId?: string;
+      companyId?: string;
+      startDate?: string;
+      endDate?: string;
+      pagination?: Pagination;
+      relations?: Record<any, any>;
+    } = {},
+  ) {
     const whereQuery: Record<any, any> & {
       employeeAvailability?: Record<any, any>;
     } = {};
@@ -186,30 +243,15 @@ export class UserEmployeeAppointmentService {
     }
 
     query['order'] = { createdAt: 'desc' };
-    query['relations'] = {
-      employeeAvailability: { employee: true },
-      user: true,
-    };
+    if (params.relations) {
+      query['relations'] = params.relations;
+    }
+
     query['where'] = whereQuery;
     query['withDeleted'] = true;
 
-    const rawHistories = await this.repository.find(query);
-
-    const histories = rawHistories.map((item) => {
-      const obj = {
-        ...item,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        employeeAvailability: item['__employeeAvailability__'],
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        user: item['__user__'],
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-        employee: item['__employeeAvailability__'].employee,
-      };
-
-      return obj;
-    });
-
-    return histories;
+    const result = await this.repository.findAndCount(query);
+    return result;
   }
 
   async save(

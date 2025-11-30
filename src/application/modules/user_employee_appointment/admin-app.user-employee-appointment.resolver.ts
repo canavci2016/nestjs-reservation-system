@@ -24,7 +24,7 @@ export class AdminAppUserEmployeeAppointmentResolver {
   constructor(
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
-  ) {}
+  ) { }
 
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
@@ -101,8 +101,7 @@ export class AdminAppUserEmployeeAppointmentResolver {
     pagination: PaginationInput,
   ): Promise<UserEmployeeAppointment[]> {
     const params = {
-      companyId:
-        adminDto.company?.company?.id || adminDto.employee?.employee?.companyId,
+      companyId: adminDto.companyId,
       startDate: args.startDate || moment().format('YYYY-MM-DD'),
       endDate: args.endDate || moment().format('YYYY-MM-DD'),
       status: args.status,
@@ -112,6 +111,24 @@ export class AdminAppUserEmployeeAppointmentResolver {
     };
     const list = await this.appointmentService.history(params);
     return list;
+  }
+
+  @AdminAuth()
+  @Query(() => Number)
+  async AdminApp_Appointment_count(
+    @Admin() adminDto: AuthAdminDecoratorInterface,
+    @Args() args: SearchAppointmentArgs,
+  ) {
+    const params = {
+      companyId: adminDto.companyId,
+      startDate: args.startDate || moment().format('YYYY-MM-DD'),
+      endDate: args.endDate || moment().format('YYYY-MM-DD'),
+      status: args.status,
+      userId: args.userId,
+      employeeId: adminDto.employee?.employee?.id || args.employeeId,
+    };
+    const count = await this.appointmentService.count(params);
+    return count;
   }
 
   @UseGuards(CompanyAuthGuard)
