@@ -468,6 +468,7 @@ type Query {
   AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
   AdminApp_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
+  AdminApp_User_Count(q: String): Float!
   AdminApp_User_detail(id: String): UserResponseDto!
   AdminApp_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   ClientApp_Announcement_detail(id: String!): AnnouncementResponseDto!

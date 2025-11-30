@@ -14,7 +14,7 @@ export class UserService {
     @InjectRepository(User)
     private repository: Repository<User>,
     private readonly i18n: I18nService,
-  ) {}
+  ) { }
 
   async findAll(
     options: {
@@ -68,6 +68,32 @@ export class UserService {
     });
 
     return updatedUsers;
+  }
+
+  async count(
+    options: {
+      q?: string;
+      companyId?: string;
+    } | null = null,
+  ) {
+    const whereQuery = {};
+
+    if (options?.companyId) {
+      whereQuery['companyId'] = options.companyId;
+    }
+
+    if (options?.q) {
+      whereQuery['name'] = Like(`%${options.q}%`);
+    }
+
+    const alias = 'user';
+
+    const count = await this.repository
+      .createQueryBuilder(alias)
+      .where(whereQuery)
+      .getCount();
+
+    return count;
   }
 
   findOne(payload: Partial<Omit<User, 'company'>>) {

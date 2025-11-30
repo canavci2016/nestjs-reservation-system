@@ -120,6 +120,19 @@ export class AdminAppUserResolver {
   }
 
   @AdminAuth()
+  @Query(() => Number)
+  async AdminApp_User_Count(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('q', { nullable: true }) q: string,
+  ): Promise<number> {
+    const count = await this.userService.count({
+      q,
+      companyId: admin.companyId,
+    });
+    return count;
+  }
+
+  @AdminAuth()
   @Query(() => UserResponseDto)
   async AdminApp_User_detail(
     @Admin() admin: AuthAdminDecoratorInterface,
