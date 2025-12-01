@@ -32,11 +32,11 @@ export class AdminAppUserResolver {
   ) { }
 
   @UseGuards(CompanyAuthGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => UserResponseDto)
   async AdminApp_Company_User_add(
     @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: UserAddInput,
-  ): Promise<boolean> {
+  ): Promise<UserResponseDto> {
     const userModel = await this.userService.save({
       ...payload,
       companyId: company.sub,
@@ -66,7 +66,7 @@ export class AdminAppUserResolver {
       const response = await this.awsService.pushIntoQueue(attributes.getObj());
     }
 
-    return Boolean(userModel);
+    return userModel;
   }
 
   //TODO: remove this use AdminApp_User_list
@@ -136,7 +136,7 @@ export class AdminAppUserResolver {
   @Query(() => UserResponseDto)
   async AdminApp_User_detail(
     @Admin() admin: AuthAdminDecoratorInterface,
-    @Args('id', { nullable: true }) id: string,
+    @Args('id') id: string,
   ) {
     const model = await this.userService.findOne({
       companyId: admin.companyId,

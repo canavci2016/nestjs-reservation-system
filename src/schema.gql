@@ -409,7 +409,7 @@ type Mutation {
   AdminApp_Company_UserPackage_delete(id: String!): Boolean!
   AdminApp_Company_UserPackage_detach(payload: CompanyDetachUserPackageInput!): Boolean!
   AdminApp_Company_UserPackage_update(id: String!, payload: CompanyUpdateUserPackageInput!): Boolean!
-  AdminApp_Company_User_add(payload: UserAddInput!): Boolean!
+  AdminApp_Company_User_add(payload: UserAddInput!): UserResponseDto!
   AdminApp_Company_User_delete(id: String!): Boolean!
   AdminApp_Company_User_update(payload: UserUpdateInput!, userId: String!): Boolean!
   AdminApp_Company_updateProfile(payload: CompanySelfUpdateInput!): Boolean!
@@ -470,7 +470,7 @@ type Query {
   AdminApp_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_User_Count(q: String): Float!
-  AdminApp_User_detail(id: String): UserResponseDto!
+  AdminApp_User_detail(id: String!): UserResponseDto!
   AdminApp_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   ClientApp_Announcement_detail(id: String!): AnnouncementResponseDto!
   ClientApp_Announcement_list(pagination: PaginationInput): [AnnouncementResponseDto!]!
