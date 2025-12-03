@@ -1,4 +1,5 @@
 {
   "CAPACITY_EXCEEDED": "oturum kapasitesi \"{value}\" olarak belirlenmiştir aşılamaz",
-  "ALREADY_BOOKED": "Bu saatte zaten bir randevu aldınız."
+  "ALREADY_BOOKED": "Bu saatte zaten bir randevu aldınız.",
+  "ACTIVE_PACKAGE_NOT_FOUND": "Kullanıcı için aktif paket bulunamadı. Lütfen önce bir paket atayın."
 }

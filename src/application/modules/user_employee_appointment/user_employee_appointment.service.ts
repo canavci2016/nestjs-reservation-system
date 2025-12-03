@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { EmployeeAvailabilityService } from '../employee_availability/employee-availability.service';
 import { UserService } from 'src/application/modules/user/user.service';
 import {
@@ -429,7 +429,14 @@ export class UserEmployeeAppointmentService {
     );
 
     if (packages.length == 0) {
-      throw new NotFoundException('active package is not found for the user');
+      throw new NotFoundException(
+        this.i18n.translate(
+          'user_employee_appointment.ACTIVE_PACKAGE_NOT_FOUND',
+          {
+            lang: 'tr',
+          },
+        ),
+      );
     }
 
     return packages[0];

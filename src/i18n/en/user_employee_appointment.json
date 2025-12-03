@@ -1,4 +1,5 @@
 {
   "CAPACITY_EXCEEDED": "the capacity \"{value}\" can not be exceeded",
-  "ALREADY_BOOKED": "You have already booked an appointment at this time."
+  "ALREADY_BOOKED": "You have already booked an appointment at this time.",
+  "ACTIVE_PACKAGE_NOT_FOUND": "Active package is not found for the user"
 }

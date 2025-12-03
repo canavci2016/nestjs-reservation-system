@@ -21,6 +21,7 @@ import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin
 import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 import { TokenService } from '../../../core/modules/token/services/token.service';
 import { TokenTypes } from '../../../shared/modules/app-token/token-types.enum';
+import { RemoveSpacesPipe } from 'src/core/pipes/remove-spaces-pipe';
 
 @Resolver()
 export class AdminAppUserResolver {
@@ -35,7 +36,7 @@ export class AdminAppUserResolver {
   @Mutation(() => UserResponseDto)
   async AdminApp_Company_User_add(
     @Company() company: AuthCompanyDecoratorInterface,
-    @Args('payload') payload: UserAddInput,
+    @Args('payload', RemoveSpacesPipe) payload: UserAddInput,
   ): Promise<UserResponseDto> {
     const userModel = await this.userService.save({
       ...payload,
