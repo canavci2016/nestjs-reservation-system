@@ -69,6 +69,7 @@ export class UserEmployeeAppointmentService {
         throw new UnauthorizedException(
           this.i18n.translate('user_employee_appointment.CAPACITY_EXCEEDED', {
             args: { value: availability.capacity },
+            lang: 'tr',
           }),
         );
       }
@@ -309,6 +310,7 @@ export class UserEmployeeAppointmentService {
         throw new UnauthorizedException(
           this.i18n.translate('user_employee_appointment.CAPACITY_EXCEEDED', {
             args: { value: availability.capacity },
+            lang: 'tr',
           }),
         );
       }
