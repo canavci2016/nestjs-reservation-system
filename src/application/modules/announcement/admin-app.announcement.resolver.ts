@@ -3,14 +3,13 @@ import { PaginationInput } from '../../../core/modules/pagination/dto/pagination
 import { AnnouncementService } from './announcement.service';
 import { AnnouncementResponseDto } from './dto/announcement-response.dto';
 import { AddAnnouncementInput } from './dto/add-announcement.input';
-import { CompanyAuthGuard } from '../company_auth/company_auth.guard';
-import { AuthCompanyDecoratorInterface } from '../company_auth/interfaces/auth-company-decorator.interface';
-import { Company } from '../company_auth/company_auth.decorator';
 import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from '../../../core/modules/aws/aws-sqs-message-qb';
 import { AwsService } from '../../../core/modules/aws/aws.service';
-import { UseGuards } from '@nestjs/common';
+import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
+import { Admin } from '../admin_auth/admin-auth.decorator';
+import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
 
 @Resolver()
 export class AdminAppAnnouncementResolver {
@@ -19,15 +18,15 @@ export class AdminAppAnnouncementResolver {
     private readonly awsService: AwsService,
   ) {}
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth()
   @Mutation(() => Boolean)
   async AdminApp_Company_Announcement_add(
-    @Company() company: AuthCompanyDecoratorInterface,
+    @Admin() admin: AuthAdminDecoratorInterface,
     @Args('payload') payload: AddAnnouncementInput,
   ): Promise<boolean> {
     const model = await this.announcementService.save({
       ...payload,
-      companyId: company.sub,
+      companyId: admin.companyId,
       isActive: true,
     });
 
@@ -40,47 +39,47 @@ export class AdminAppAnnouncementResolver {
     return Boolean(response.$metadata.httpStatusCode === 200);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth()
   @Mutation(() => Boolean)
   async AdminApp_Company_Announcement_update(
-    @Company() company: AuthCompanyDecoratorInterface,
+    @Admin() admin: AuthAdminDecoratorInterface,
     @Args('id') id: string,
     @Args('payload') payload: UpdateAnnouncementInput,
   ): Promise<boolean> {
     const model = await this.announcementService.updateById(
-      { id, companyId: company.sub },
+      { id, companyId: admin.companyId },
       {
         ...payload,
-        companyId: company.sub,
+        companyId: admin.companyId,
         isActive: true,
       },
     );
     return Boolean(model.affected);
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth()
   @Query(() => [AnnouncementResponseDto])
   async AdminApp_Company_Announcement_list(
-    @Company() company: AuthCompanyDecoratorInterface,
+    @Admin() admin: AuthAdminDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
   ): Promise<AnnouncementResponseDto[]> {
     const models = await this.announcementService.findAll({
-      companyId: company.sub,
+      companyId: admin.companyId,
       pagination: pagination,
     });
     return models;
   }
 
-  @UseGuards(CompanyAuthGuard)
+  @AdminAuth()
   @Mutation(() => Boolean)
   async AdminApp_Company_Announcement_delete(
-    @Company() company: AuthCompanyDecoratorInterface,
+    @Admin() admin: AuthAdminDecoratorInterface,
     @Args('id') id: string,
   ): Promise<boolean> {
     const model = await this.announcementService.deleteById({
       id,
-      companyId: company.sub,
+      companyId: admin.companyId,
     });
     return Boolean(model.affected);
   }

@@ -181,6 +181,7 @@ export class UserService {
       throw new ConflictException(
         this.i18n.translate('user.EXISTS', {
           args: { value: userName },
+          lang: 'tr',
         }),
       );
     }

@@ -15,6 +15,7 @@ export type I18nTranslations = {
     "user_employee_appointment": {
         "CAPACITY_EXCEEDED": string;
         "ALREADY_BOOKED": string;
+        "ACTIVE_PACKAGE_NOT_FOUND": string;
     };
     "validation": {
         "NOT_EMPTY": string;
