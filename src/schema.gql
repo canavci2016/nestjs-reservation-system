@@ -58,6 +58,14 @@ type AnnouncementResponseDto {
   title: String!
 }
 
+type AuthAdminProfileResponseDto {
+  """company id"""
+  companyId: String!
+
+  """Enable user package system"""
+  enableUserPackageSystem: Boolean!
+}
+
 type AuthAdminResponseDto {
   """user name"""
   access_token: String!
@@ -449,6 +457,7 @@ type Query {
   AdminApp_Appointment_count(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): Float!
   AdminApp_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]!
   AdminApp_Auth_ForgetPassword(userNameOrEmail: String!): Boolean!
+  AdminApp_Auth_profile: AuthAdminProfileResponseDto!
   AdminApp_Company_Announcement_list(pagination: PaginationInput): [AnnouncementResponseDto!]!
   AdminApp_Company_Appointment_list(employeeId: String, endDate: String, pagination: PaginationInput, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): [UserEmployeeAppointment!]! @deprecated(reason: "use the method AdminApp_Appointment_list instead")
   AdminApp_Company_Blog_list(pagination: PaginationInput): [Blog!]!

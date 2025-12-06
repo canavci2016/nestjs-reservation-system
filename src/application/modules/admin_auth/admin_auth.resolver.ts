@@ -13,11 +13,14 @@ import { Admin } from './admin-auth.decorator';
 import { AdminAuth } from './admin-auth-with-role.decorator';
 import { AuthAdminDecoratorInterface } from './interfaces/auth-admin-decorator.interface';
 import { AdminAppAuthRegisterInput } from './dto/adminapp-auth-register.input';
+import { AuthAdminProfileResponseDto } from './dto/auth-admin-profile-response.dto';
+import { CompanyAuthService } from '../company_auth/company_auth.service';
 
 @Resolver()
 export class AdminAuthResolver {
   constructor(
     private readonly authService: AdminAuthService,
+    private readonly companyService: CompanyAuthService,
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
@@ -82,5 +85,19 @@ export class AdminAuthResolver {
   ): Promise<AuthAdminResponseDto> {
     const company = await this.authService.registerCompany(payload);
     return company;
+  }
+
+  @AdminAuth()
+  @Query(() => AuthAdminProfileResponseDto)
+  async AdminApp_Auth_profile(@Admin() admin: AuthAdminDecoratorInterface) {
+    const company = await this.companyService.findById(admin.companyId);
+    if (!company) {
+      throw new Error('Admin user not found');
+    }
+
+    return {
+      companyId: admin.companyId,
+      enableUserPackageSystem: company.enableUserPackageSystem,
+    };
   }
 }

@@ -8,5 +8,6 @@ export interface AuthCompanyDecoratorInterface {
     isActive: boolean;
     userName: string;
     secretKey: string;
+    enableUserPackageSystem: boolean;
   };
 }
