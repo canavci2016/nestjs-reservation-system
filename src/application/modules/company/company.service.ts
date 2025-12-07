@@ -1,10 +1,16 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
 import { FileUpload } from 'src/core/interfaces/file-upload.interface';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class CompanyService {
@@ -14,6 +20,7 @@ export class CompanyService {
     @InjectRepository(Company)
     private repository: Repository<Company>,
     private readonly fileUploadService: FileUploadService,
+    private readonly i18n: I18nService,
   ) {
     this.logger.log('CompanyService initialized');
   }
@@ -126,6 +133,21 @@ export class CompanyService {
 
     if (uploadedPhotoUrl) {
       payloadMap.set('photoUrl', uploadedPhotoUrl);
+    }
+
+    if (payloadMap.get('email')) {
+      const existingCompany = await this.findOne({
+        email: payloadMap.get('email') as string,
+      });
+
+      if (existingCompany && existingCompany.id !== id) {
+        throw new ConflictException(
+          this.i18n.translate('company.EMAIL_EXISTS', {
+            args: { value: payloadMap.get('email') as string },
+            lang: 'tr',
+          }),
+        );
+      }
     }
 
     if (payloadMap.size > 0) {

@@ -41,12 +41,12 @@ export class AdminAuthGuard implements CanActivate {
       const company = await this.companyService.findOne({ id: payload.sub });
       const employee = await this.employeeService.findOne({ id: payload.sub });
 
-      if (
-        roles?.length > 0 &&
-        !roles?.includes[AdminAuthRole.EMPLOYEE] &&
-        employee
-      ) {
-        throw new UnauthorizedException();
+      if (roles?.length > 0) {
+        if (!roles?.includes(AdminAuthRole.EMPLOYEE) && employee) {
+          throw new UnauthorizedException();
+        } else if (!roles?.includes(AdminAuthRole.COMPANY) && company) {
+          throw new UnauthorizedException();
+        }
       }
 
       if (company || employee) {

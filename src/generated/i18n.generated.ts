@@ -5,6 +5,9 @@
 import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "company": {
+        "EMAIL_EXISTS": string;
+    };
     "employee_auth": {
         "NOT_FOUND": string;
         "PASSWORD_WRONG": string;
