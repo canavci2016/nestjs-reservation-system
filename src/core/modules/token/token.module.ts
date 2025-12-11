@@ -2,8 +2,6 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtService } from './services/jwt.service';
 import { TokenService } from './services/token.service';
-import TokenEntity from './entities/token.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ICoreTokenModuleOptions } from './interfaces/token-module.interface';
 
 @Module({})
@@ -16,6 +14,7 @@ export class TokenModule {
     imports?: any[];
   }): DynamicModule {
     return {
+      module: TokenModule,
       imports: [
         ...(options.imports || []),
         JwtModule.registerAsync({
@@ -34,9 +33,7 @@ export class TokenModule {
           inject: options.inject || [],
           imports: options.imports || [],
         }),
-        TypeOrmModule.forFeature([TokenEntity]), //we must get rid of type orm dependencies
       ],
-      module: TokenModule,
       providers: [
         {
           provide: 'TOKEN_JWT_SECRET',
