@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppTokenService } from './app-token.service';
+import { AppTokenProvider } from './app-token.provider';
 import { TokenModule } from 'src/core/modules/token/token.module';
 import { ConfigModule } from 'src/core/modules/config/config.module';
 import { ConfigService } from 'src/core/modules/config/config.service';
@@ -17,7 +17,7 @@ import { ICoreTokenModuleOptions } from 'src/core/modules/token/interfaces/token
         };
       },
     })],
-  providers: [AppTokenService],
+  providers: [AppTokenProvider],
   exports: [TokenModule],
 })
 export class AppTokenModule { }

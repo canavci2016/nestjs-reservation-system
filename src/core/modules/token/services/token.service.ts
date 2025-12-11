@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { JwtService } from './jwt.service';
 import TokenEntity from '../entities/token.entity';
+import { ITokenDto } from '../interfaces/token-dto.interface';
 
 @Injectable()
 export class TokenService {
@@ -13,7 +14,7 @@ export class TokenService {
   ) {}
 
   async save(
-    payload: Partial<Pick<TokenEntity, 'startAt' | 'content'>> &
+    payload: Partial<Pick<ITokenDto, 'startAt' | 'content'>> &
       Required<
         Pick<TokenEntity, 'owner_id' | 'owner_type' | 'action' | 'expiresAt'>
       >,
