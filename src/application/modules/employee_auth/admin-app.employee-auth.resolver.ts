@@ -33,6 +33,7 @@ export class AdminAppEmployeeAuthResolver {
     @Args('payload') payload: UpdateProfileInput,
   ): Promise<boolean> {
     const res = await this.authService.updateById(adminDto.sub, payload);
+    
     return res;
   }
 }

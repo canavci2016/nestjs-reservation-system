@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { SuperAdminCompany } from '../../company/models/super-admin-company.model';
 
 @ObjectType()
 export class AuthUser {
@@ -16,4 +17,10 @@ export class AuthUser {
 
   @Field({ description: 'user email', nullable: true })
   email?: string;
+
+  @Field(() => SuperAdminCompany, {
+    description: 'user company',
+    nullable: true,
+  })
+  company?: SuperAdminCompany;
 }

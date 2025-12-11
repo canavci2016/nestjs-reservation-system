@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { Pagination } from '../../../core/modules/pagination/interfaces/pagination.interface';
 import { Announcement } from '../../../database/entities/announcement.entity';
-import { FileUploadService } from '../../../shared/modules/file-upload/file-upload.service';
+import { FileUploadService } from '../../shared/modules/file-upload/file-upload.service';
 
 interface FindAllOptions {
   companyId?: string;

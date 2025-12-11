@@ -4,7 +4,7 @@ import { EmployeeAuthModule } from 'src/application/modules/employee_auth/employ
 import { CompanyAuthModule } from 'src/application/modules/company_auth/company_auth.module';
 import { AdminAuthResolver } from './admin_auth.resolver';
 import { AdminAuthController } from './admin-auth.controller';
-import { AppTokenModule } from 'src/shared/modules/app-token/app-token.module';
+import { AppTokenModule } from '../../shared/modules/app-token/app-token.module';
 
 @Module({
   imports: [EmployeeAuthModule, CompanyAuthModule, AppTokenModule],

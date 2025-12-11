@@ -123,6 +123,9 @@ type AuthSuperAdmin {
 }
 
 type AuthUser {
+  """user company"""
+  company: SuperAdminCompany
+
   """user email"""
   email: String
 

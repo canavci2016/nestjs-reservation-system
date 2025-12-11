@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import * as argon2 from 'argon2';
-import { FileUploadService } from 'src/shared/modules/file-upload/file-upload.service';
+import { FileUploadService } from '../../shared/modules/file-upload/file-upload.service';
 import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 import { I18nService } from 'nestjs-i18n';
 

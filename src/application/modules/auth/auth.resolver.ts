@@ -12,7 +12,7 @@ import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/application/modules/user/user.service';
 import { UserUpdatePasswordInput } from './dto/user-update-password';
-import { RateLimiting } from 'src/shared/decorators/rate-limiting.decorator';
+import { RateLimiting } from '../../shared/decorators/rate-limiting.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -68,7 +68,8 @@ export class AuthResolver {
     authUserIns.lastName = user.lastName;
     authUserIns.email = user.email;
     authUserIns.phone = user.phone;
-
+    const company = await user.company;
+    authUserIns.company = company;
     return authUserIns;
   }
 

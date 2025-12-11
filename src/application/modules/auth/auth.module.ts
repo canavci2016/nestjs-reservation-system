@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { AuthController } from './auth.controller';
-import { AppTokenModule } from 'src/shared/modules/app-token/app-token.module';
+import { AppTokenModule } from '../../shared/modules/app-token/app-token.module';
 
 @Module({
   imports: [AppTokenModule],

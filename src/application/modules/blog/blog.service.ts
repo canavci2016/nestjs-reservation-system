@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { SaveBlog } from './interfaces/save-blog.interface';
 import { FindAllOptions } from './interfaces/find-all-options.interface';
 import { Blog } from '../../../database/entities/blog.entity';
-import { FileUploadService } from '../../../shared/modules/file-upload/file-upload.service';
+import { FileUploadService } from '../../shared/modules/file-upload/file-upload.service';
 
 @Injectable()
 export class BlogService {

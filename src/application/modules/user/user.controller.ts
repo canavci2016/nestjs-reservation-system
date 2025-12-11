@@ -13,9 +13,9 @@ import { Response } from 'express';
 import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
-import { TokenGuard } from '../../../shared/modules/app-token/token.guard';
+import { TokenGuard } from '../../shared/modules/app-token/token.guard';
 import { TokenService } from '../../../core/modules/token/services/token.service';
-import { Token } from '../../../shared/modules/app-token/token.decorator';
+import { Token } from '../../shared/modules/app-token/token.decorator';
 
 @Controller('user')
 export class UserController {

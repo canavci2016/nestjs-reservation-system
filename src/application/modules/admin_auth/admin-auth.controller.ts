@@ -12,9 +12,9 @@ import Handlebars from 'handlebars';
 import { readFile } from 'fs/promises';
 import { AdminAuthService } from './admin_auth.service';
 import { UserSetPasswordInput } from './dto/user-set-password.input';
-import { TokenGuard } from 'src/shared/modules/app-token/token.guard';
+import { TokenGuard } from '../../shared/modules/app-token/token.guard';
 import { TokenService } from 'src/core/modules/token/services/token.service';
-import { Token } from 'src/shared/modules/app-token/token.decorator';
+import { Token } from '../../shared/modules/app-token/token.decorator';
 
 @Controller('admin-auth')
 export class AdminAuthController {

@@ -13,7 +13,7 @@ import { Admin } from '../admin_auth/admin-auth.decorator';
 import { AuthAdminDecoratorInterface } from '../admin_auth/interfaces/auth-admin-decorator.interface';
 import { AdminAuth } from '../admin_auth/admin-auth-with-role.decorator';
 import { TokenService } from '../../../core/modules/token/services/token.service';
-import { TokenTypes } from '../../../shared/modules/app-token/token-types.enum';
+import { TokenTypes } from '../../shared/modules/app-token/token-types.enum';
 import { RemoveSpacesPipe } from 'src/core/pipes/remove-spaces-pipe';
 import { AdminAuthRole } from '../admin_auth/admin-auth-role.enum';
 

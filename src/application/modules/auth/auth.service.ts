@@ -7,7 +7,7 @@ import { UserService } from 'src/application/modules/user/user.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Signup } from './interfaces/sign-up.interface';
-import { TokenTypes } from 'src/shared/modules/app-token/token-types.enum';
+import { TokenTypes } from '../../shared/modules/app-token/token-types.enum';
 import { TokenService } from 'src/core/modules/token/services/token.service';
 import { ConfigService } from 'src/core/modules/config/config.service';
 import * as moment from 'moment';
