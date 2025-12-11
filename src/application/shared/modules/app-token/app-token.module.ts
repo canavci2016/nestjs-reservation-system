@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { AppTokenService } from './app-token.service';
+import { Global, Module } from '@nestjs/common';
 import { TokenModule } from 'src/core/modules/token/token.module';
 import { ConfigModule } from 'src/core/modules/config/config.module';
 import { ConfigService } from 'src/core/modules/config/config.service';
 import { ICoreTokenModuleOptions } from 'src/core/modules/token/interfaces/token-module.interface';
 
+@Global()
 @Module({
   imports: [
     TokenModule.forRoot({
@@ -17,7 +17,7 @@ import { ICoreTokenModuleOptions } from 'src/core/modules/token/interfaces/token
         };
       },
     })],
-  providers: [AppTokenService],
+  providers: [],
   exports: [TokenModule],
 })
 export class AppTokenModule { }

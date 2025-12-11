@@ -19,14 +19,6 @@ import {
 } from 'nestjs-i18n';
 import * as path from 'path';
 
-const configFactory = {
-  provide: 'CONFIG',
-  useFactory: () => {
-    return {
-      test: 'dad',
-    };
-  },
-};
 
 @Module({
   imports: [
@@ -101,6 +93,6 @@ const configFactory = {
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, configFactory],
+  providers: [AppService],
 })
 export class AppModule { }
