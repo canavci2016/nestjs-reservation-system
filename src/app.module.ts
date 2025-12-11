@@ -6,7 +6,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { ApplicationModule } from './application/application.module';
 import { DatabaseModule } from './database/database.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -32,12 +31,6 @@ const configFactory = {
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000, // Time window in milliseconds (1 minute)
-        limit: 10, // Number of requests per time window
-      },
-    ]),
     JwtModule.register({
       global: true,
       secret: process.env.APP_KEY,
