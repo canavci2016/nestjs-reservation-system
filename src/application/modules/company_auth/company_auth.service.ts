@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CompanyService } from 'src/application/modules/company/company.service';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class CompanyAuthService {
@@ -33,7 +33,7 @@ export class CompanyAuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.getToken(payload),
     };
   }
 

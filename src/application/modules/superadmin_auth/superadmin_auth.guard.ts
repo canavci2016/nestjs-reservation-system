@@ -4,10 +4,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { SuperAdminAuthService } from './superadmin_auth.service';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class SuperAdminAuthGuard implements CanActivate {
@@ -24,12 +24,7 @@ export class SuperAdminAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload: { sub: string } = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: process.env.APP_SECRET,
-        },
-      );
+      const payload: { sub: string } = await this.jwtService.decodeToken(token);
 
       const admin = await this.authService.findOne({ id: payload.sub });
 

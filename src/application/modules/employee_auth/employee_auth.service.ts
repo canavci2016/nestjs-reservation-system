@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
-import { JwtService } from '@nestjs/jwt';
 import { UpdateProfile } from './interfaces/update-profile';
 import { I18nService } from 'nestjs-i18n';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class EmployeeAuthService {
@@ -45,7 +45,7 @@ export class EmployeeAuthService {
 
     const payload = { sub: employee.id, username: employee.userName };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.getToken(payload),
     };
   }
 

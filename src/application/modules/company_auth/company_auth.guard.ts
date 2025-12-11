@@ -4,11 +4,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthCompanyDecoratorInterface } from './interfaces/auth-company-decorator.interface';
 import { CompanyService } from 'src/application/modules/company/company.service';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class CompanyAuthGuard implements CanActivate {
@@ -26,9 +26,7 @@ export class CompanyAuthGuard implements CanActivate {
     }
     try {
       const payload: Omit<AuthCompanyDecoratorInterface, 'company'> =
-        await this.jwtService.verifyAsync(token, {
-          secret: process.env.APP_SECRET,
-        });
+        await this.jwtService.decodeToken(token);
 
       const company = await this.companyService.findOne({ id: payload.sub });
 

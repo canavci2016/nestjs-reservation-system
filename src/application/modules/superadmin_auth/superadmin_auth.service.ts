@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SuperAdmin } from 'src/database/entities/super-admin.entity';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class SuperAdminAuthService {
@@ -50,7 +50,7 @@ export class SuperAdminAuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.getToken(payload),
     };
   }
 

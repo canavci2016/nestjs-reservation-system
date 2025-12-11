@@ -4,11 +4,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { AuthEmployeeDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class EmployeeAuthGuard implements CanActivate {
@@ -26,9 +26,7 @@ export class EmployeeAuthGuard implements CanActivate {
     }
     try {
       const payload: Omit<AuthEmployeeDecoratorInterface, 'employee'> =
-        await this.jwtService.verifyAsync(token, {
-          secret: process.env.APP_SECRET,
-        });
+        await this.jwtService.decodeToken(token);
 
       const employee = await this.employeeService.findOne({ id: payload.sub });
 

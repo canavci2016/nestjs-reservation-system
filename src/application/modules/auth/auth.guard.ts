@@ -5,11 +5,11 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { UserService } from 'src/application/modules/user/user.service';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,12 +26,8 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const secret = process.env.APP_KEY;
-
       const payload: Omit<AuthUserDecoratorInterface, 'user'> =
-        await this.jwtService.verifyAsync(token, {
-          secret: secret,
-        });
+        await this.jwtService.decodeToken(token);
 
       const user = await this.userService.findOne({ id: payload.sub });
 
@@ -41,7 +37,6 @@ export class AuthGuard implements CanActivate {
 
       request['user'] = { ...payload, user };
     } catch (e: any) {
-
       if (e instanceof NotFoundException) {
         throw e;
       }

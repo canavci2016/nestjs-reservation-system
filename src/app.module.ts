@@ -8,7 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ApplicationModule } from './application/application.module';
 import { DatabaseModule } from './database/database.module';
-import { JwtModule } from '@nestjs/jwt';
 import { CoreModule } from './core/core.module';
 import { GraphQLFormattedError } from 'graphql';
 import {
@@ -19,15 +18,9 @@ import {
 } from 'nestjs-i18n';
 import * as path from 'path';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.APP_KEY,
-      signOptions: { expiresIn: '10d' },
-    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,

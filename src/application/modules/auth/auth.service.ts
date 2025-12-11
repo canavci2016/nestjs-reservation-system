@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from 'src/application/modules/user/user.service';
 import { SignInByEmailAndPassword } from './interfaces/sign-by-email-password.interface';
-import { JwtService } from '@nestjs/jwt';
 import { Signup } from './interfaces/sign-up.interface';
 import { TokenTypes } from '../../shared/modules/app-token/token-types.enum';
 import { TokenService } from 'src/core/modules/token/services/token.service';
@@ -13,6 +12,7 @@ import { ConfigService } from 'src/core/modules/config/config.service';
 import * as moment from 'moment';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
 import { AwsService } from 'src/core/modules/aws/aws.service';
+import { JwtService } from 'src/core/modules/token/services/jwt.service';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +42,7 @@ export class AuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.getToken(payload),
     };
   }
 
@@ -51,7 +51,7 @@ export class AuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.getToken(payload),
     };
   }
 
@@ -92,7 +92,7 @@ export class AuthService {
   }
 
   async decrytToken(token: string) {
-    const payload: Record<any, any> = await this.jwtService.verifyAsync(token);
+    const payload: Record<any, any> = await this.jwtService.decodeToken(token);
 
     return payload;
   }
