@@ -7,7 +7,7 @@ import {
 import { UserAndCompanyUserPackage } from 'src/database/entities/user-and-company-user-package.entity';
 import { Pagination } from 'src/core/modules/pagination/interfaces/pagination.interface';
 import { UserService } from 'src/application/modules/user/user.service';
-import { LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
+import { IsNull, LessThanOrEqual, MoreThan, Raw, Repository } from 'typeorm';
 import * as moment from 'moment';
 
 export interface FindAllOptions {
@@ -30,8 +30,6 @@ export class UserPackageService {
     private repository: Repository<CompanyUserPackage>,
     @InjectRepository(UserAndCompanyUserPackage)
     private userPackagerepository: Repository<UserAndCompanyUserPackage>,
-    @InjectRepository(UserAndCompanyUserPackage)
-    private userAndCompanyUserPackageRepository: Repository<UserAndCompanyUserPackage>,
     private readonly userService: UserService,
   ) { }
 
@@ -92,7 +90,7 @@ export class UserPackageService {
       companyUserPackage: true,
     };
 
-    const packages = await this.userAndCompanyUserPackageRepository.find(query);
+    const packages = await this.userPackagerepository.find(query);
 
     let updatedPackages = packages.map((pck) => {
       const newPackage = { ...pck, valid: false };
@@ -176,7 +174,7 @@ export class UserPackageService {
       throw new NotFoundException('user not found');
     }
 
-    const res = await this.userAndCompanyUserPackageRepository.save({
+    const res = await this.userPackagerepository.save({
       userId: payload.userId,
       companyUserPackageId: payload.id,
       quota: companyUserPackage.quota,
@@ -191,9 +189,9 @@ export class UserPackageService {
   async detachACompanyUserPackageFromUser(
     payload: Pick<UserAndCompanyUserPackage, 'id'>,
   ) {
-    const result = await this.userAndCompanyUserPackageRepository
+    const result = await this.userPackagerepository
       .createQueryBuilder()
-      .delete()
+      .softDelete()
       .from(UserAndCompanyUserPackage)
       .where(payload)
       .execute();
@@ -229,6 +227,7 @@ export class UserPackageService {
       endDate: MoreThan(new Date()),
       quota: MoreThan(0),
       numberOfUsage: Raw((alias) => `${alias} < "quota"`),
+      companyUserPackage: { deletedAt: IsNull() },
     };
 
     if (packageId) {

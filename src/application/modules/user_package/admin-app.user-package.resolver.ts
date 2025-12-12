@@ -153,7 +153,6 @@ export class AdminAppUserPackageResolver {
   @AdminAuth(AdminAuthRole.COMPANY)
   @Mutation(() => Boolean)
   async AdminApp_Company_UserPackage_detach(
-    @Company() company: AuthCompanyDecoratorInterface,
     @Args('payload') payload: CompanyDetachUserPackageInput,
   ): Promise<boolean> {
     const model = await this.packageService.detachACompanyUserPackageFromUser({

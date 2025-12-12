@@ -81,12 +81,13 @@ export class AdminAppUserEmployeeAppointmentResolver {
 
     const userModel = await appointment.user;
     const availabilityModel = await appointment.employeeAvailability;
+    const employeeModel = employee.employee;
 
     const attributes = new AwsSqsMessageQueryBuilder()
       .setStr('action', 'ADMINAPP_EMPLOYEE_APPOINTMENT_ADD')
-      .setStr('employeeModel', employee.employee)
       .setStr('userModel', userModel)
-      .setStr('availabilityModel', availabilityModel);
+      .setStr('availabilityModel', availabilityModel)
+      .setStr('employeeModel', employeeModel);
 
     const response = await this.awsService.pushIntoQueue(attributes.getObj());
     return true;
