@@ -14,6 +14,9 @@ import { AdminAuthModule } from './modules/admin_auth/admin_auth.module';
 import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module';
 import { EmployeeAvailabilityModule } from './modules/employee_availability/employee-availability.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
+import { ConfigModule } from 'src/core/modules/config/config.module';
+import { ConfigService } from 'src/core/modules/config/config.service';
 
 @Module({
   imports: [
@@ -31,12 +34,23 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AdminAuthModule,
     EmployeeAuthModule,
     EmployeeAvailabilityModule,
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000, // Time window in milliseconds (1 minute)
-        limit: 10, // Number of requests per time window
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          throttlers: [
+            {
+              ttl: 60000,
+              limit: 10,
+            },
+          ],
+          storage: new ThrottlerStorageRedisService(
+            config.get('REDIS_HOST') as string,
+          ),
+        };
       },
-    ]),
+    }),
   ],
   exports: [
     BlogModule,
@@ -55,4 +69,4 @@ import { ThrottlerModule } from '@nestjs/throttler';
     EmployeeAvailabilityModule,
   ],
 })
-export class ApplicationModule { }
+export class ApplicationModule {}
