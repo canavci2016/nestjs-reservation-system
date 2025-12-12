@@ -394,6 +394,7 @@ input EmployeeSignUpInput {
 }
 
 type Mutation {
+  AdminApp_Appointment_add(payload: CompanyBookAppointmentInput!): Boolean!
   AdminApp_Auth_Register(payload: AdminAppAuthRegisterInput!): AuthAdminResponseDto!
   AdminApp_Auth_SetDeviceToken(token: String!): Boolean!
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdminResponseDto!

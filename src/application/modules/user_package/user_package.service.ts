@@ -221,25 +221,25 @@ export class UserPackageService {
     userId: string,
     packageId: string | null = null,
   ) {
-    const whereQuery = {
-      userId: userId,
-      startDate: LessThanOrEqual(new Date()),
-      endDate: MoreThan(new Date()),
-      quota: MoreThan(0),
-      numberOfUsage: Raw((alias) => `${alias} < "quota"`),
-      companyUserPackage: { deletedAt: IsNull() },
-    };
+    let query = this.userPackagerepository
+      .createQueryBuilder('uacup')
+      .leftJoinAndSelect('uacup.companyUserPackage', 'cup')
+      .where('uacup.userId = :userId', { userId })
+      .andWhere('uacup.startDate <= :now', { now: new Date() })
+      .andWhere('uacup.endDate > :now', { now: new Date() })
+      .andWhere('uacup.quota > 0')
+      .andWhere('uacup.numberOfUsage < uacup.quota')
+      .orderBy('uacup.createdAt', 'ASC');
 
     if (packageId) {
-      whereQuery['id'] = packageId;
+      query = query.andWhere('uacup.id = :packageId', { packageId });
     }
 
-    const packages = await this.userPackagerepository.find({
-      where: whereQuery,
-      order: { createdAt: 'ASC' },
-    });
+    const packages = await query.getMany();
 
-    return packages;
+    const filteredPackages = packages.filter((pck) => pck?.companyUserPackage);
+
+    return filteredPackages;
   }
 
   async updateUserAndCompanyPackage(

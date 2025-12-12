@@ -1,5 +1,5 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Directive, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserEmployeeAppointmentService } from './user_employee_appointment.service';
 import { UserEmployeeAppointment } from './models/user-employee-appointment.model';
 import { EmployeeAuthGuard } from 'src/application/modules/employee_auth/employee-auth.guard';
@@ -26,6 +26,48 @@ export class AdminAppUserEmployeeAppointmentResolver {
     private readonly awsService: AwsService,
   ) { }
 
+  @AdminAuth()
+  @Mutation(() => Boolean)
+  async AdminApp_Appointment_add(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args('payload') payload: CompanyBookAppointmentInput,
+  ): Promise<boolean> {
+    const res = await this.appointmentService.book({
+      ...payload,
+      companyId: admin.companyId,
+    });
+    const accept = await this.appointmentService.accept({ id: res.id });
+    const appointment = await this.appointmentService.findOne({ id: res.id });
+
+    if (!appointment) {
+      throw new NotFoundException('appointment is not present');
+    }
+
+    const userModel = await appointment.user;
+    const availabilityModel = await appointment.employeeAvailability;
+    const employeeModel = await availabilityModel.employee;
+
+    let attributes: AwsSqsMessageQueryBuilder | null = null;
+    if (admin.company?.company) {
+      attributes = new AwsSqsMessageQueryBuilder()
+        .setStr('action', 'ADMINAPP_COMPANY_APPOINTMENT_ADD')
+        .setStr('companyModel', admin.company.company)
+        .setStr('userModel', userModel)
+        .setStr('availabilityModel', availabilityModel)
+        .setStr('employeeModel', employeeModel);
+    } else {
+      attributes = new AwsSqsMessageQueryBuilder()
+        .setStr('action', 'ADMINAPP_EMPLOYEE_APPOINTMENT_ADD')
+        .setStr('userModel', userModel)
+        .setStr('availabilityModel', availabilityModel)
+        .setStr('employeeModel', employeeModel);
+    }
+
+    const response = await this.awsService.pushIntoQueue(attributes.getObj());
+    return true;
+  }
+
+  @Directive('@deprecated(reason: "Use AdminApp_Appointment_add instead")')
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_Appointment_add(
@@ -60,6 +102,7 @@ export class AdminAppUserEmployeeAppointmentResolver {
     return true;
   }
 
+  @Directive('@deprecated(reason: "Use AdminApp_Appointment_add instead")')
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Employee_Appointment_add(
