@@ -22,6 +22,21 @@ export class AdminAppEmployeeAvailabilityResolver {
     private readonly availabilityService: EmployeeAvailabilityService,
   ) { }
 
+  @AdminAuth()
+  @Mutation(() => Boolean)
+  async AdminApp_Availability_add(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args() payload: AddEmployeeAvailabilityArgs,
+  ): Promise<boolean> {
+    const data = payload.payload.map((it) => ({
+      companyId: admin.companyId,
+      ...it,
+    }));
+
+    const res = await this.availabilityService.save(data);
+    return true;
+  }
+
   @UseGuards(EmployeeAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Employee_Availability_add(
