@@ -39,21 +39,6 @@ export class AdminAppEmployeeAvailabilityResolver {
     return true;
   }
 
-  @AdminAuth()
-  @Query(() => [EmployeeAvailability])
-  async AdminApp_Employee_Availability_list(
-    @Admin() admin: AuthAdminDecoratorInterface,
-    @Args() args: AdminAppCompanyEmployeeListAvailabilityArgs,
-  ): Promise<EmployeeAvailability[]> {
-    const employeeId = admin.employee?.employee?.id || args.employeeId;
-
-    const result = await this.availabilityService.getAvailableTimeSlots({
-      ...args,
-      employeeId: employeeId,
-    });
-    return result;
-  }
-
   @UseGuards(CompanyAuthGuard)
   @Mutation(() => Boolean)
   async AdminApp_Company_Employee_Availability_add(
@@ -67,6 +52,21 @@ export class AdminAppEmployeeAvailabilityResolver {
 
     const res = await this.availabilityService.save(data);
     return true;
+  }
+
+  @AdminAuth()
+  @Query(() => [EmployeeAvailability])
+  async AdminApp_Employee_Availability_list(
+    @Admin() admin: AuthAdminDecoratorInterface,
+    @Args() args: AdminAppCompanyEmployeeListAvailabilityArgs,
+  ): Promise<EmployeeAvailability[]> {
+    const employeeId = admin.employee?.employee?.id || args.employeeId;
+
+    const result = await this.availabilityService.getAvailableTimeSlots({
+      ...args,
+      employeeId: employeeId,
+    });
+    return result;
   }
 
   @UseGuards(CompanyAuthGuard)
