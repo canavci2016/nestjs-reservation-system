@@ -1,8 +1,3 @@
-import { Stream } from 'stream';
+import { FileUpload as IBaseFileUpload } from 'graphql-upload/Upload';
 
-export interface FileUpload {
-  filename: string;
-  mimetype: string;
-  encoding: string;
-  createReadStream: () => Stream;
-}
+export type FileUpload = IBaseFileUpload;

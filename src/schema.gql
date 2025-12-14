@@ -12,6 +12,9 @@ input AddAnnouncementInput {
 input AddAvailabilitySingleInput {
   availableDate: String!
 
+  """number of accepted users per session"""
+  capacity: Float = 1
+
   """availability end date"""
   endTime: String!
 
@@ -28,6 +31,9 @@ input AddBlogInput {
 
 input AddEmployeeAvailabilitySingleInput {
   availableDate: String!
+
+  """number of accepted users per session"""
+  capacity: Float = 1
   employeeId: String!
 
   """availability end date"""
@@ -398,6 +404,7 @@ type Mutation {
   AdminApp_Auth_Register(payload: AdminAppAuthRegisterInput!): AuthAdminResponseDto!
   AdminApp_Auth_SetDeviceToken(token: String!): Boolean!
   AdminApp_Auth_login(password: String!, userName: String!): AuthAdminResponseDto!
+  AdminApp_Availability_add(payload: [AddEmployeeAvailabilitySingleInput!]!): Boolean!
   AdminApp_Company_Announcement_add(payload: AddAnnouncementInput!): Boolean!
   AdminApp_Company_Announcement_delete(id: String!): Boolean!
   AdminApp_Company_Announcement_update(id: String!, payload: UpdateAnnouncementInput!): Boolean!
