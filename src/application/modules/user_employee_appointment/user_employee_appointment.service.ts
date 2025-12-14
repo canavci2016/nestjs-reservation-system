@@ -376,7 +376,11 @@ export class UserEmployeeAppointmentService {
     const appointment = appointments[0];
 
     if (appointment.status == UserEmployeeAppointmentStatus.REJECTED) {
-      throw new PreconditionFailedException('appointment is already rejected');
+      throw new PreconditionFailedException(
+        this.i18n.translate('user_employee_appointment.ALREADY_REJECTED', {
+          lang: 'tr',
+        }),
+      );
     }
 
     if (appointment.userAndCompanyUserPackageId) {

@@ -1,5 +1,7 @@
 {
   "CAPACITY_EXCEEDED": "oturum kapasitesi \"{value}\" olarak belirlenmiştir aşılamaz",
   "ALREADY_BOOKED": "Bu saatte zaten bir randevu aldınız.",
-  "ACTIVE_PACKAGE_NOT_FOUND": "Kullanıcı için aktif paket bulunamadı. Lütfen önce bir paket atayın."
+  "ACTIVE_PACKAGE_NOT_FOUND": "Kullanıcı için aktif paket bulunamadı. Lütfen önce bir paket atayın.",
+  "WRONG_OWNER": "Bu randevu sadece sahibi tarafından değiştirilebilir",
+  "ALREADY_REJECTED": "appointment is already rejected"
 }

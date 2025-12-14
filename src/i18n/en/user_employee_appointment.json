@@ -1,5 +1,7 @@
 {
   "CAPACITY_EXCEEDED": "the capacity \"{value}\" can not be exceeded",
   "ALREADY_BOOKED": "You have already booked an appointment at this time.",
-  "ACTIVE_PACKAGE_NOT_FOUND": "Active package is not found for the user"
+  "ACTIVE_PACKAGE_NOT_FOUND": "Active package is not found for the user",
+  "WRONG_OWNER": "you arent owner the appointment",
+  "ALREADY_REJECTED": "Randevu zaten iptal edildi"
 }

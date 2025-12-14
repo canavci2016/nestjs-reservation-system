@@ -1,4 +1,8 @@
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  ForbiddenException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserEmployeeAppointmentService } from './user_employee_appointment.service';
 import { BookAppointmentInput } from './dto/book-appointment.input';
@@ -13,6 +17,7 @@ import { AwsService } from 'src/core/modules/aws/aws.service';
 import { EmployeeService } from 'src/application/modules/employee/employee.service';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
 import { AwsSqsMessageQueryBuilder } from 'src/core/modules/aws/aws-sqs-message-qb';
+import { I18nService } from 'nestjs-i18n';
 
 @Resolver()
 export class ClientAppUserEmployeeAppointmentResolver {
@@ -20,6 +25,7 @@ export class ClientAppUserEmployeeAppointmentResolver {
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
     private readonly employeeService: EmployeeService,
+    private readonly i18n: I18nService,
   ) { }
 
   @UseGuards(AuthGuard)
@@ -89,9 +95,20 @@ export class ClientAppUserEmployeeAppointmentResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   async ClientApp_Appointment_reject(
+    @User() user: AuthUserDecoratorInterface,
     @Args('id') id: string,
     @Args('comment', { nullable: true }) comment: string,
   ): Promise<boolean> {
+    const appointment = await this.appointmentService.findOne({ id: id });
+
+    if (appointment?.creatorId != user.sub) {
+      throw new ForbiddenException(
+        this.i18n.translate('user_employee_appointment.WRONG_OWNER', {
+          lang: 'tr',
+        }),
+      );
+    }
+
     const res = await this.appointmentService.reject({ id }, comment || '');
 
     return res;

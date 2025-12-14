@@ -19,6 +19,8 @@ export type I18nTranslations = {
         "CAPACITY_EXCEEDED": string;
         "ALREADY_BOOKED": string;
         "ACTIVE_PACKAGE_NOT_FOUND": string;
+        "WRONG_OWNER": string;
+        "ALREADY_REJECTED": string;
     };
     "validation": {
         "NOT_EMPTY": string;
