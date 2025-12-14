@@ -82,6 +82,7 @@ export class UserEmployeeAppointmentService {
         throw new UnauthorizedException(
           this.i18n.translate('user_employee_appointment.ALREADY_BOOKED', {
             args: { value: availability.capacity },
+            lang: 'tr',
           }),
         );
       }
