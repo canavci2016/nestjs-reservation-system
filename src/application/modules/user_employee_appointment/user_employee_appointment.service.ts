@@ -34,7 +34,12 @@ export class UserEmployeeAppointmentService {
     params: Pick<
       UserEmployeeAppointment,
       'employeeAvailabilityId' | 'userId'
-    > & { companyId: string; userCompanyPackageId?: string },
+    > & {
+      companyId: string;
+      userCompanyPackageId?: string;
+      creatorId?: string;
+      creatorType?: 'user' | 'company' | 'employee';
+    },
   ) {
     try {
       const { companyId, userId, employeeAvailabilityId } = params;
@@ -96,6 +101,8 @@ export class UserEmployeeAppointmentService {
         employeeAvailabilityId: employeeAvailabilityId,
         userId: userId,
         userAndCompanyUserPackageId: activePackage?.id,
+        creatorId: params.creatorId,
+        creatorType: params.creatorType,
       });
 
       return res;

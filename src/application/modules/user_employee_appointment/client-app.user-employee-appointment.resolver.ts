@@ -20,7 +20,7 @@ export class ClientAppUserEmployeeAppointmentResolver {
     private readonly appointmentService: UserEmployeeAppointmentService,
     private readonly awsService: AwsService,
     private readonly employeeService: EmployeeService,
-  ) {}
+  ) { }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
@@ -31,6 +31,8 @@ export class ClientAppUserEmployeeAppointmentResolver {
     const res = await this.appointmentService.book({
       userId: user.sub,
       companyId: user.user.companyId,
+      creatorId: user.sub,
+      creatorType: 'user',
       ...payload,
     });
 

@@ -67,6 +67,12 @@ export class UserEmployeeAppointment {
   @Column({ default: false })
   notifyUserBeforeEvent: boolean;
 
+  @Column({ nullable: true })
+  creatorId: string;
+
+  @Column({ nullable: true })
+  creatorType: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
