@@ -10,7 +10,7 @@ export class AdminAuthService {
   constructor(
     private readonly companyService: CompanyAuthService,
     private readonly employeeService: EmployeeAuthService,
-  ) { }
+  ) {}
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,

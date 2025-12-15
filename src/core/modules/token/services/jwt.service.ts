@@ -6,9 +6,15 @@ export class JwtService {
   constructor(
     @Inject('TOKEN_JWT_SECRET') private readonly secret: string,
     private readonly jwtService: NestJwtService,
-  ) {}
-  async getToken(payload: Record<any, any>) {
-    return this.jwtService.signAsync(payload, { secret: this.secret });
+  ) { }
+  async getToken(
+    payload: Record<any, any>,
+    options: { expiresIn?: string } = {},
+  ) {
+    return this.jwtService.signAsync(payload, {
+      secret: this.secret,
+      ...options,
+    });
   }
 
   async decodeToken<T extends object>(token: string): Promise<T> {

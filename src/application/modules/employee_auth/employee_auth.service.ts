@@ -45,7 +45,9 @@ export class EmployeeAuthService {
 
     const payload = { sub: employee.id, username: employee.userName };
     return {
-      access_token: await this.jwtService.getToken(payload),
+      access_token: await this.jwtService.getToken(payload, {
+        expiresIn: '10 days',
+      }),
     };
   }
 

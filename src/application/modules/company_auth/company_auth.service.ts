@@ -33,7 +33,9 @@ export class CompanyAuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.getToken(payload),
+      access_token: await this.jwtService.getToken(payload, {
+        expiresIn: '10 days',
+      }),
     };
   }
 

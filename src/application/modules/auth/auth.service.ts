@@ -22,7 +22,7 @@ export class AuthService {
     private readonly tokenService: TokenService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
-  ) {}
+  ) { }
 
   async signInByEmailAndPassword(
     field: SignInByEmailAndPassword,
@@ -42,7 +42,9 @@ export class AuthService {
 
     const payload = { sub: user.id, username: user.userName };
     return {
-      access_token: await this.jwtService.getToken(payload),
+      access_token: await this.jwtService.getToken(payload, {
+        expiresIn: '10 days',
+      }),
     };
   }
 

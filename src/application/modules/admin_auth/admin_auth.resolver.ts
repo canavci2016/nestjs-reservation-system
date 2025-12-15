@@ -24,7 +24,7 @@ export class AdminAuthResolver {
     private readonly tokenService: TokenService,
     private readonly awsService: AwsService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   @Mutation(() => AuthAdminResponseDto)
   async AdminApp_Auth_login(
