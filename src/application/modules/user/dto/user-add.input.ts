@@ -1,6 +1,14 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Max, MaxLength } from 'class-validator';
+import {
+  IsEmail,
+  IsLowercase,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+} from 'class-validator';
 
 @InputType()
 export class UserAddInput {
@@ -17,11 +25,14 @@ export class UserAddInput {
   @Field()
   @IsNotEmpty({ message: 'kullanıcı adı alanı boş olamaz ' })
   @Transform(({ value }: { value: string }) =>
-    typeof value === 'string'
-      ? value?.trim()?.toLowerCase().replace(/\s+/g, '')
-      : value,
+    typeof value === 'string' ? value?.trim()?.replace(/\s+/g, '') : value,
   )
   @MaxLength(10, { message: 'kullanıcı adı en fazla 10 karakter olabilir' })
+  @IsLowercase({ message: 'kullanıcı adı sadece küçük harf olmalıdır' })
+  @Matches(/^[a-z][a-z0-9._]*$/, {
+    message:
+      'Kullanıcı adı sadece alfabe olmalıdır, kabul edilen karakterler:  ., _',
+  })
   userName: string;
 
   @Field()

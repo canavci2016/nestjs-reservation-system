@@ -1,5 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  IsLowercase,
+  IsNotEmpty,
+  IsOptional,
+  Matches,
+} from 'class-validator';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'src/core/interfaces/file-upload.interface';
 
@@ -15,6 +21,11 @@ export class EmployeeSignUpInput {
 
   @IsNotEmpty({ message: 'kullanıcı adı boş olamaz' })
   @Field()
+  @IsLowercase({ message: 'kullanıcı adı sadece küçük harf olmalıdır' })
+  @Matches(/^[a-z][a-z0-9._]*$/, {
+    message:
+      'Kullanıcı adı sadece alfabe olmalıdır, kabul edilen karakterler:  ., _',
+  })
   userName: string;
 
   @IsNotEmpty({ message: 'şifre boş olamaz' })
