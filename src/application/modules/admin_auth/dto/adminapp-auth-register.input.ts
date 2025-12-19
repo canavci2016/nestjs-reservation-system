@@ -2,9 +2,11 @@ import { Field, InputType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import {
   IsEmail,
+  IsLowercase,
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -30,6 +32,11 @@ export class AdminAppAuthRegisterInput {
   @IsNotEmpty({ message: 'Kullanıcı adı boş kalamaz ' })
   @MinLength(2, { message: 'Kullanıcı adı en az 2 karakter olmalı ' })
   @MaxLength(10, { message: 'Kullanıcı adı en fazla 10 karakter olmalı ' })
+  @IsLowercase({ message: 'kullanıcı adı sadece küçük harf olmalıdır' })
+  @Matches(/^[a-z][a-z0-9._]*$/, {
+    message:
+      'Kullanıcı adı sadece alfabe olmalıdır, kabul edilen karakterler:  ., _',
+  })
   userName: string;
 
   @Field()
