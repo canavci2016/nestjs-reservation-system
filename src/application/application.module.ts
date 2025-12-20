@@ -13,6 +13,7 @@ import { SuperadminAuthModule } from './modules/superadmin_auth/superadmin_auth.
 import { AdminAuthModule } from './modules/admin_auth/admin_auth.module';
 import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module';
 import { EmployeeAvailabilityModule } from './modules/employee_availability/employee-availability.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -31,6 +32,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AdminAuthModule,
     EmployeeAuthModule,
     EmployeeAvailabilityModule,
+    UploadModule,
     ThrottlerModule.forRoot([
       {
         ttl: 60000, // Time window in milliseconds (1 minute)
@@ -53,6 +55,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AdminAuthModule,
     EmployeeAuthModule,
     EmployeeAvailabilityModule,
+    UploadModule,
   ],
 })
 export class ApplicationModule { }

@@ -26,8 +26,14 @@ export class AdminAuthGuard implements CanActivate {
     const roles =
       this.reflector.get<string[]>('roles', context.getHandler()) || [];
 
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req as Request;
+    let request: Request | null;
+    if (context.getType() == 'http') {
+      request = context.switchToHttp().getRequest() as Request;
+    } else {
+      const ctx = GqlExecutionContext.create(context);
+      request = ctx.getContext().req as Request;
+    }
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
