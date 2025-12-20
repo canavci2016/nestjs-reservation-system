@@ -4,7 +4,7 @@ import { AwsService } from 'src/core/modules/aws/aws.service';
 
 @Injectable()
 export class FileUploadService {
-  constructor(private readonly awsService: AwsService) {}
+  constructor(private readonly awsService: AwsService) { }
 
   async blog(
     file: Promise<FileUpload> | undefined | null,
