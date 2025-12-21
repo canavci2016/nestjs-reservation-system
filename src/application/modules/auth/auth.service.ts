@@ -66,13 +66,9 @@ export class AuthService {
     return user;
   }
 
-  async findByUsernameOrEmail(payload: {
-    userNameOrEmail: string;
-    companyId: string;
-  }) {
+  async findByUsernameOrEmail(payload: { userNameOrEmail: string }) {
     let user = await this.userService.findOne({
       userName: payload.userNameOrEmail,
-      companyId: payload.companyId,
     });
 
     if (user) {
@@ -80,16 +76,13 @@ export class AuthService {
     }
     user = await this.userService.findOne({
       email: payload.userNameOrEmail,
-      companyId: payload.companyId,
     });
 
     if (user) {
       return user;
     }
 
-    throw new NotFoundException(
-      'there is no account associated with given credentials',
-    );
+    return null;
   }
 
   async decrytToken(token: string) {
@@ -103,17 +96,15 @@ export class AuthService {
     return user;
   }
 
-  async forgetPassword(payload: {
-    userNameOrEmail: string;
-    companyId: string;
-  }) {
+  async forgetPassword(payload: { userNameOrEmail: string }) {
     const res = await this.findByUsernameOrEmail({
       userNameOrEmail: payload.userNameOrEmail,
-      companyId: payload.companyId,
     });
 
     if (!res) {
-      throw new NotFoundException('user is not found');
+      throw new NotFoundException(
+        'there is no account associated with given credentials',
+      );
     }
 
     const token = await this.tokenService.save({

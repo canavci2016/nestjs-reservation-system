@@ -92,16 +92,13 @@ export class AuthResolver {
     return Boolean(res?.affected);
   }
 
-  @UseGuards(CompanyAppGuard)
   @RateLimiting({ limit: 6, expInMinutes: 1 })
   @Mutation(() => Boolean)
   async ClientApp_User_ForgetPassword(
     @Args('userNameOrEmail') userNameOrEmail: string,
-    @CompanyApp() company: { id: string },
   ): Promise<boolean> {
     const res = await this.authService.forgetPassword({
       userNameOrEmail,
-      companyId: company.id,
     });
     return res;
   }
