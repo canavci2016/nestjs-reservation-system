@@ -21,16 +21,13 @@ export class AuthResolver {
     private readonly userService: UserService,
   ) { }
 
-  @UseGuards(CompanyAppGuard)
   @Mutation(() => String)
   async ClientApp_User_login(
-    @CompanyApp() company: { id: string },
     @Args() loginArgs: UserLoginArgs,
   ): Promise<string> {
     const user = await this.authService.signInByEmailAndPassword({
       userName: loginArgs.userName,
       password: loginArgs.password,
-      companyId: company.id,
     });
 
     return user?.access_token;

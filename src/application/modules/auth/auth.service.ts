@@ -29,7 +29,6 @@ export class AuthService {
   ): Promise<{ access_token: string }> {
     const user = await this.userService.findOne({
       userName: field.userName,
-      companyId: field.companyId,
     });
     if (!user) {
       throw new NotFoundException();

@@ -174,7 +174,6 @@ export class UserService {
   async checkIfUserNameIsInUse(userName: string, companyId: string) {
     const user = await this.findOne({
       userName: userName,
-      companyId: companyId,
     });
 
     if (user) {
