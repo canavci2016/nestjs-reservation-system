@@ -3,36 +3,37 @@ import { BlogService } from './blog.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Blog } from './models/blog.model';
 import { PaginationInput } from '../../../core/modules/pagination/dto/pagination.input';
-import { CompanyAppGuard } from '../company_auth/company_app.guard';
-import { CompanyApp } from '../company_auth/company_app.decorator';
 import { PaginationPipe } from '../../../core/modules/pagination/pagination.pipe';
+import { AuthGuard } from '../auth/auth.guard';
+import { AuthUserDecoratorInterface } from '../auth/interfaces/auth-employee-decorator.interface';
+import { User } from '../auth/auth.decorator';
 
 @Resolver()
 export class ClientAppBlogResolver {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(private readonly blogService: BlogService) { }
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(AuthGuard)
   @Query(() => [Blog])
   async ClientApp_Blog_list(
-    @CompanyApp() company: { id: string },
+    @User() authUser: AuthUserDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
   ): Promise<Blog[]> {
     const models = await this.blogService.findAll({
-      companyId: company.id,
+      companyId: authUser.user.companyId,
       pagination: pagination,
     });
     return models;
   }
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(AuthGuard)
   @Query(() => Blog)
   async ClientApp_Blog_detail(
-    @CompanyApp() company: { id: string },
+    @User() authUser: AuthUserDecoratorInterface,
     @Args('id') id: string,
   ): Promise<Blog> {
     const model = await this.blogService.findOne({
-      companyId: company.id,
+      companyId: authUser.user.companyId,
       id: id,
     });
 
