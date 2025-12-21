@@ -449,7 +449,6 @@ type Mutation {
   ClientApp_Profile_update(payload: UserUpdateInput!, userId: String!): Boolean!
   ClientApp_User_ForgetPassword(userNameOrEmail: String!): Boolean!
   ClientApp_User_login(password: String!, userName: String!): String!
-  ClientApp_User_signUp(payload: UserSignUpInput!): String!
   ClientApp_User_update(payload: UserUpdateProfileInput!): Boolean!
   ClientApp_User_updatePassword(payload: UserUpdatePasswordInput!): Boolean!
   SuperAdmin_Auth_login(password: String!, userName: String!): AuthSuperAdmin!
@@ -744,15 +743,6 @@ type UserResponseDto {
   phone: String
 
   """user unique name"""
-  userName: String!
-}
-
-input UserSignUpInput {
-  email: String
-  lastName: String!
-  name: String!
-  password: String!
-  phone: String
   userName: String!
 }
 

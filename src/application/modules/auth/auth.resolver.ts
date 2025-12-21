@@ -1,13 +1,10 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { ConflictException, UseGuards, ValidationPipe } from '@nestjs/common';
-import { CompanyApp } from 'src/application/modules/company_auth/company_app.decorator';
-import { CompanyAppGuard } from 'src/application/modules/company_auth/company_app.guard';
+import { UseGuards, ValidationPipe } from '@nestjs/common';
 import { UserLoginArgs } from './dto/user-login.args';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { User } from './auth.decorator';
 import { AuthUser } from './models/auth-user.model';
-import { UserSignUpInput } from './dto/user-signup.input';
 import { UserUpdateProfileInput } from './dto/user-update-profile.input';
 import { AuthUserDecoratorInterface } from './interfaces/auth-employee-decorator.interface';
 import { UserService } from 'src/application/modules/user/user.service';
@@ -31,28 +28,6 @@ export class AuthResolver {
     });
 
     return user?.access_token;
-  }
-
-  @UseGuards(CompanyAppGuard)
-  @Mutation(() => String)
-  async ClientApp_User_signUp(
-    @CompanyApp() company: { id: string },
-    @Args('payload') payload: UserSignUpInput,
-  ): Promise<string> {
-    const isUserExists = await this.userService.findOne({
-      userName: payload.userName,
-      companyId: company.id,
-    });
-
-    if (isUserExists) {
-      throw new ConflictException('user is already available');
-    }
-
-    const user = await this.authService.singUp({
-      ...payload,
-      companyId: company.id,
-    });
-    return user.access_token;
   }
 
   @UseGuards(AuthGuard)
