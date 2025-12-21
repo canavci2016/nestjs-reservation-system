@@ -3,8 +3,9 @@ import { EmployeeAvailabilityService } from './employee-availability.service';
 import { UseGuards } from '@nestjs/common';
 import { ListAvailabilityArgs } from './dto/list-availability.args';
 import { EmployeeAvailability } from './models/employee-availability.model';
-import { CompanyAppGuard } from '../company_auth/company_app.guard';
-import { CompanyApp } from '../company_auth/company_app.decorator';
+import { AuthUserDecoratorInterface } from '../auth/interfaces/auth-employee-decorator.interface';
+import { AuthGuard } from '../auth/auth.guard';
+import { User } from '../auth/auth.decorator';
 
 @Resolver()
 export class ClientAppEmployeeAvailabilityResolver {
@@ -12,10 +13,10 @@ export class ClientAppEmployeeAvailabilityResolver {
     private readonly availabilityService: EmployeeAvailabilityService,
   ) {}
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(AuthGuard)
   @Query(() => [EmployeeAvailability])
   async ClientApp_Employee_Availability_list(
-    @CompanyApp() company: { sub: string },
+    @User() authUser: AuthUserDecoratorInterface,
     @Args() args: ListAvailabilityArgs,
   ): Promise<EmployeeAvailability[]> {
     const result = await this.availabilityService.getAvailableTimeSlots(args);
