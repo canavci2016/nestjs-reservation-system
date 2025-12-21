@@ -3,23 +3,24 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { Employee } from './models/employee.model';
 import { PaginationInput } from 'src/core/modules/pagination/dto/pagination.input';
-import { CompanyAppGuard } from 'src/application/modules/company_auth/company_app.guard';
-import { CompanyApp } from 'src/application/modules/company_auth/company_app.decorator';
 import { PaginationPipe } from 'src/core/modules/pagination/pagination.pipe';
+import { AuthGuard } from '../auth/auth.guard';
+import { AuthUserDecoratorInterface } from '../auth/interfaces/auth-employee-decorator.interface';
+import { User } from '../auth/auth.decorator';
 
 @Resolver()
 export class ClientAppEmployeeResolver {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(private readonly employeeService: EmployeeService) { }
 
-  @UseGuards(CompanyAppGuard)
+  @UseGuards(AuthGuard)
   @Query(() => [Employee])
   async ClientApp_Employee_list(
-    @CompanyApp() company: { id: string },
+    @User() authUser: AuthUserDecoratorInterface,
     @Args('pagination', { nullable: true }, PaginationPipe)
     pagination: PaginationInput,
   ): Promise<Employee[]> {
     const models = await this.employeeService.findAll({
-      companyId: company.id,
+      companyId: authUser.user.companyId,
       pagination: pagination,
       isActive: true,
     });
