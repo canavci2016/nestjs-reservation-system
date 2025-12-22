@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsLowercase,
@@ -36,6 +37,9 @@ export class EmployeeSignUpInput {
   phone: string;
 
   @IsOptional()
+  @Transform(({ value }: { value: string }) =>
+    value?.trim() == '' ? null : value?.trim(),
+  )
   @IsEmail({}, { message: 'geçersiz email formatı' })
   @Field({ nullable: true })
   email: string;
