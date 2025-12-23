@@ -383,31 +383,14 @@ export class UserEmployeeAppointmentService {
       );
     }
 
-    if (appointment.userAndCompanyUserPackageId) {
-      const userPackage =
-        await this.userPackageService.findOneForUserAndCompanyUserPackagePivot({
-          id: appointment.userAndCompanyUserPackageId,
-        });
-
-      if (!userPackage) {
-        throw new NotFoundException('user package not found');
-      }
-
-      const increaseUsage =
-        await this.userPackageService.updateUserAndCompanyPackage(
-          userPackage.id,
-          {
-            numberOfUsage: userPackage.numberOfUsage - 1,
-          },
-        );
-    }
+    await this.decreaseUserPackageUsage(appointment);
 
     const result = await this.updateById(condition.id, {
       status: UserEmployeeAppointmentStatus.REJECTED,
       comment,
     });
 
-    return true;
+    return Boolean(result.affected);
   }
 
   async updateById(id: string, payload: Partial<UserEmployeeAppointment>) {
@@ -424,6 +407,33 @@ export class UserEmployeeAppointmentService {
     payload: FindOptionsWhere<UserEmployeeAppointment>,
   ): Promise<UserEmployeeAppointment | null> {
     return this.repository.findOneBy(payload);
+  }
+
+  async decreaseUserPackageUsage(appointment: UserEmployeeAppointment) {
+    let result = false;
+    if (
+      appointment.userAndCompanyUserPackageId &&
+      appointment.status == UserEmployeeAppointmentStatus.ACCEPTED
+    ) {
+      const userPackage =
+        await this.userPackageService.findOneForUserAndCompanyUserPackagePivot({
+          id: appointment.userAndCompanyUserPackageId,
+        });
+
+      if (!userPackage) {
+        throw new NotFoundException('user package not found');
+      }
+
+      const decreaseUsage =
+        await this.userPackageService.updateUserAndCompanyPackage(
+          userPackage.id,
+          {
+            numberOfUsage: userPackage.numberOfUsage - 1,
+          },
+        );
+      result = Boolean(decreaseUsage.affected);
+    }
+    return result;
   }
 
   async getActivePackageForUser(user: User, defaultPackageId?: string) {
