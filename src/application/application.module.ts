@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BlogModule } from './modules/blog/blog.module';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 import { UserModule } from './modules/user/user.module';
 import { CompanyModule } from './modules/company/company.module';
 import { EmployeeModule } from './modules/employee/employee.module';
@@ -21,6 +22,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     BlogModule,
     AnnouncementModule,
     ReportingModule,
+    StatisticsModule,
     UserModule,
     CompanyModule,
     EmployeeModule,
@@ -44,6 +46,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     BlogModule,
     AnnouncementModule,
     ReportingModule,
+    StatisticsModule,
     UserModule,
     CompanyModule,
     EmployeeModule,

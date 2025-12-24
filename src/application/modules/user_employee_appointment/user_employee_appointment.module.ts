@@ -19,5 +19,6 @@ import { UserPackageModule } from 'src/application/modules/user_package/user_pac
     ClientAppUserEmployeeAppointmentResolver,
     AdminAppUserEmployeeAppointmentResolver,
   ],
+  exports: [UserEmployeeAppointmentService],
 })
-export class UserEmployeeAppointmentModule { }
+export class UserEmployeeAppointmentModule {}

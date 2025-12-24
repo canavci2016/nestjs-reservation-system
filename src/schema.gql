@@ -487,6 +487,8 @@ type Query {
   AdminApp_Employee_User_list(pagination: PaginationInput, q: String): [UserResponseDto!]!
   AdminApp_Employee_getProfile: AuthEmployee!
   AdminApp_Employee_list(pagination: PaginationInput): [Employee!]!
+  AdminApp_Statistics_appointmentCount(employeeId: String, endDate: String, startDate: String, status: UserEmployeeAppointmentStatus, userId: String): Float!
+  AdminApp_Statistics_userCount: Float!
   AdminApp_UserPackage_list(pagination: PaginationInput): [CompanyUserPackage!]!
   AdminApp_UserPackage_listForAUser(pagination: PaginationInput, userId: String!): [UserAndCompanyUserPackage!]!
   AdminApp_User_Count(q: String): Float!
