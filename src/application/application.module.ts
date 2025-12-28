@@ -16,6 +16,7 @@ import { EmployeeAuthModule } from './modules/employee_auth/employee_auth.module
 import { EmployeeAvailabilityModule } from './modules/employee_availability/employee-availability.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -41,6 +42,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
         limit: 10, // Number of requests per time window
       },
     ]),
+    CacheModule.register({
+      ttl: 60000, // Time to live in milliseconds (1 minute)
+      max: 100, // Maximum number of items in cache
+      isGlobal: true,
+    }),
   ],
   exports: [
     BlogModule,
