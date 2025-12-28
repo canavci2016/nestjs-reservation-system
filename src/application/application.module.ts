@@ -17,6 +17,9 @@ import { EmployeeAvailabilityModule } from './modules/employee_availability/empl
 import { UploadModule } from './modules/upload/upload.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule } from 'src/core/modules/config/config.module';
+import { ConfigService } from 'src/core/modules/config/config.service';
+import KeyvRedis from '@keyv/redis';
 
 @Module({
   imports: [
@@ -42,10 +45,16 @@ import { CacheModule } from '@nestjs/cache-manager';
         limit: 10, // Number of requests per time window
       },
     ]),
-    CacheModule.register({
-      ttl: 60000, // Time to live in milliseconds (1 minute)
-      max: 100, // Maximum number of items in cache
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
       isGlobal: true,
+      useFactory: (configService: ConfigService) => {
+        return {
+          ttl: 60000, // Time to live in milliseconds (1 minute)
+          stores: [new KeyvRedis(configService.get('REDIS_HOST'))],
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   exports: [
