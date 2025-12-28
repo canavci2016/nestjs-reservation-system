@@ -17,7 +17,7 @@ yarn build
 
 # Zip output
 echo "Creating output.zip..."
-zip -r output.zip .
+zip -r output.zip . -x ".env*"
 
 # Deploy using Elastic Beanstalk
 echo "Deploying to Elastic Beanstalk..."
